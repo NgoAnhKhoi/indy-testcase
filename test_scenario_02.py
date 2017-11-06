@@ -49,7 +49,7 @@ def command(command_str):
 
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
-    command('cd .sovrin')
+    command('cd ~/.sovrin')
     command('cp ' + MyVars.pool_genesis_txn_file + " " + MyVars.original_pool_genesis_txn_file)
     open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
