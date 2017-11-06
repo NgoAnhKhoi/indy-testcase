@@ -3,6 +3,8 @@ import os
 import asyncio
 import json
 import logging
+import subprocess
+import tempfile
 import shutil
 from indy import ledger, signus, wallet, pool
 from indy.error import IndyError
@@ -10,7 +12,6 @@ from indy.error import IndyError
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
 # -----------------------------------------------------------------------------------------
-
 
 class Colors:
     """ Class to set the colors for text.  Syntax:  print(Colors.OKGREEN +"TEXT HERE" +Colors.ENDC) """
@@ -27,6 +28,10 @@ class MyVars:
     folder_path = os.path.expanduser("~") + "/.sovrin"
     pool_genesis_txn_file = "pool_transactions_sandbox_genesis"
     original_pool_genesis_txn_file = "original_pool_transactions_sandbox_genesis"
+
+    pool_genesis_txn_file_path = folder_path + pool_genesis_txn_file
+    original_pool_genesis_txn_file_path = folder_path + original_pool_genesis_txn_file
+
     debug = False
     the_error_message = "the information needed to connect was not found"
     test_results = {'Test 3': False}
@@ -36,13 +41,23 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
+# noinspection PyUnresolvedReferences
 def command(command_str):
-    os.system("send command to CLI: " + command_str)
+    os.system(command_str)
+    output = subprocess.getoutput(command_str)
+    return output
+    # with tempfile.TemporaryFile() as tempf:
+    #     proc = subprocess.Popen(command_str, stdout=tempf)
+    #     proc.wait()
+    #     tempf.seek(0)
+    #     print (tempf.read())
+
 
 def precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
-    command("make a copy")
-    command("clear file: " + MyVars.pool_genesis_txn_file + "| agrs[d 'shift' G, :wq]")
+    command('cd .sovrin')
+    # command('cp', MyVars.pool_genesis_txn_file, MyVars.original_pool_genesis_txn_file)
+    # open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
 
 async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool():
@@ -114,9 +129,9 @@ def final_results():
 precondition()
 
 # Create the loop instance using asyncio
-loop = asyncio.get_event_loop()
-loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
-loop.close()
-
-print("\n\nResults\n+" + 40*"=" + "+")
-final_results()
+# loop = asyncio.get_event_loop()
+# loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
+# loop.close()
+#
+# print("\n\nResults\n+" + 40*"=" + "+")
+# final_results()
