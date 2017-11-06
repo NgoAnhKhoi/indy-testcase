@@ -44,10 +44,7 @@ logging.basicConfig(level=logging.INFO)
 # noinspection PyUnresolvedReferences
 def command(command_str):
     print("cmd: [" + command_str + "]")
-#     os.system(command_str)
-    list = command_str.split(" ")
-    p = subprocess.Popen(list, stdout=subprocess.PIPE)
-    p.communicate()
+    os.system(command_str)
     output = subprocess.getoutput(command_str)
     print("output: [" + output + "]")
     return output
@@ -67,6 +64,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     print(Colors.HEADER + "\n\t1. using sovrin\n" + Colors.ENDC)
     try:
         command("sovrin")
+        print("asdjfhaklsdjfjdasfj")
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
