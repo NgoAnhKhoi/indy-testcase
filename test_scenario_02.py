@@ -66,7 +66,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     try:
         #command("sovrin")
         print("khoi")
-        sleep(10)
+        sleep(120)
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
