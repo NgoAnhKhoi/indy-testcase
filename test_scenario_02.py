@@ -129,7 +129,7 @@ def final_results():
 
 
 # Run the cleanup first...
-precondition()
+test_precondition()
 
 # Create the loop instance using asyncio
 # loop = asyncio.get_event_loop()

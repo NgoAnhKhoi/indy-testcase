@@ -74,8 +74,12 @@ def final_results():
 
 
 # Run the cleanup first...
-precondition()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(precondition())
+loop.close()
 
+print("\n\nResults\n+" + 40*"=" + "+")
+final_results()
 # Create the loop instance using asyncio
 # loop = asyncio.get_event_loop()
 # loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
