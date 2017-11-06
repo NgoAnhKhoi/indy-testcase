@@ -44,8 +44,8 @@ logging.basicConfig(level=logging.INFO)
 # noinspection PyUnresolvedReferences
 def command(command_str):
     os.system(command_str)
-    output = subprocess.getoutput(command_str)
-    return output
+    return subprocess.getoutput(command_str)
+
     # with tempfile.TemporaryFile() as tempf:
     #     proc = subprocess.Popen(command_str, stdout=tempf)
     #     proc.wait()
@@ -53,9 +53,12 @@ def command(command_str):
     #     print (tempf.read())
 
 
-def precondition():
+async def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     command('cd .sovrin')
+    await asyncio.sleep(0)
+    output = command('ls -l')
+    print("khoi output: " + output)
     # command('cp', MyVars.pool_genesis_txn_file, MyVars.original_pool_genesis_txn_file)
     # open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
