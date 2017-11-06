@@ -46,19 +46,12 @@ def command(command_str):
     os.system(command_str)
     return subprocess.getoutput(command_str)
 
-    # with tempfile.TemporaryFile() as tempf:
-    #     proc = subprocess.Popen(command_str, stdout=tempf)
-    #     proc.wait()
-    #     tempf.seek(0)
-    #     print (tempf.read())
-
 
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     command('cd .sovrin')
-    output = command('ls -l')
-    # command('cp', MyVars.pool_genesis_txn_file, MyVars.original_pool_genesis_txn_file)
-    # open(MyVars.pool_genesis_txn_file_path, 'w').close()
+    command('cp', MyVars.pool_genesis_txn_file, MyVars.original_pool_genesis_txn_file)
+    open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
 
 async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool():
