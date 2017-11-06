@@ -10,6 +10,7 @@ import time
 from indy import ledger, signus, wallet, pool
 from indy.error import IndyError
 from time import sleep
+from tkinter.tix import Shell
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
@@ -45,9 +46,8 @@ logging.basicConfig(level=logging.INFO)
 
 # noinspection PyUnresolvedReferences
 def command(command_str):
-    print("cmd: [" + command_str + "]")
-    os.system(command_str)
-    time.sleep(20)
+    print("in command")
+    subprocess.run(command_str, shell=True)
     output = subprocess.getoutput(command_str)
     print("output: [" + output + "]")
     return output
@@ -55,8 +55,8 @@ def command(command_str):
 
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
-    command('cd ~/.sovrin')
-    command('cp ' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path)
+    command(['cd', '~/.sovrin'])
+    command(['cp', MyVars.pool_genesis_txn_file_path, MyVars.original_pool_genesis_txn_file_path])
     open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
 
@@ -66,14 +66,14 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 1. Using sovrin command -----------------------------
     print(Colors.HEADER + "\n\t1. using sovrin\n" + Colors.ENDC)
     try:
-        await command("sovrin")
+        await command(['sovrin'])
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 2. connect test with the empty pool_transactions_sandbox_genesis file --------------------------
     print(Colors.HEADER + "\n\t2. connect test with the empty pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
     try:
-        return_message = await command("connect test")
+        return_message = await command(['connect test'])
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
@@ -91,7 +91,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 4. exit sovrin -----------------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t4. exit sovrin\n" + Colors.ENDC)
     try:
-        await command("exit")
+        await command(['exit'])
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
@@ -102,12 +102,12 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 5. Restore the pool_transactions_sandbox_genesis file ------------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t==Clean up==\n\t5. Restore the pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
     try:
-        await command("rm pool_transactions_sandbox_genesis")
+        await command(['rm', 'pool_transactions_sandbox_genesis'])
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     try:
-        await command("mv original_pool_trasnsactions_sandbox_genesis pool_transactions_sandbox_genesis")
+        await command(['mv', 'original_pool_trasnsactions_sandbox_genesis', 'pool_transactions_sandbox_genesis'])
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
