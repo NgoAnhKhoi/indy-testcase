@@ -38,7 +38,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 # noinspection PyUnresolvedReferences
-def command(command_str):
+async def command(command_str):
     print("in command")
     subprocess.run(command_str, shell=True)
     output = subprocess.getoutput(command_str)
@@ -66,7 +66,9 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 2. connect test with the empty pool_transactions_sandbox_genesis file --------------------------
     print(Colors.HEADER + "\n\t2. connect test with the empty pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
     try:
-        return_message = await command(['connect test'])
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(command(['connect test']))
+        return_message = "" #await command(['connect test'])
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
