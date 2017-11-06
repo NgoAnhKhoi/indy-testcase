@@ -45,7 +45,9 @@ logging.basicConfig(level=logging.INFO)
 def command(command_str):
     print("cmd: [" + command_str + "]")
 #     os.system(command_str)
-    subprocess.call(command_str)
+    list = command_str.split(" ")
+    p = subprocess.Popen(list, stdout=subprocess.PIPE)
+    p.communicate()
     output = subprocess.getoutput(command_str)
     print("output: [" + output + "]")
     return output
