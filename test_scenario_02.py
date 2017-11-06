@@ -46,7 +46,7 @@ logging.basicConfig(level=logging.INFO)
 def command(command_str):
     print("cmd: [" + command_str + "]")
     os.system(command_str)
-    output = subprocess.getoutput(command_str)
+    output = "" #subprocess.getoutput(command_str)
     print("output: [" + output + "]")
     return output
 
@@ -58,20 +58,20 @@ def test_precondition():
     open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
 
-def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool():
+async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool():
     logger.info("Test Scenario 02 -> started")
 
     # 1. Using sovrin command -----------------------------
     print(Colors.HEADER + "\n\t1. using sovrin\n" + Colors.ENDC)
     try:
-        command("sovrin")
+        await command("sovrin")
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 2. connect test with the empty pool_transactions_sandbox_genesis file --------------------------
     print(Colors.HEADER + "\n\t2. connect test with the empty pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
     try:
-        return_message = command("connect test")
+        return_message = await command("connect test")
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
@@ -89,7 +89,7 @@ def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the
     # 4. exit sovrin -----------------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t4. exit sovrin\n" + Colors.ENDC)
     try:
-        command("exit")
+        await command("exit")
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
@@ -100,12 +100,12 @@ def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the
     # 5. Restore the pool_transactions_sandbox_genesis file ------------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t==Clean up==\n\t5. Restore the pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
     try:
-        command("rm pool_transactions_sandbox_genesis")
+        await command("rm pool_transactions_sandbox_genesis")
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     try:
-        command("mv original_pool_trasnsactions_sandbox_genesis pool_transactions_sandbox_genesis")
+        await command("mv original_pool_trasnsactions_sandbox_genesis pool_transactions_sandbox_genesis")
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -126,11 +126,11 @@ def final_results():
 
 # Run the cleanup first...
 test_precondition()
-verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool()
+
 # Create the loop instance using asyncio
-# loop = asyncio.get_event_loop()
-# loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
-# loop.close()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
+loop.close()
 
 print("\n\nResults\n+" + 40*"=" + "+")
 final_results()
