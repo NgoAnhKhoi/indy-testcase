@@ -53,12 +53,10 @@ def command(command_str):
     #     print (tempf.read())
 
 
-async def test_precondition():
+def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     command('cd .sovrin')
-    await asyncio.sleep(0)
     output = command('ls -l')
-    print("khoi output: " + output)
     # command('cp', MyVars.pool_genesis_txn_file, MyVars.original_pool_genesis_txn_file)
     # open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
@@ -132,9 +130,9 @@ def final_results():
 test_precondition()
 
 # Create the loop instance using asyncio
-# loop = asyncio.get_event_loop()
-# loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
-# loop.close()
-#
-# print("\n\nResults\n+" + 40*"=" + "+")
-# final_results()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
+loop.close()
+
+print("\n\nResults\n+" + 40*"=" + "+")
+final_results()
