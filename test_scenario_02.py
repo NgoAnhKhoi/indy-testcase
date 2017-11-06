@@ -60,18 +60,20 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     print(Colors.HEADER + "\n\t1. using sovrin\n" + Colors.ENDC)
     try:
         await command(['sovrin'])
+        await command(['connect test'])
+        return_message = ""
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 2. connect test with the empty pool_transactions_sandbox_genesis file --------------------------
-    print(Colors.HEADER + "\n\t2. connect test with the empty pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
-    try:
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(command(['connect test']))
-        return_message = "" #await command(['connect test'])
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
+#     print(Colors.HEADER + "\n\t2. connect test with the empty pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
+#     try:
+#         loop = asyncio.get_event_loop()
+#         loop.run_until_complete(command(['connect test']))
+#         return_message = "" #await command(['connect test'])
+#     except IndyError as E:
+#         print(Colors.FAIL + str(E) + Colors.ENDC)
+#         sys.exit[1]
 
     # 3. verifying the message ------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t3. verifying the message\n" + Colors.ENDC)
