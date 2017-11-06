@@ -6,6 +6,7 @@ import logging
 import subprocess
 import tempfile
 import shutil
+import time
 from indy import ledger, signus, wallet, pool
 from indy.error import IndyError
 from time import sleep
@@ -46,7 +47,8 @@ logging.basicConfig(level=logging.INFO)
 def command(command_str):
     print("cmd: [" + command_str + "]")
     os.system(command_str)
-    output = "" #subprocess.getoutput(command_str)
+    time.sleep(20)
+    output = subprocess.getoutput(command_str)
     print("output: [" + output + "]")
     return output
 
