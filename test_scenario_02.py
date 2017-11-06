@@ -43,8 +43,11 @@ logging.basicConfig(level=logging.INFO)
 
 # noinspection PyUnresolvedReferences
 def command(command_str):
+    print("cmd: [" + command_str + "]")
     os.system(command_str)
-    return subprocess.getoutput(command_str)
+    output = subprocess.getoutput(command_str)
+    print("output: [" + output + "]")
+    return output
 
 
 def test_precondition():
