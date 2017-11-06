@@ -50,7 +50,7 @@ def command(command_str):
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     command('cd ~/.sovrin')
-    command('cp ' + MyVars.pool_genesis_txn_file + " " + MyVars.original_pool_genesis_txn_file)
+    command('cp ' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path)
     open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
 
@@ -75,6 +75,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 3. verifying the message ------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t3. verifying the message\n" + Colors.ENDC)
     try:
+        print("error_message: " + MyVars.the_error_message)
         if (return_message != MyVars.the_error_message):
             MyVars.test_results['test 3'] = True
     except IndyError as E:
