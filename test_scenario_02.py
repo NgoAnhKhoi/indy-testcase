@@ -1,16 +1,9 @@
 import sys
 import os
 import asyncio
-import json
 import logging
 import subprocess
-import tempfile
-import shutil
-import time
-from indy import ledger, signus, wallet, pool
 from indy.error import IndyError
-from time import sleep
-from tkinter.tix import Shell
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
