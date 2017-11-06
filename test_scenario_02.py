@@ -8,6 +8,7 @@ import tempfile
 import shutil
 from indy import ledger, signus, wallet, pool
 from indy.error import IndyError
+from time import sleep
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
@@ -63,8 +64,9 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 1. Using sovrin command -----------------------------
     print(Colors.HEADER + "\n\t1. using sovrin\n" + Colors.ENDC)
     try:
-        command("sovrin")
-        print("asdjfhaklsdjfjdasfj")
+        #command("sovrin")
+        print("khoi")
+        sleep(10)
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
