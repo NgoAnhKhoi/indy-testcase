@@ -138,17 +138,22 @@ def final_results():
 
 
 # Run the cleanup first...
-test = ['sovrin','connect test']
-test1 = ["exit"]
-command(test)
-command(test1)
+# test = ['sovrin','connect test']
+# test1 = ["exit"]
+# command(test)
+# command(test1)
 
+async def abc():
+    test = ['sovrin','connect test']
+    test1 = ["exit"]
+    await command(test)
+    await command(test1)
 # test_precondition()
 
 # Create the loop instance using asyncio
-# loop = asyncio.get_event_loop()
-# loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
-# loop.close()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(abc())
+loop.close()
 
 print("done")
 # print("\n\nResults\n+" + 40*"=" + "+")
