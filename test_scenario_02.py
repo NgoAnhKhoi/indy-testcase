@@ -147,9 +147,12 @@ def final_results():
 
 # Run the cleanup first...
 async def khoi():
-    pool_config = "~/Git/indy-testcase/pool_transactions_sandbox_genesis"
-    os.system('sovrin')
-    await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
+    pool_config = "~/.sovrin/pool_transactions_sandbox_genesis"
+#     os.system('sovrin')
+    try:
+        await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
+    except IndyError as E:
+        a = "do nothing"
 
 #     subprocess.call(['connect test'])
 # command(test1)
