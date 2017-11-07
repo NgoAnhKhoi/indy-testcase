@@ -8,6 +8,7 @@ import sys
 from indy import pool
 from indy.error import IndyError
 from sys import stdin
+import subprocess
 
 
 # -----------------------------------------------------------------------------------------
@@ -43,9 +44,9 @@ logging.basicConfig(level=logging.INFO)
 
 def command(command_str):
     print("in command")
-    p = Popen(command_str, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
-    stdin, stdout, stderr = p.communicate()
-    stdin = "exit"
+#     p = Popen(command_str)
+    subprocess.call(command_str)
+    stdout = "" #"p.communicate()[0]
     return stdout
 
 def test_precondition():
