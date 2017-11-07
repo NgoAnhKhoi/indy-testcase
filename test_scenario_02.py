@@ -1,14 +1,17 @@
-import sys
-import os
 import asyncio
+import json
 import logging
+import os
 import subprocess
+import sys
+
+from indy import pool
 from indy.error import IndyError
+
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
 # -----------------------------------------------------------------------------------------
-
 class Colors:
     """ Class to set the colors for text.  Syntax:  print(Colors.OKGREEN +"TEXT HERE" +Colors.ENDC) """
     HEADER = '\033[95m'
@@ -27,7 +30,7 @@ class MyVars:
 
     pool_genesis_txn_file_path = folder_path + pool_genesis_txn_file
     original_pool_genesis_txn_file_path = folder_path + original_pool_genesis_txn_file
-
+    pool_name = "test_pool09"
     debug = False
     the_error_message = "the information needed to connect was not found"
     test_results = {'Test 3': False}
@@ -38,13 +41,15 @@ logging.basicConfig(level=logging.INFO)
 
 
 # noinspection PyUnresolvedReferences
-async def command(command_str):
+def command(command_str):
     print("in command")
     subprocess.run(command_str, shell=True)
     output = subprocess.getoutput(command_str)
-    print("output: [" + output + "]")
     return output
 
+
+def get_output():
+    return subprocess.getoutput()
 
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
@@ -60,25 +65,26 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     print(Colors.HEADER + "\n\t1. using sovrin\n" + Colors.ENDC)
     try:
         await command(['sovrin'])
-        await command(['connect test'])
-        return_message = ""
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 2. connect test with the empty pool_transactions_sandbox_genesis file --------------------------
-#     print(Colors.HEADER + "\n\t2. connect test with the empty pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
-#     try:
-#         loop = asyncio.get_event_loop()
-#         loop.run_until_complete(command(['connect test']))
-#         return_message = "" #await command(['connect test'])
-#     except IndyError as E:
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-#         sys.exit[1]
+    print(Colors.HEADER + "\n\t2.  Create Ledger\n" + Colors.ENDC)
+    pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file_path)})
+    try:
+        await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+        sys.exit[1]
+
+    await asyncio.sleep(0)
 
     # 3. verifying the message ------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t3. verifying the message\n" + Colors.ENDC)
     try:
         print("error_message: " + MyVars.the_error_message)
+        return_message = get_output()
+        print("output_message: " + MyVars.the_error_message)
         if (return_message != MyVars.the_error_message):
             MyVars.test_results['test 3'] = True
     except IndyError as E:
