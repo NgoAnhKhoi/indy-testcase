@@ -182,9 +182,9 @@ loop.close()
 # test_precondition()
 
 # Create the loop instance using asyncio
-loop = asyncio.get_event_loop()
-loop.run_until_complete(khoi())
-loop.close()
+# loop = asyncio.get_event_loop()
+# loop.run_until_complete(khoi())
+# loop.close()
 
 print("done")
 # print("\n\nResults\n+" + 40*"=" + "+")
