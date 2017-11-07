@@ -8,7 +8,7 @@ import subprocess
 from sys import stdin
 import sys
 import time
-
+import random
 from indy import pool
 from indy.error import IndyError
 
@@ -147,10 +147,11 @@ def final_results():
 
 # Run the cleanup first...
 async def khoi():
-    pool_config = json.dumps({"genesis_txn": "~/Git/indy-testcase/genesis_sandbox_file"})
+    pool_config = json.dumps({"genesis_txn": str("~/Git/indy-testcase/genesis_sandbox_file")})
+    pool_name = "khoi_test_" + str(random.randrange(100, 1000, 2))
 #     os.system('sovrin')
     try:
-        await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
+        await pool.create_pool_ledger_config(pool_name, pool_config)
         pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
         print("pool handle: " + str(pool_handle))
     except IndyError as E:
