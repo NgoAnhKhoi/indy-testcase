@@ -127,7 +127,7 @@ def final_results():
 
 
 # Run the cleanup first...
-test = ['sovrin', 'connect test']
+test = ["sovrin 'connect test'"]
 test1 = ["exit"]
 command(test)
 
