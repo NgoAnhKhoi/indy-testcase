@@ -153,10 +153,9 @@ async def khoi():
 #     os.system('sovrin')
     try:
         await pool.create_pool_ledger_config(pool_name, pool_config)
-        pool_handle = await pool.open_pool_ledger(pool_name, None)
-        print("pool handle: " + str(pool_handle))
     except IndyError as E:
         a = "do nothing"
+    print("end def")
 #     finally:
 #         cmd = 'cp ' + MyVars.folder_path + "khoi_pool " + MyVars.pool_genesis_txn_file_path
 #         os.system('cmd')
