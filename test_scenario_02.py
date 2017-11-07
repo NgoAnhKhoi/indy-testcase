@@ -7,6 +7,7 @@ from subprocess import Popen, PIPE, TimeoutExpired, STDOUT, check_output
 import subprocess
 from sys import stdin
 import sys
+import time
 
 from indy import pool
 from indy.error import IndyError
@@ -145,9 +146,12 @@ def final_results():
 
 
 # Run the cleanup first...
-async def khoi():
+def khoi():
     process = Popen(["sovrin 'connect test'"])
-    await asyncio.sleep(10)
+    time.sleep(10)
+    subprocess.call(['exit'])
+
+khoi()
 #     subprocess.call(['connect test'])
 # command(test1)
 # command(test1)
@@ -160,9 +164,9 @@ async def khoi():
 # test_precondition()
 
 # Create the loop instance using asyncio
-loop = asyncio.get_event_loop()
-loop.run_until_complete(khoi())
-loop.close()
+# loop = asyncio.get_event_loop()
+# loop.run_until_complete(khoi())
+# loop.close()
 
 print("done")
 # print("\n\nResults\n+" + 40*"=" + "+")
