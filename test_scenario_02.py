@@ -2,11 +2,12 @@ import asyncio
 import json
 import logging
 import os
-import subprocess
+from subprocess import Popen, PIPE
 import sys
 
 from indy import pool
 from indy.error import IndyError
+from sys import stdin
 
 
 # -----------------------------------------------------------------------------------------
@@ -42,14 +43,10 @@ logging.basicConfig(level=logging.INFO)
 
 def command(command_str):
     print("in command")
-    p = subprocess.Popen(command_str, shell=True)
-    output = p.communicate()[0]
-    subprocess._cleanup()
-    return output
-
-
-def get_output():
-    return subprocess.getoutput()
+    p = Popen(command_str, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
+    stdin, stdout, stderr = p.communicate()
+    stdin = "exit"
+    return stdout
 
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
