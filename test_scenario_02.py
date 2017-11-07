@@ -48,8 +48,7 @@ def command(command_str):
     stdout = ""
     try:
         process = Popen(command_str, stdin = PIPE)
-        stdout = process.communicate()[0]
-        process.stdin.write('exit')
+        stdout = process.communicate(input='exit'.encode())[0]
 #         process.terminate()
     except TimeoutExpired:
         stdout = "asdf"
