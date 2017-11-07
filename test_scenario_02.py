@@ -45,29 +45,30 @@ logging.basicConfig(level=logging.INFO)
 
 def command(command_str):
 #     print("in command")
-    stdout = ""
-    try:
-        process = Popen(['sovrin'], stdin = PIPE, stdout = PIPE)
-        subprocess.call(['connect test'], stdin = PIPE, stdout = PIPE)
-        subprocess.call(['exit'], stdin = PIPE, stdout = PIPE)
-#         while True:
-#             if 'connecting test' in str(process.stdout.readline()):
-#                 
-#                 break
-#         process.terminate()
-    except TimeoutExpired:
-        stdout = "asdf"
-#     subprocess.call(command_str)
-#     subprocess.run(command_str, time_out=30)
-#     stdout = check_output(command_str, stderr=STDOUT, timeout=30)
-#     stdout = "" #"p.communicate()[0]
+    os.system(command_str)
+#     stdout = ""
 #     try:
-#         stdout = process.communicate(timeout=10)[0]
+#         process = Popen(['sovrin'], stdin = PIPE, stdout = PIPE)
+#         subprocess.call(['connect test'], stdin = PIPE, stdout = PIPE)
+#         subprocess.call(['exit'], stdin = PIPE, stdout = PIPE)
+# #         while True:
+# #             if 'connecting test' in str(process.stdout.readline()):
+# #                 
+# #                 break
+# #         process.terminate()
 #     except TimeoutExpired:
-#         os.kill(process.pid, signal.SIGINT) # send signal to the process group
-#         stdout = process.communicate()[0]
-#     print("out command")
-    return stdout
+#         stdout = "asdf"
+# #     subprocess.call(command_str)
+# #     subprocess.run(command_str, time_out=30)
+# #     stdout = check_output(command_str, stderr=STDOUT, timeout=30)
+# #     stdout = "" #"p.communicate()[0]
+# #     try:
+# #         stdout = process.communicate(timeout=10)[0]
+# #     except TimeoutExpired:
+# #         os.kill(process.pid, signal.SIGINT) # send signal to the process group
+# #         stdout = process.communicate()[0]
+# #     print("out command")
+#     return stdout
 
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
@@ -144,9 +145,10 @@ def final_results():
 
 
 # Run the cleanup first...
-test = ['sovrin','connect test']
-test1 = ["exit"]
-command(test)
+async def khoi():
+    process = await Popen(['sovrin'], stdin = PIPE, stdout = PIPE, bufsize=1, universal_newlines=True)
+    await asyncio.sleep(10)
+    os.system('connect test')
 # command(test1)
 # command(test1)
 
@@ -158,9 +160,9 @@ command(test)
 # test_precondition()
 
 # Create the loop instance using asyncio
-# loop = asyncio.get_event_loop()
-# loop.run_until_complete(abc())
-# loop.close()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(khoi())
+loop.close()
 
 print("done")
 # print("\n\nResults\n+" + 40*"=" + "+")
