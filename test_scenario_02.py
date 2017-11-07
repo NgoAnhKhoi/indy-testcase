@@ -146,16 +146,27 @@ def final_results():
 
 
 # Run the cleanup first...
-async def khoi():
+async def test_connect():
+    print("Begin")
     pool_txn = ".sovrin/pool_transactions_sandbox_genesis"
     pool_config = json.dumps({"genesis_txn": str(pool_txn)})
-    pool_name = "khoi_test_" + str(random.randrange(100, 1000, 2))
-#     os.system('sovrin')
+    pool_name = "test_" + str(random.randrange(100, 1000, 2))
     try:
         await pool.create_pool_ledger_config(pool_name, pool_config)
     except IndyError as E:
-        a = "do nothing"
-    print("end def")
+        print("do something with error_code: " + str(E))
+
+    print("end")
+
+# Create the loop instance using asyncio
+loop = asyncio.get_event_loop()
+loop.run_until_complete(test_connect())
+loop.close()
+
+
+
+
+
 #     finally:
 #         cmd = 'cp ' + MyVars.folder_path + "khoi_pool " + MyVars.pool_genesis_txn_file_path
 #         os.system('cmd')
