@@ -49,8 +49,9 @@ def command(command_str):
     try:
         process = Popen(command_str, stdin = PIPE, stdout = PIPE)
         while True:
-            if process.stdout.readline() != '':
+            if 'connecting test' in process.stdout.readline():
                 Popen(['exit'], stdin = PIPE, stdout = PIPE)
+                break
 #         process.terminate()
     except TimeoutExpired:
         stdout = "asdf"
