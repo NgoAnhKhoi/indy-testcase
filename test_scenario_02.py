@@ -67,21 +67,21 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 1. Using sovrin command -----------------------------
     print(Colors.HEADER + "\n\t1. using sovrin\n" + Colors.ENDC)
     try:
-        await command(['sovrin'])
+        await command(['sovrin', 'connect test'])
         await asyncio.sleep(1)
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 2. connect test with the empty pool_transactions_sandbox_genesis file --------------------------
-    print(Colors.HEADER + "\n\t2.  Create Ledger\n" + Colors.ENDC)
-    pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file_path)})
-    try:
-        await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
-
-    await asyncio.sleep(1)
+#     print(Colors.HEADER + "\n\t2.  Create Ledger\n" + Colors.ENDC)
+#     pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file_path)})
+#     try:
+#         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
+#     except IndyError as E:
+#         print(Colors.FAIL + str(E) + Colors.ENDC)
+#         sys.exit[1]
+# 
+#     await asyncio.sleep(1)
 
     # 3. verifying the message ------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t3. verifying the message\n" + Colors.ENDC)
