@@ -42,6 +42,9 @@ logging.basicConfig(level=logging.INFO)
 
 def command(command_str):
     print("in command")
+    print ("path: " + MyVars.pool_genesis_txn_file_path)
+    os.system("cd " + MyVars.pool_genesis_txn_file_path)
+    os.system("ls -l")
     p = subprocess.Popen(['cp', MyVars.pool_genesis_txn_file_path, MyVars.original_pool_genesis_txn_file_path], shell=True)
     output = p.communicate()[0]
     return output
