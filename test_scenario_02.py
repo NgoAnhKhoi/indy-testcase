@@ -147,7 +147,7 @@ def final_results():
 
 # Run the cleanup first...
 async def khoi():
-    pool_config = "~/.sovrin/pool_transactions_sandbox_genesis"
+    pool_config = json.dumps({"genesis_txn": "~/.sovrin/pool_transactions_sandbox_genesis"})
 #     os.system('sovrin')
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
