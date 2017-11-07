@@ -4,7 +4,7 @@ import logging
 import os
 from subprocess import Popen, PIPE
 import sys
-
+from subprocess import STDOUT, check_output
 from indy import pool
 from indy.error import IndyError
 from sys import stdin
@@ -46,8 +46,9 @@ def command(command_str):
     print("in command")
 #     p = Popen(command_str)
 #     subprocess.call(command_str)
-    subprocess.run(command_str, time_out=30)
-    stdout = "" #"p.communicate()[0]
+#     subprocess.run(command_str, time_out=30)
+    stdout = check_output(command_str, stderr=STDOUT, timeout=30)
+#     stdout = "" #"p.communicate()[0]
     print("out command")
     return stdout
 
