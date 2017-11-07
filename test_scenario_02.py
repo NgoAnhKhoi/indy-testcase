@@ -146,9 +146,9 @@ def final_results():
 
 # Run the cleanup first...
 async def khoi():
-    process = await Popen(['sovrin'], stdin = PIPE, stdout = PIPE, bufsize=1, universal_newlines=True)
+    process = Popen(['sovrin'], stdin = PIPE, stdout = PIPE, bufsize=1, universal_newlines=True)
     await asyncio.sleep(10)
-    os.system('connect test')
+    subprocess.call(['connect test'])
 # command(test1)
 # command(test1)
 
