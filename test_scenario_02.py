@@ -147,7 +147,7 @@ def final_results():
 
 # Run the cleanup first...
 async def khoi():
-    pool_config = json.dumps({"genesis_txn": "~/Git/indy-testcase/khoi"})
+    pool_config = json.dumps({"genesis_txn": "~/.sovrin/khoi_pool"})
 #     os.system('sovrin')
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
