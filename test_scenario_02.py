@@ -24,7 +24,7 @@ class MyVars:
     """  Needed some global variables. """
 
     pool_handle = 0
-    folder_path = os.path.expanduser("~") + "/.sovrin/"
+    folder_path = "~/.sovrin/" #os.path.expanduser("~") + "/.sovrin/"
     pool_genesis_txn_file = "pool_transactions_sandbox_genesis"
     original_pool_genesis_txn_file = "original_pool_transactions_sandbox_genesis"
 
@@ -55,7 +55,7 @@ def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
 #     command(['cd ~/.sovrin'])
-    command(['cp' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path])
+    command(['cp ' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path])
     open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
 
