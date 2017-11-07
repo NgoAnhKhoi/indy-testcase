@@ -44,18 +44,20 @@ logging.basicConfig(level=logging.INFO)
 
 
 def command(command_str):
-    print("in command")
+#     print("in command")
     process = Popen(command_str)
+    stdout = process.communicate(timeout=30)
+    process.terminate()
 #     subprocess.call(command_str)
 #     subprocess.run(command_str, time_out=30)
 #     stdout = check_output(command_str, stderr=STDOUT, timeout=30)
 #     stdout = "" #"p.communicate()[0]
-    try:
-        stdout = process.communicate(timeout=10)[0]
-    except TimeoutExpired:
-        os.kill(process.pid, signal.SIGINT) # send signal to the process group
-        stdout = process.communicate()[0]
-    print("out command")
+#     try:
+#         stdout = process.communicate(timeout=10)[0]
+#     except TimeoutExpired:
+#         os.kill(process.pid, signal.SIGINT) # send signal to the process group
+#         stdout = process.communicate()[0]
+#     print("out command")
     return stdout
 
 def test_precondition():
@@ -136,6 +138,7 @@ def final_results():
 test = ['sovrin','connect test']
 test1 = ["exit"]
 command(test)
+command(test1)
 
 # test_precondition()
 
