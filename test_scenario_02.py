@@ -42,10 +42,7 @@ logging.basicConfig(level=logging.INFO)
 
 def command(command_str):
     print("in command")
-    print ("path: " + MyVars.pool_genesis_txn_file_path)
-    os.system("cd " + MyVars.folder_path)
-    os.system("ls -l")
-    p = subprocess.Popen(['cp ' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path], shell=True)
+    p = subprocess.Popen(command_str, shell=True)
     output = p.communicate()[0]
     return output
 
@@ -128,8 +125,8 @@ def final_results():
 
 
 # Run the cleanup first...
-test = ['cp', MyVars.pool_genesis_txn_file_path, MyVars.original_pool_genesis_txn_file_path]
-command("a")
+test = ['sovrin', 'connect test']
+command(test)
 # test_precondition()
 
 # Create the loop instance using asyncio
