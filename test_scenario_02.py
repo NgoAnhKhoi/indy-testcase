@@ -47,8 +47,9 @@ def command(command_str):
 #     print("in command")
     stdout = ""
     try:
-        process = Popen(command_str)
-        stdout = process.communicate(timeout=30)
+        process = Popen(command_str, stdin = PIPE)
+        stdout = process.communicate()[0]
+        process.stdin.write('exit')
 #         process.terminate()
     except TimeoutExpired:
         stdout = "asdf"
@@ -139,22 +140,22 @@ def final_results():
 
 
 # Run the cleanup first...
-# test = ['sovrin','connect test']
-# test1 = ["exit"]
-# command(test)
+test = ['sovrin','connect test']
+test1 = ["exit"]
+command(test)
 # command(test1)
 
-async def abc():
-    test = ['sovrin','connect test']
-    test1 = ["exit"]
-    await command(test)
-    await command(test1)
+# async def abc():
+#     test = ['sovrin','connect test']
+#     test1 = ["exit"]
+#     await command(test)
+#     await command(test1)
 # test_precondition()
 
 # Create the loop instance using asyncio
-loop = asyncio.get_event_loop()
-loop.run_until_complete(abc())
-loop.close()
+# loop = asyncio.get_event_loop()
+# loop.run_until_complete(abc())
+# loop.close()
 
 print("done")
 # print("\n\nResults\n+" + 40*"=" + "+")
