@@ -126,7 +126,9 @@ def final_results():
 
 # Run the cleanup first...
 test = ["sovrin 'connect test'"]
+test1 = ["exit"]
 command(test)
+command(test1)
 # test_precondition()
 
 # Create the loop instance using asyncio
