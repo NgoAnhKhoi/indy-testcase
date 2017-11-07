@@ -54,8 +54,8 @@ def get_output():
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
-#     command(['cd ~/.sovrin'])
-    command(['cp ' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path])
+    command(['cd', '~/.sovrin'])
+    command(['cp', MyVars.pool_genesis_txn_file_path, MyVars.original_pool_genesis_txn_file_path])
     open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
 
@@ -106,7 +106,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 5. Restore the pool_transactions_sandbox_genesis file ------------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t==Clean up==\n\t5. Restore the pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
     try:
-        await command(['rm pool_transactions_sandbox_genesis', 'mv original_pool_trasnsactions_sandbox_genesis pool_transactions_sandbox_genesis'])
+        await command(['rm', 'pool_transactions_sandbox_genesis', 'mv', 'original_pool_trasnsactions_sandbox_genesis', 'pool_transactions_sandbox_genesis'])
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
