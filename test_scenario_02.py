@@ -48,7 +48,7 @@ def command(command_str):
     try:
         process = Popen(command_str)
         stdout = process.communicate(timeout=30)
-        process.terminate()
+#         process.terminate()
     except TimeoutExpired:
         a = "asdf"
 #     subprocess.call(command_str)
