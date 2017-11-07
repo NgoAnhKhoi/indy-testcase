@@ -54,7 +54,7 @@ def get_output():
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
-    command(['cd', '~/.sovrin'])
+    command(['~/.sovrin'])
     command(['cp', MyVars.pool_genesis_txn_file_path, MyVars.original_pool_genesis_txn_file_path])
     open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
