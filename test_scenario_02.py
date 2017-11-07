@@ -50,7 +50,7 @@ def command(command_str):
         process = Popen(command_str, stdin = PIPE, stdout = PIPE)
         while True:
             if process.stdout.readline() != '':
-                process.stdin.write('exit')
+                Popen(['exit'], stdin = PIPE, stdout = PIPE)
 #         process.terminate()
     except TimeoutExpired:
         stdout = "asdf"
