@@ -2,13 +2,14 @@ import asyncio
 import json
 import logging
 import os
-from subprocess import Popen, PIPE
+import signal
+from subprocess import Popen, PIPE, TimeoutExpired, STDOUT, check_output
+import subprocess
+from sys import stdin
 import sys
-from subprocess import STDOUT, check_output
+
 from indy import pool
 from indy.error import IndyError
-from sys import stdin
-import subprocess
 
 
 # -----------------------------------------------------------------------------------------
@@ -44,11 +45,16 @@ logging.basicConfig(level=logging.INFO)
 
 def command(command_str):
     print("in command")
-#     p = Popen(command_str)
+    process = Popen(command_str)
 #     subprocess.call(command_str)
 #     subprocess.run(command_str, time_out=30)
-    stdout = check_output(command_str, stderr=STDOUT, timeout=30)
+#     stdout = check_output(command_str, stderr=STDOUT, timeout=30)
 #     stdout = "" #"p.communicate()[0]
+    try:
+        stdout = process.communicate(timeout=10)[0]
+    except TimeoutExpired:
+        os.kill(process.pid, signal.SIGINT) # send signal to the process group
+        stdout = process.communicate()[0]
     print("out command")
     return stdout
 
@@ -127,7 +133,7 @@ def final_results():
 
 
 # Run the cleanup first...
-test = ["sovrin 'connect test'"]
+test = ['sovrin','connect test']
 test1 = ["exit"]
 command(test)
 
