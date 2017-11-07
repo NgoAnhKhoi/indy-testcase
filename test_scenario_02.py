@@ -44,6 +44,7 @@ def command(command_str):
     print("in command")
     p = subprocess.Popen(command_str, shell=True)
     output = p.communicate()[0]
+    subprocess._cleanup()
     return output
 
 
