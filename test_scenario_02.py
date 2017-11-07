@@ -153,9 +153,9 @@ async def khoi():
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
     except IndyError as E:
         a = "do nothing"
-    finally:
-        cmd = 'cp ' + MyVars.folder_path + "khoi_pool " + MyVars.pool_genesis_txn_file_path
-        os.system(cmd)
+#     finally:
+#         cmd = 'cp ' + MyVars.folder_path + "khoi_pool " + MyVars.pool_genesis_txn_file_path
+#         os.system('cmd')
 #     subprocess.call(['connect test'])
 # command(test1)
 # command(test1)
