@@ -45,12 +45,13 @@ logging.basicConfig(level=logging.INFO)
 
 def command(command_str):
 #     print("in command")
+    stdout = ""
     try:
         process = Popen(command_str)
         stdout = process.communicate(timeout=30)
 #         process.terminate()
     except TimeoutExpired:
-        a = "asdf"
+        stdout = "asdf"
 #     subprocess.call(command_str)
 #     subprocess.run(command_str, time_out=30)
 #     stdout = check_output(command_str, stderr=STDOUT, timeout=30)
