@@ -43,8 +43,8 @@ logging.basicConfig(level=logging.INFO)
 # noinspection PyUnresolvedReferences
 def command(command_str):
     print("in command")
-    subprocess.run(command_str, shell=True)
-    output = subprocess.getoutput(command_str)
+    p = subprocess.Popen(command_str)
+    output = p.communicate()[0]
     return output
 
 
