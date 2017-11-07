@@ -146,12 +146,11 @@ def final_results():
 
 
 # Run the cleanup first...
-def khoi():
-    process = Popen(["sovrin 'connect test'"])
-    time.sleep(10)
-    subprocess.call(['exit'])
+async def khoi():
+    pool_config = "~/Git/indy-testcase/pool_transactions_sandbox_genesis"
+    os.system('sovrin')
+    await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
 
-khoi()
 #     subprocess.call(['connect test'])
 # command(test1)
 # command(test1)
@@ -164,9 +163,9 @@ khoi()
 # test_precondition()
 
 # Create the loop instance using asyncio
-# loop = asyncio.get_event_loop()
-# loop.run_until_complete(khoi())
-# loop.close()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(khoi())
+loop.close()
 
 print("done")
 # print("\n\nResults\n+" + 40*"=" + "+")
