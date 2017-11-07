@@ -64,7 +64,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 1. Using sovrin command -----------------------------
     print(Colors.HEADER + "\n\t1. using sovrin\n" + Colors.ENDC)
     try:
-        return_message = await command(['sovrin', 'connect test'])
+        return_message = await command(['sovrin\nconnect test'])
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
