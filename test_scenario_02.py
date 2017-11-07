@@ -34,7 +34,7 @@ class MyVars:
 
     pool_genesis_txn_file_path = folder_path + pool_genesis_txn_file
     original_pool_genesis_txn_file_path = folder_path + original_pool_genesis_txn_file
-    pool_name = "test_pool01khoixxx"
+    pool_name = "t_pool123l"
     debug = False
     the_error_message = "the information needed to connect was not found"
     test_results = {'Test 3': False}
@@ -147,12 +147,15 @@ def final_results():
 
 # Run the cleanup first...
 async def khoi():
-    pool_config = json.dumps({"genesis_txn": "~/.sovrin/khoi_pool"})
+    pool_config = json.dumps({"genesis_txn": "~/Git/indy-testcase/genesis_sandbox_file"})
 #     os.system('sovrin')
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
+        pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
     except IndyError as E:
         a = "do nothing"
+
+    print("pool handle: " + str(pool_handle))
 #     finally:
 #         cmd = 'cp ' + MyVars.folder_path + "khoi_pool " + MyVars.pool_genesis_txn_file_path
 #         os.system('cmd')
