@@ -147,7 +147,8 @@ def final_results():
 
 # Run the cleanup first...
 async def khoi():
-    pool_config = json.dumps({"genesis_txn": str("~/Git/indy-testcase/genesis_sandbox_file")})
+    pool_txn = ".sovrin/pool_transactions_sandbox_genesis"
+    pool_config = json.dumps({"genesis_txn": str(pool_txn)})
     pool_name = "khoi_test_" + str(random.randrange(100, 1000, 2))
 #     os.system('sovrin')
     try:
