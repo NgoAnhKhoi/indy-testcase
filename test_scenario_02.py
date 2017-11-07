@@ -43,9 +43,9 @@ logging.basicConfig(level=logging.INFO)
 def command(command_str):
     print("in command")
     print ("path: " + MyVars.pool_genesis_txn_file_path)
-    os.system("cd " + MyVars.pool_genesis_txn_file_path)
+    os.system("cd " + MyVars.folder_path)
     os.system("ls -l")
-    p = subprocess.Popen(['cp', MyVars.pool_genesis_txn_file_path, MyVars.original_pool_genesis_txn_file_path], shell=True)
+    p = subprocess.Popen(['cp ' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path], shell=True)
     output = p.communicate()[0]
     return output
 
@@ -67,7 +67,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
     # 1. Using sovrin command -----------------------------
     print(Colors.HEADER + "\n\t1. using sovrin\n" + Colors.ENDC)
     try:
-        return_message = await command(['sovrin', 'connect', 'test'])
+        return_message = await command(['sovrin', 'connect test'])
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
