@@ -42,10 +42,10 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-def command(command_str):
+async def command(command_str):
     print("in command")
 #     p = Popen(command_str)
-    subprocess.call(command_str)
+    await subprocess.call(command_str)
     stdout = "" #"p.communicate()[0]
     return stdout
 
@@ -126,7 +126,9 @@ def final_results():
 # Run the cleanup first...
 test = ['sovrin', 'connect test', 'exit']
 # test1 = ["exit"]
-command(test)
+loop = asyncio.get_event_loop()
+loop.run_until_complete(command(test))
+loop.close()
 # command(test1)
 # test_precondition()
 
