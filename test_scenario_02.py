@@ -47,8 +47,10 @@ def command(command_str):
 #     print("in command")
     stdout = ""
     try:
-        process = Popen(command_str, stdin = PIPE)
-        stdout = process.communicate(input='exit'.encode())[0]
+        process = Popen(command_str, stdin = PIPE, stdout = PIPE)
+        while True:
+            if process.stdout.readline() != '':
+                process.stdin.write('exit')
 #         process.terminate()
     except TimeoutExpired:
         stdout = "asdf"
@@ -142,6 +144,7 @@ def final_results():
 test = ['sovrin','connect test']
 test1 = ["exit"]
 command(test)
+command(test1)
 # command(test1)
 
 # async def abc():
