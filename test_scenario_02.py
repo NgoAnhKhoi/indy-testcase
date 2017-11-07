@@ -24,7 +24,7 @@ class MyVars:
     """  Needed some global variables. """
 
     pool_handle = 0
-    folder_path = "~/.sovrin/" #os.path.expanduser("~") + "/.sovrin/"
+    folder_path = os.path.expanduser("~") + "/.sovrin/"
     pool_genesis_txn_file = "pool_transactions_sandbox_genesis"
     original_pool_genesis_txn_file = "original_pool_transactions_sandbox_genesis"
 
@@ -42,7 +42,7 @@ logging.basicConfig(level=logging.INFO)
 
 def command(command_str):
     print("in command")
-    p = subprocess.Popen(command_str, shell=True)
+    p = subprocess.Popen(['cp', MyVars.pool_genesis_txn_file_path, MyVars.original_pool_genesis_txn_file_path], shell=True)
     output = p.communicate()[0]
     return output
 
@@ -53,7 +53,7 @@ def get_output():
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
-    command(['cd', '~/.sovrin'])
+#     command(['cd', '~/.sovrin'])
     command(['cp', MyVars.pool_genesis_txn_file_path, MyVars.original_pool_genesis_txn_file_path])
 #     open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
@@ -125,12 +125,14 @@ def final_results():
 
 
 # Run the cleanup first...
-test_precondition()
+test = ['cp', MyVars.pool_genesis_txn_file_path, MyVars.original_pool_genesis_txn_file_path]
+command("a")
+# test_precondition()
 
 # Create the loop instance using asyncio
-loop = asyncio.get_event_loop()
-loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
-loop.close()
+# loop = asyncio.get_event_loop()
+# loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
+# loop.close()
 
 print("done")
 # print("\n\nResults\n+" + 40*"=" + "+")
