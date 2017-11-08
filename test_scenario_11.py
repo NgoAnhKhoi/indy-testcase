@@ -238,9 +238,12 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     parts6 = {'trustee': False, 'trusteenym': False}
 
     print(Colors.HEADER + "\n\t6. Use TrustAnchor1 to create a Trustee\n" + Colors.ENDC)
+    print("\nbefore build_nym_request\n")
     nym_txn_req6 = await ledger.build_nym_request(trustanchor1_did, trustee2_did, trustee2_verkey, None, roles[0])
     try:
+        print("\n\nstep 6\n\n")
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req6)
+        print("\n\nend 6\n\n")
     except IndyError as E:
         print("\n\nerror code 6: %s\n\n", str(E.error_code))
         if E.error_code == 304:
