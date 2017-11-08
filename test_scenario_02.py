@@ -150,10 +150,11 @@ async def test_connect():
     print("Begin")
     pool_txn = ".sovrin/pool_transactions_sandbox_genesis"
     pool_config = json.dumps({"genesis_txn": str(pool_txn)})
+    config_optional = json.dumps({"network_timeout":1000})
     pool_name = "test_" + str(random.randrange(100, 1000, 2))
     try:
         await pool.create_pool_ledger_config(pool_name, pool_config)
-        res = await pool.open_pool_ledger(pool_name, network_timeout=1000)
+        res = await pool.open_pool_ledger(pool_name, config_optional)
         print("result: " + res)
     except IndyError as E:
         print("do something with error_code: " + str(E))
