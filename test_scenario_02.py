@@ -146,9 +146,6 @@ def final_results():
                 # print('{}: {}'.format(test_num, value))
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
 
-def f()->str:
-    return "30"
-
 
 # Run the cleanup first...
 async def test_connect():
@@ -156,7 +153,7 @@ async def test_connect():
     pool_txn = ".sovrin/pool_transactions_sandbox_genesis"
     pool_config = json.dumps({"genesis_txn": str(pool_txn)})
     pool_name = "test_" + str(random.randrange(100, 1000, 2))
-    config_optional = f()
+    config_optional = [None,None,30]
     print("config_optional: " + str(config_optional))
     try:
         await pool.create_pool_ledger_config(pool_name, pool_config)
