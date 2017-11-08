@@ -36,7 +36,7 @@ class MyVars:
 
     pool_genesis_txn_file_path = folder_path + pool_genesis_txn_file
     original_pool_genesis_txn_file_path = folder_path + original_pool_genesis_txn_file
-    pool_name = "test_wait_forever" #+ str(random.randrange(100, 1000, 2))
+    pool_name = "test_wait_forever_" + str(random.randrange(100, 1000, 2))
     debug = False
     the_error_message = "the information needed to connect was not found"
     test_results = {'Test 3': False}
