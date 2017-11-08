@@ -22,13 +22,10 @@ from indy.error import IndyError
 class Colors:
     """ Class to set the colors for text.  Syntax:  print(Colors.OKGREEN +"TEXT HERE" +Colors.ENDC) """
     HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
     ENDC = '\033[0m'  # Normal default color
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
 
 
 class MyVars:
@@ -39,10 +36,9 @@ class MyVars:
     pool_genesis_txn_file = ".sovrin/pool_transactions_sandbox_genesis"
     wallet_handle = 0
     pool_name = "test_pool_" + str(random.randrange(100, 1000, 2))
-    pool_name1 = "test_pool_" + str(random.randrange(100, 1000, 2))
     wallet_name = "test_wallet_" + str(random.randrange(100, 1000, 1))
     debug = False
-    test_results = {'Test 6': False}
+    test_results = {'Test 4': False}
 
 
 logger = logging.getLogger(__name__)
@@ -51,7 +47,6 @@ logging.basicConfig(level=logging.INFO)
 
 def test_prep():
     """  Delete all files out of the .sovrin/pool and .sovrin/wallet directories  """
-    import os
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
     x = os.path.expanduser('~')
     work_dir = x + os.sep + ".indy"
@@ -115,31 +110,26 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
 
     print("\nwallet_handle: " + str(MyVars.wallet_handle) + "\n")
 
-    # 6. verify wallet moved to .indy/wallet
+    # 4. verify wallet moved to .indy/wallet
     try:
-        print(Colors.HEADER + "\n\t6. Verifying wallet exist\n" + Colors.ENDC)
+        print(Colors.HEADER + "\n\t4. Verifying wallet exist\n" + Colors.ENDC)
         x = os.path.expanduser('~')
         work_dir = x + os.sep + ".indy"
         wallet_path = work_dir + "/wallet/" + MyVars.wallet_name
         result = os.path.exists(wallet_path)
-        print("wallet_path: " + str(wallet_path))
-        print("result: " + str(result))
         if result:
-            print("exist file: " + wallet_path)
-            MyVars.test_results['Test 6'] = True
+            MyVars.test_results['Test 4'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
-#     if MyVars.debug:
-#         input(Colors.WARNING + "\n\nWallet handle is %s" % str(MyVars.wallet_handle) + Colors.ENDC)
 
 
     # ==================================================================================================================
     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # ==================================================================================================================
-    # 13. Close wallet and pool ------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t==Clean up==\n\t13. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
+    # 5. Close wallet and pool ------------------------------------------------------------------------------
+    print(Colors.HEADER + "\n\t==Clean up==\n\t7. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
     try:
         await wallet.close_wallet(MyVars.wallet_handle)
         await pool.close_pool_ledger(MyVars.pool_handle)
@@ -147,20 +137,16 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
-#     if MyVars.debug:
-#         input(Colors.WARNING + "\n\nClosed wallet and pool\n" + Colors.ENDC)
 
-    #14. Delete wallet and pool ledger --------------------------------------------------------------------
-#     print(Colors.HEADER + "\n\t14. Delete the wallet and pool ledger...\n" + Colors.ENDC)
-#     try:
-#         await wallet.delete_wallet(MyVars.wallet_name, None)
-#         await pool.delete_pool_ledger_config(MyVars.pool_name)
-#     except IndyError as E:
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-#  
-#     await asyncio.sleep(0)
-#     if MyVars.debug:
-#         input(Colors.WARNING + "\n\nDeleted wallet and pool ledger\n" + Colors.ENDC)
+    #6. Delete wallet and pool ledger --------------------------------------------------------------------
+    print(Colors.HEADER + "\n\t8. Delete the wallet and pool ledger...\n" + Colors.ENDC)
+    try:
+        await wallet.delete_wallet(MyVars.wallet_name, None)
+        await pool.delete_pool_ledger_config(MyVars.pool_name)
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+
+    await asyncio.sleep(0)
 
     logger.info("Test Scenario 04 -> completed")
 
@@ -176,9 +162,6 @@ def final_results():
                 # print('{}: {}'.format(test_num, value))
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
 
-
-def log(str):
-    print("\n\n" + str + "\n\n")
 
 # Run the cleanup first...
 test_prep()
