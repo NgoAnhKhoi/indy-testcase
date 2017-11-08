@@ -105,8 +105,14 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
-
     print("\nwallet_name: " + MyVars.wallet_name + "\n")
+    # Get wallet handle
+    try:
+        MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+
+    print("\nwallet_handle: " + str(MyVars.wallet_handle) + "\n")
 #     # create and open pool to check which wallet is active
 #     # 4. Create ledger config from genesis txn file  ---------------------------------------------------------
 #     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
@@ -133,6 +139,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
 
     # 6. verify wallet moved to .indy/wallet
     try:
+        print(Colors.HEADER + "\n\t6. Verifying wallet exist\n" + Colors.ENDC)
         wallet_path = ".indy/wallet/" + MyVars.wallet_name
         result = os.path.isfile(wallet_path)
         wallet_path1 = ".sovrin/wallet/" + MyVars.wallet_name
