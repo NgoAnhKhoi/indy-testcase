@@ -11,6 +11,7 @@ import time
 import random
 from indy import pool
 from indy.error import IndyError
+from distutils.command.config import config
 
 
 # -----------------------------------------------------------------------------------------
@@ -152,6 +153,8 @@ async def test_connect():
     pool_config = json.dumps({"genesis_txn": str(pool_txn)})
     config_optional = json.dumps({"network_timeout":30})
     pool_name = "test_" + str(random.randrange(100, 1000, 2))
+
+    print("config_optional: " + str(config_optional))
     try:
         await pool.create_pool_ledger_config(pool_name, pool_config)
         res = await pool.open_pool_ledger(pool_name, config_optional)
