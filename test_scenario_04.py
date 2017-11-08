@@ -114,29 +114,17 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     print("\nwallet_handle: " + str(MyVars.wallet_handle) + "\n")
-#     # create and open pool to check which wallet is active
-#     # 4. Create ledger config from genesis txn file  ---------------------------------------------------------
-#     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
-#     pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file)})
-#     try:
-#         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
-#     except IndyError as E:
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-#         sys.exit[1]
-# 
-#     await asyncio.sleep(0)
-# 
-#     # 5. Open pool ledger -----------------------------------------------------------------------------------
-#     print(Colors.HEADER + "\n\t2.  Open pool ledger\n" + Colors.ENDC)
-#     try:
-#         pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
-#         MyVars.pool_handle = pool_handle
-#     except IndyError as E:
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-# 
-#     await asyncio.sleep(0)
-#     if MyVars.debug:
-#         input(Colors.WARNING + "\n\nPoolHandle is %s" % str(MyVars.pool_handle) + Colors.ENDC)
+    # create and open pool to check which wallet is active
+    # 5. Open pool ledger -----------------------------------------------------------------------------------
+    print(Colors.HEADER + "\n\t2.  Open pool ledger\n" + Colors.ENDC)
+    try:
+        pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
+        MyVars.pool_handle = pool_handle
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+    await asyncio.sleep(0)
+    if MyVars.debug:
+        input(Colors.WARNING + "\n\nPoolHandle is %s" % str(MyVars.pool_handle) + Colors.ENDC)
 
     # 6. verify wallet moved to .indy/wallet
     try:
@@ -145,7 +133,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         result = os.path.isfile(wallet_path)
         wallet_path1 = ".sovrin/wallet/" + MyVars.wallet_name
         result1 = os.path.isfile(wallet_path)
-        
+
         if result is True:
             print("exist file: " + wallet_path)
             MyVars.test_results['Test 6'] = True
