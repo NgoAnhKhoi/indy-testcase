@@ -155,7 +155,7 @@ async def test_connect():
     try:
         await pool.create_pool_ledger_config(pool_name, pool_config)
         res = await pool.open_pool_ledger(pool_name, config_optional)
-        print("result: " + res)
+        print("result: " + str(res))
     except IndyError as E:
         print("do something with error_code: " + str(E))
 
