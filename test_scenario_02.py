@@ -151,7 +151,7 @@ async def test_connect():
     print("Begin")
     pool_txn = ".sovrin/pool_transactions_sandbox_genesis"
     pool_config = json.dumps({"genesis_txn": str(pool_txn)})
-    config_optional = json.dumps({"network_timeout":30})
+    config_optional = json.dumps({"network_timeout":"30"})
     pool_name = "test_" + str(random.randrange(100, 1000, 2))
 
     print("config_optional: " + str(config_optional))
