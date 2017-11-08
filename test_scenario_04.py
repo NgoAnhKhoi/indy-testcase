@@ -164,14 +164,14 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
 #         input(Colors.WARNING + "\n\nClosed wallet and pool\n" + Colors.ENDC)
 
     # 14. Delete wallet and pool ledger --------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t14. Delete the wallet and pool ledger...\n" + Colors.ENDC)
-    try:
-        await wallet.delete_wallet(MyVars.wallet_name, None)
-        await pool.delete_pool_ledger_config(MyVars.pool_name)
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    await asyncio.sleep(0)
+#     print(Colors.HEADER + "\n\t14. Delete the wallet and pool ledger...\n" + Colors.ENDC)
+#     try:
+#         await wallet.delete_wallet(MyVars.wallet_name, None)
+#         await pool.delete_pool_ledger_config(MyVars.pool_name)
+#     except IndyError as E:
+#         print(Colors.FAIL + str(E) + Colors.ENDC)
+# 
+#     await asyncio.sleep(0)
 #     if MyVars.debug:
 #         input(Colors.WARNING + "\n\nDeleted wallet and pool ledger\n" + Colors.ENDC)
 
