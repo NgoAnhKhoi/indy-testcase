@@ -67,9 +67,8 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
             sys.exit[1]
-    
         await asyncio.sleep(0)
-    
+
         # 2. Open pool ledger -----------------------------------------------------------------------------------
         print(Colors.HEADER + "\n\t2.  Open pool ledger\n" + Colors.ENDC)
         try:
@@ -77,7 +76,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
             sys.exit(1)
-    
+
         # 3. verifying the message ------------------------------------------------------------------------
         print(Colors.HEADER + "\n\t3. verifying the message\n" + Colors.ENDC)
         try:
@@ -107,7 +106,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
         print(Colors.HEADER + "\n\t==Clean up==\n\t5. Restore the pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
         try:
             command('rm ' + MyVars.pool_genesis_txn_file_path)
-            command('mv ' + MyVars.original_pool_genesis_txn_file_path + " " + MyVars.pool_genesis_txn_file_path)
+            command('cp ' + MyVars.original_pool_genesis_txn_file_path + " " + MyVars.pool_genesis_txn_file_path)
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -134,7 +133,7 @@ async def test_connect():
     pool_name = "test_" + str(random.randrange(100, 1000, 2))
     try:
         await pool.create_pool_ledger_config(pool_name, pool_config)
-        res = await pool.open_pool_ledger(pool_name, None)
+        res = await pool.open_pool_ledger(pool_name, json.dumps({"network_timeout": "10"}))
         print("result: " + str(res))
     except IndyError as E:
         print("do something with error_code: " + str(E))
