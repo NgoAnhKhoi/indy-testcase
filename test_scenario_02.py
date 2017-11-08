@@ -58,56 +58,58 @@ def test_precondition():
 
 async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool():
     logger.info("Test Scenario 02 -> started")
-
-    # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
-    print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
-    pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file_path)})
     try:
-        await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
+        # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
+        print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
+        pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file_path)})
+        try:
+            await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
+        except IndyError as E:
+            print(Colors.FAIL + str(E) + Colors.ENDC)
+            sys.exit[1]
+    
+        await asyncio.sleep(0)
+    
+        # 2. Open pool ledger -----------------------------------------------------------------------------------
+        print(Colors.HEADER + "\n\t2.  Open pool ledger\n" + Colors.ENDC)
+        try:
+            result = await pool.open_pool_ledger(MyVars.pool_name, None)
+        except IndyError as E:
+            print(Colors.FAIL + str(E) + Colors.ENDC)
+            sys.exit(1)
+    
+        # 3. verifying the message ------------------------------------------------------------------------
+        print(Colors.HEADER + "\n\t3. verifying the message\n" + Colors.ENDC)
+        try:
+            print("error_message: " + MyVars.the_error_message)
+    #         return_message = get_output()
+            print("output_message: " + str(result))
+            if (str(result) != MyVars.the_error_message):
+                MyVars.test_results['Test 3'] = True
+        except IndyError as E:
+            print(Colors.FAIL + str(E) + Colors.ENDC)
+            sys.exit[1]
+
+        # 4. exit sovrin -----------------------------------------------------------------------------------
+        print(Colors.HEADER + "\n\t4. exit sovrin\n" + Colors.ENDC)
+        try:
+            await command(['exit'])
+        except IndyError as E:
+            print(Colors.FAIL + str(E) + Colors.ENDC)
+            sys.exit[1]
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
-
-    await asyncio.sleep(0)
-
-    # 2. Open pool ledger -----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t2.  Open pool ledger\n" + Colors.ENDC)
-    try:
-        result = await pool.open_pool_ledger(MyVars.pool_name, None)
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit(1)
-
-    # 3. verifying the message ------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t3. verifying the message\n" + Colors.ENDC)
-    try:
-        print("error_message: " + MyVars.the_error_message)
-#         return_message = get_output()
-        print("output_message: " + str(result))
-        if (str(result) != MyVars.the_error_message):
-            MyVars.test_results['Test 3'] = True
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
-
-    # 4. exit sovrin -----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t4. exit sovrin\n" + Colors.ENDC)
-    try:
-        await command(['exit'])
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
-
     # ==================================================================================================================
     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # ==================================================================================================================
-    # 5. Restore the pool_transactions_sandbox_genesis file ------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t==Clean up==\n\t5. Restore the pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
-    try:
-        command('rm ' + MyVars.pool_genesis_txn_file_path)
-        command('mv ' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path)
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
+    finally:
+        # 5. Restore the pool_transactions_sandbox_genesis file ------------------------------------------------------------------------------
+        print(Colors.HEADER + "\n\t==Clean up==\n\t5. Restore the pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
+        try:
+            command('rm ' + MyVars.pool_genesis_txn_file_path)
+            command('mv ' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path)
+        except IndyError as E:
+            print(Colors.FAIL + str(E) + Colors.ENDC)
 
     logger.info("Test Scenario 02 -> completed")
 
