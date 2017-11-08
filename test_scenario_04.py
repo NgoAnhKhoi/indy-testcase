@@ -105,6 +105,8 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
+
+    print("\nwallet_name: " + MyVars.wallet_name + "\n")
 #     # create and open pool to check which wallet is active
 #     # 4. Create ledger config from genesis txn file  ---------------------------------------------------------
 #     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
@@ -133,14 +135,20 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     try:
         wallet_path = ".indy/wallet/" + MyVars.wallet_name
         result = os.path.isfile(wallet_path)
-        if result == True:
+        wallet_path1 = ".sovrin/wallet/" + MyVars.wallet_name
+        result1 = os.path.isfile(wallet_path)
+        if result is True:
+            print("exist file: " + wallet_path)
+            MyVars.test_results['Test 6'] = True
+        if result1 is True:
+            print("exist file1: " + wallet_path1)
             MyVars.test_results['Test 6'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
-    if MyVars.debug:
-        input(Colors.WARNING + "\n\nWallet handle is %s" % str(MyVars.wallet_handle) + Colors.ENDC)
+#     if MyVars.debug:
+#         input(Colors.WARNING + "\n\nWallet handle is %s" % str(MyVars.wallet_handle) + Colors.ENDC)
 
 
     # ==================================================================================================================
@@ -155,8 +163,8 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
-    if MyVars.debug:
-        input(Colors.WARNING + "\n\nClosed wallet and pool\n" + Colors.ENDC)
+#     if MyVars.debug:
+#         input(Colors.WARNING + "\n\nClosed wallet and pool\n" + Colors.ENDC)
 
     # 14. Delete wallet and pool ledger --------------------------------------------------------------------
     print(Colors.HEADER + "\n\t14. Delete the wallet and pool ledger...\n" + Colors.ENDC)
@@ -167,8 +175,8 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
-    if MyVars.debug:
-        input(Colors.WARNING + "\n\nDeleted wallet and pool ledger\n" + Colors.ENDC)
+#     if MyVars.debug:
+#         input(Colors.WARNING + "\n\nDeleted wallet and pool ledger\n" + Colors.ENDC)
 
     logger.info("Test Scenario 04 -> completed")
 
