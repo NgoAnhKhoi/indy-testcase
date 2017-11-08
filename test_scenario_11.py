@@ -153,7 +153,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         (trustee1_did, trustee1_verkey, trustee1_pk) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({}))
 
-        print("trustee1: DID[%s] verkey[%s] public_key[%s]" % str(trustee1_did), str(trustee1_verkey), str(trustee1_pk))
+#         print("trustee1: DID[%s] verkey[%s] public_key[%s]" % str(trustee1_did), str(trustee1_verkey), str(trustee1_pk))
 
         (trustee2_did, trustee2_verkey, trustee2_pk) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({}))
