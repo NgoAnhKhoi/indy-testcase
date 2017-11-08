@@ -153,7 +153,8 @@ async def test_connect():
     pool_name = "test_" + str(random.randrange(100, 1000, 2))
     try:
         await pool.create_pool_ledger_config(pool_name, pool_config)
-        pool_handle = pool.open_pool_ledger(pool_name, None)
+        res = await pool.open_pool_ledger(pool_name, network_timeout=1000)
+        print("result: " + res)
     except IndyError as E:
         print("do something with error_code: " + str(E))
 
