@@ -30,7 +30,7 @@ class MyVars:
     """  Needed some global variables. """
 
     pool_handle = 0
-    folder_path = "~/.sovrin/"
+    folder_path = ".sovrin/"
     pool_genesis_txn_file = "pool_transactions_sandbox_genesis"
     original_pool_genesis_txn_file = "original_pool_transactions_sandbox_genesis"
 
