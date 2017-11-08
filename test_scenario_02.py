@@ -1,3 +1,4 @@
+from typing import Optional
 import asyncio
 import json
 import logging
@@ -151,9 +152,8 @@ async def test_connect():
     print("Begin")
     pool_txn = ".sovrin/pool_transactions_sandbox_genesis"
     pool_config = json.dumps({"genesis_txn": str(pool_txn)})
-    config_optional = json.dumps({"refresh_on_open":True, "auto_refresh_time": 24*60, "network_timeout":30})
     pool_name = "test_" + str(random.randrange(100, 1000, 2))
-
+    config_optional = Optional["30"]
     print("config_optional: " + str(config_optional))
     try:
         await pool.create_pool_ledger_config(pool_name, pool_config)
