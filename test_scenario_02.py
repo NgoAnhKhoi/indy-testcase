@@ -140,13 +140,17 @@ async def test_connect():
 
     print("end")
 
-# test_precondition()
-test_precondition()
-# Create the loop instance using asyncio
 loop = asyncio.get_event_loop()
-loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
+loop.run_until_complete(test_connect())
 loop.close()
 
-
-print("\n\nResults\n+" + 40*"=" + "+")
-final_results()
+# test_precondition()
+# test_precondition()
+# # Create the loop instance using asyncio
+# loop = asyncio.get_event_loop()
+# loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
+# loop.close()
+# 
+# 
+# print("\n\nResults\n+" + 40*"=" + "+")
+# final_results()
