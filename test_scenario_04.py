@@ -100,7 +100,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
-    print("\nwallet_name: " + MyVars.wallet_name + "\n")
+
     # Get wallet handle
     print(Colors.HEADER + "\n\t4. Get wallet handle\n" + Colors.ENDC)
     try:
@@ -108,13 +108,10 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    print("\nwallet_handle: " + str(MyVars.wallet_handle) + "\n")
-
     # 4. verify wallet moved to .indy/wallet
     try:
         print(Colors.HEADER + "\n\t4. Verifying wallet exist\n" + Colors.ENDC)
-        x = os.path.expanduser('~')
-        work_dir = x + os.sep + ".indy"
+        work_dir = os.path.expanduser('~') + os.sep + ".indy"
         wallet_path = work_dir + "/wallet/" + MyVars.wallet_name
         result = os.path.exists(wallet_path)
         if result:
