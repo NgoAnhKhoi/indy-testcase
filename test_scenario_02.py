@@ -30,7 +30,7 @@ class MyVars:
     """  Needed some global variables. """
 
     pool_handle = 0
-    folder_path = os.path.expanduser("~") + "/.sovrin/"
+    folder_path = "~/.sovrin/"
     pool_genesis_txn_file = "pool_transactions_sandbox_genesis"
     original_pool_genesis_txn_file = "original_pool_transactions_sandbox_genesis"
 
@@ -107,7 +107,7 @@ async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_
         print(Colors.HEADER + "\n\t==Clean up==\n\t5. Restore the pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
         try:
             command('rm ' + MyVars.pool_genesis_txn_file_path)
-            command('mv ' + MyVars.pool_genesis_txn_file_path + " " + MyVars.original_pool_genesis_txn_file_path)
+            command('mv ' + MyVars.original_pool_genesis_txn_file_path + " " + MyVars.pool_genesis_txn_file_path)
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
 
