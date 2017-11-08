@@ -242,7 +242,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req6)
     except IndyError as E:
-        print("error code 6: " + str(E.error_code))
+        print("\n\nerror code 6: %s\n\n", str(E.error_code))
         if E.error_code == 304:
             parts6['trustee'] = True
             print(Colors.OKGREEN + ("::PASS::Validated that a TrustAnchor cannot add a Trustee\n" + Colors.ENDC))
@@ -256,7 +256,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     try:
         get_nym_txn_resp6a = await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req6a)
     except IndyError as E:
-        print("error code 6a: " + str(E.error_code))
+        print("\n\nerror code 6a: %s\n\n", str(E.error_code))
         if E.error_code == 304:
             print(Colors.OKGREEN + ("::PASS::Validated that cannot GET_NYM because it should not have been created\n" + Colors.ENDC))
         else:
@@ -268,7 +268,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
 
     if str(check_response_to["result"]["data"]) == "None":
         parts6['trusteenym'] = True
-    print("6b: %b", parts6['trusteenym'])
+    print("\n\n6b: %b\n\n", parts6['trusteenym'])
     # If any of the results are are not true, then fail the test
     if not all(value == True for value in parts6.values()):
         print(Colors.FAIL + "\n\tOne of the commands in test 6 failed" + Colors.ENDC)
