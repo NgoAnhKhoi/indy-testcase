@@ -114,31 +114,15 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     print("\nwallet_handle: " + str(MyVars.wallet_handle) + "\n")
-    # create and open pool to check which wallet is active
-    # 5. Open pool ledger -----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t2.  Open pool ledger\n" + Colors.ENDC)
-    try:
-        pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
-        MyVars.pool_handle = pool_handle
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-    await asyncio.sleep(0)
-    if MyVars.debug:
-        input(Colors.WARNING + "\n\nPoolHandle is %s" % str(MyVars.pool_handle) + Colors.ENDC)
 
     # 6. verify wallet moved to .indy/wallet
     try:
         print(Colors.HEADER + "\n\t6. Verifying wallet exist\n" + Colors.ENDC)
-        wallet_path = ".indy/wallet/" + MyVars.wallet_name
+        wallet_path = "~/.indy/wallet/" + MyVars.wallet_name
         result = os.path.isfile(wallet_path)
-        wallet_path1 = ".sovrin/wallet/" + MyVars.wallet_name
-        result1 = os.path.isfile(wallet_path)
 
         if result is True:
             print("exist file: " + wallet_path)
-            MyVars.test_results['Test 6'] = True
-        if result1 is True:
-            print("exist file1: " + wallet_path1)
             MyVars.test_results['Test 6'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
