@@ -146,15 +146,11 @@ async def do():
 
     # 4. Create DIDs.
     print(Colors.HEADER + "\n\t4.  Create DIDs\n" + Colors.ENDC)
-    (default_trustee_did,
-     default_trustee_verkey,
-     default_trustee_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                                json.dumps({"seed": seed_default_trustee}))
+    (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
+            MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
 
-    (trustee1_did,
-     trustee1_verkey,
-     trustee1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                         json.dumps({"seed": seed_trustee1}))
+    (trustee1_did, trustee1_verkey, trustee1_pk) = await signus.create_and_store_my_did(
+            MyVars.wallet_handle, json.dumps({"seed": seed_trustee1}))
 
     (trustee2_did,
      trustee2_verkey,
