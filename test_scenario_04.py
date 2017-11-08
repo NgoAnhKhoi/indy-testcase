@@ -107,6 +107,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         sys.exit[1]
     print("\nwallet_name: " + MyVars.wallet_name + "\n")
     # Get wallet handle
+    print(Colors.HEADER + "\n\t4. Get wallet handle\n" + Colors.ENDC)
     try:
         MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
     except IndyError as E:
@@ -144,6 +145,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         result = os.path.isfile(wallet_path)
         wallet_path1 = ".sovrin/wallet/" + MyVars.wallet_name
         result1 = os.path.isfile(wallet_path)
+        
         if result is True:
             print("exist file: " + wallet_path)
             MyVars.test_results['Test 6'] = True
