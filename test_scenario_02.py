@@ -126,31 +126,31 @@ def final_results():
 
 
 # Run the cleanup first...
-async def test_connect():
-    print("Begin")
-    pool_txn = ".sovrin/pool_transactions_sandbox_genesis"
-    pool_config = json.dumps({"genesis_txn": str(pool_txn)})
-    pool_name = "test_" + str(random.randrange(100, 1000, 2))
-    try:
-        await pool.create_pool_ledger_config(pool_name, pool_config)
-        res = await pool.open_pool_ledger(pool_name, json.dumps({"network_timeout": "10"}))
-        print("result: " + str(res))
-    except IndyError as E:
-        print("do something with error_code: " + str(E))
-
-    print("end")
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(test_connect())
-loop.close()
-
-# test_precondition()
-# test_precondition()
-# # Create the loop instance using asyncio
+# async def test_connect():
+#     print("Begin")
+#     pool_txn = ".sovrin/pool_transactions_sandbox_genesis"
+#     pool_config = json.dumps({"genesis_txn": str(pool_txn)})
+#     pool_name = "test_" + str(random.randrange(100, 1000, 2))
+#     try:
+#         await pool.create_pool_ledger_config(pool_name, pool_config)
+#         res = await pool.open_pool_ledger(pool_name, json.dumps({"network_timeout": "10"}))
+#         print("result: " + str(res))
+#     except IndyError as E:
+#         print("do something with error_code: " + str(E))
+# 
+#     print("end")
+# 
 # loop = asyncio.get_event_loop()
-# loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
+# loop.run_until_complete(test_connect())
 # loop.close()
-# 
-# 
-# print("\n\nResults\n+" + 40*"=" + "+")
-# final_results()
+
+# test_precondition()
+test_precondition()
+# Create the loop instance using asyncio
+loop = asyncio.get_event_loop()
+loop.run_until_complete(verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool())
+loop.close()
+ 
+ 
+print("\n\nResults\n+" + 40*"=" + "+")
+final_results()
