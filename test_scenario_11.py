@@ -38,7 +38,7 @@ class MyVars:
     pool_genesis_txn_file = ".sovrin/pool_transactions_sandbox_genesis"
     wallet_handle = 0
     pool_name = "test_pool_" + str(random.randrange(100, 1000, 2))
-    wallet_name = "test_wallet11"
+    wallet_name = "test_wallet_" + str(random.randrange(100, 1000, 1))
     debug = False
     test_results = {'Test 5': False, 'Test 6': False, 'Test 7': False, 'Test 8': False, 'Test 9': False,
                     'Test 10': False, 'Test 11': False, 'Test 12': False}
