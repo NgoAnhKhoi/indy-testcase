@@ -43,12 +43,12 @@ class MyVars:
     test_results = {'Test 5': False, 'Test 6': False, 'Test 7': False, 'Test 8': False, 'Test 9': False,
                     'Test 10': False, 'Test 11': False, 'Test 12': False}
 
-class Role:
-    TRUSTEE = "TRUSTEE"
-    STEWARD = "STEWARD"
-    TRUST_ANCHOR = "TRUST_ANCHOR"
-    TGB = "TGB"
-    NONE = ""
+# class Role:
+#     TRUSTEE = "TRUSTEE"
+#     STEWARD = "STEWARD"
+#     TRUST_ANCHOR = "TRUST_ANCHOR"
+#     TGB = "TGB"
+#     NONE = ""
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -99,7 +99,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     # seed_user4 = "RandomUser4000000000000000000000"
     # seed_user5 = "RandomUser5000000000000000000000"
     # seed_user6 = "RandomUser6000000000000000000000"
-#     roles = ("TRUSTEE", "STEWARD", "TRUST_ANCHOR", "TGB", "")
+    roles = ("TRUSTEE", "STEWARD", "TRUST_ANCHOR", "TGB", "")
 
     # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
@@ -181,7 +181,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     parts5 = {'trustee1': False, 'trusteenym': False, 'trustanchor1': False, 'trustanchor1nym': False}
 
     print(Colors.HEADER + "\n\t5. Use default Trustee to create a Trustee\n" + Colors.ENDC)
-    nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, trustee1_did, trustee1_verkey, None, Role.TRUSTEE)
+    nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, trustee1_did, trustee1_verkey, None, roles[0])#Role.TRUSTEE)
 
     try:
         res = await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
@@ -203,7 +203,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     # 5b. TrustAnchor1
     print(Colors.HEADER + "\n\t5b. Use Trustee to create a TrustAnchor\n" + Colors.ENDC)
     nym_txn_req5b = await ledger.build_nym_request(default_trustee_did, trustanchor1_did, trustanchor1_verkey, None,
-                                                  Role.TRUST_ANCHOR)
+                                                  roles[0]) #Role.TRUST_ANCHOR)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
                                              nym_txn_req5b)
