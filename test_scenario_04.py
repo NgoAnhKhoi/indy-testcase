@@ -120,7 +120,8 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.HEADER + "\n\t6. Verifying wallet exist\n" + Colors.ENDC)
         wallet_path = "~/.indy/wallet/" + MyVars.wallet_name
         result = os.path.isfile(wallet_path)
-
+        print("wallet_path: " + str(wallet_path))
+        print("result: " + str(result))
         if result is True:
             print("exist file: " + wallet_path)
             MyVars.test_results['Test 6'] = True
