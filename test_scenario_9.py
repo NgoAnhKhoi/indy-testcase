@@ -223,17 +223,6 @@ async def do():
     # 5. Using default Trustee to create Trustee1.
 #     print(Colors.HEADER + "\n\t5.  Using default Trustee to create Trustee1\n" + Colors.ENDC)
 #     MyVars.test_results["Test 5"] = await add_nym(default_trustee_did, trustee1_did, trustee1_verkey,
-#                                                   None, MyVars.roles[0], can_add=True)
-    print(Colors.HEADER + "\n\t5. Use default Trustee to create a Trustee\n" + Colors.ENDC)
-    nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, trustee1_did, trustee1_verkey, None, MyVars.roles[0])#Role.TRUSTEE)
-
-    try:
-        res = await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
-                                             nym_txn_req5)
-        print("res: " + str(res))
-        MyVars.test_results["Test 5"] = True
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
 
 #     # 6. Verify GET NYM.
 #     print(Colors.HEADER + "\n\t6.  Verify GET NYM - Trustee1\n" + Colors.ENDC)
