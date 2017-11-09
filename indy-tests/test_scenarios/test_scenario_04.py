@@ -12,7 +12,6 @@ import logging
 import shutil
 from indy import signus, wallet, pool
 from indy.error import IndyError
-sys.path.append('../utils')
 from utils.constant import Colors, Constant
 from utils.utils import generate_random_string
 
