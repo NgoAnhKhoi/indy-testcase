@@ -29,7 +29,7 @@ class MyVars:
     wallet_handle = 0
     pool_name = generate_random_string("test_pool", length=10)
     wallet_name = generate_random_string("test_wallet", length=10)
-    print("pool_name: %s\nwallet_name: %s" % pool_name, wallet_name)
+    print(("pool_name: %s\nwallet_name: %s") % (pool_name, wallet_name))
     debug = False
     test_results = {'Test 4': [False, "no message"], 'Test 5': [False, "no message"]}
 
