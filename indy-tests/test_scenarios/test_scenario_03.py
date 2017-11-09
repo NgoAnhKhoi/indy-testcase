@@ -4,9 +4,14 @@ import logging
 import os
 import asyncio
 import shutil
+import time
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from indy import pool, signus, wallet
 from indy.error import IndyError
 from utils.constant import Colors, Constant
+from utils.report import TestReport
 
 
 class MyVars:
@@ -15,7 +20,8 @@ class MyVars:
     pool_name = "pool_genesis_test3"
     wallet_name = "test_wallet3"
     debug = False
-    test_results = {"Test 5": False, "Test 6": False, "Test 7": False}
+    test_report = TestReport("Test_scenario_03_Check_Connection")
+    test_results = {"Test 4": False, "Test 5": False, "Test 6": False}
 
 
 logger = logging.getLogger(__name__)
@@ -44,62 +50,79 @@ async def test_scenario_03_check_connection():
     seed_steward01 = "000000000000000000000000Steward1"
     pool_config = json.dumps({"genesis_txn": str(Constant.pool_genesis_txn_file)})
 
-    print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
+    # 1. Create pool ledger
+    print(Colors.HEADER + "\n\t1.  Create pool ledger\n" + Colors.ENDC)
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(1, "Create pool ledger", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
 
-    print(Colors.HEADER + "\n\t3. Create wallet\n" + Colors.ENDC)
+    # 2. Create wallet
+    print(Colors.HEADER + "\n\t2. Create wallet\n" + Colors.ENDC)
     try:
         await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(2, "Create wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
 
     try:
         MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(2, "Create wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # 4. Create DID
-    print(Colors.HEADER + "\n\t4. Create DID's\n" + Colors.ENDC)
+    # 3. Create DID
+    print(Colors.HEADER + "\n\t3. Create DID\n" + Colors.ENDC)
     try:
         await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({"seed": seed_steward01}))
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(3, "Create DID", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # ==========================================================================================================
     # Test starts here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # ==========================================================================================================
 
-    # 5. Connect to pool.
+    # 4. Connect to pool.
     # Verify that the default wallet move to Test from NoEnv?
     # Cannot verify because ".indy/wallet" do not include any folder that name
     # no-env and test, and default wallet cannot be created via indy-sdk
-    print(Colors.HEADER + "\n\t5.  Connect to pool\n" + Colors.ENDC)
+    print(Colors.HEADER + "\n\t4.  Connect to pool\n" + Colors.ENDC)
     try:
         MyVars.pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
-        MyVars.test_results["Test 5"] = True
+        MyVars.test_results["Test 4"] = True
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(4, "Connect to pool", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # 6. Disconnect from pool.
-    print(Colors.HEADER + "\n\t6.  Disconnect from pool\n" + Colors.ENDC)
+    # 5. Disconnect from pool.
+    print(Colors.HEADER + "\n\t5.  Disconnect from pool\n" + Colors.ENDC)
     try:
         await pool.close_pool_ledger(MyVars.pool_handle)
-        MyVars.test_results["Test 6"] = True
+        MyVars.test_results["Test 5"] = True
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(5, "Disconnect form pool", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # 7. Reconnect to pool.
-    print(Colors.HEADER + "\n\t7.  Reconnect to pool\n" + Colors.ENDC)
+    # 6. Reconnect to pool.
+    print(Colors.HEADER + "\n\t6.  Reconnect to pool\n" + Colors.ENDC)
     try:
         MyVars.pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
-        MyVars.test_results["Test 7"] = True
+        MyVars.test_results["Test 6"] = True
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(6, "Reconnect to pool", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
+
     print(Colors.HEADER + "\n\t==Clean up==" + Colors.ENDC)
     # 8. Close pool ledger and wallet.
     print(Colors.HEADER + "\t8.  Close pool ledger and wallet\n" + Colors.ENDC)
@@ -133,10 +156,16 @@ def final_result():
 
 def test():
     test_precondition()
+
+    begin_time = time.time()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(test_scenario_03_check_connection())
     loop.close()
+
+    MyVars.test_report.set_duration(time.time() - begin_time)
     final_result()
+
+    MyVars.test_report.write_result_to_file("")
 
 
 test()

@@ -10,6 +10,11 @@ import json
 import os.path
 import logging
 import shutil
+import time
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from utils.report import TestReport
 from indy import signus, wallet, pool
 from indy.error import IndyError
 from utils.utils import generate_random_string
@@ -20,7 +25,6 @@ from utils.constant import Colors, Constant
 # -----------------------------------------------------------------------------------------
 
 
-
 class MyVars:
     """  Needed some global variables. """
 
@@ -28,6 +32,7 @@ class MyVars:
     # Need the path to the pool transaction file location
     pool_genesis_txn_file = Constant.pool_genesis_txn_file
     wallet_handle = 0
+    test_report = TestReport("Test_scenario_04_Keyrings_Wallets")
     pool_name = generate_random_string("test_pool", length=10)
     wallet_name = generate_random_string("test_wallet", length=10)
     print(("pool_name: %s\nwallet_name: %s") % (pool_name, wallet_name))
@@ -69,6 +74,8 @@ async def test_scenario_04_keyrings_wallets():
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(1, "Create Ledger", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
 
@@ -80,6 +87,8 @@ async def test_scenario_04_keyrings_wallets():
         pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
         MyVars.pool_handle = pool_handle
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(2, "Open pool ledger", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
@@ -91,6 +100,8 @@ async def test_scenario_04_keyrings_wallets():
     try:
         await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(3, "Create wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
 
@@ -98,6 +109,8 @@ async def test_scenario_04_keyrings_wallets():
     try:
         MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(3, "Create wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 4. verify wallet was created in .indy/wallet
@@ -110,6 +123,8 @@ async def test_scenario_04_keyrings_wallets():
         if result:
             MyVars.test_results['Step 4'] = True
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(4, "Verify wallet was created in \".indy/wallet\"", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
@@ -124,6 +139,8 @@ async def test_scenario_04_keyrings_wallets():
             MyVars.test_results['Step 5'] = True
             print("===PASSED===")
     except IndyError as E:
+        MyVars.test_report.set_result(False)
+        MyVars.test_report.set_step_status(5, "Create DID to check the new wallet work well", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # ==================================================================================================================
@@ -160,17 +177,20 @@ def final_results():
     else:
         for test_num, value in MyVars.test_results.items():
             if not value:
-                # print('{}: {}'.format(test_num, value))
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
 
 
 # Run the cleanup first...
 test_prep()
+begin_time = time.time()
 
 # Create the loop instance using asyncio
 loop = asyncio.get_event_loop()
 loop.run_until_complete(test_scenario_04_keyrings_wallets())
 loop.close()
 
-print("\n\nResults\n+" + 40*"=" + "+")
+MyVars.test_report.set_duration(time.time() - begin_time)
+MyVars.test_report.write_result_to_file("")
+
+print("\n\nResults\n+" + 40 * "=" + "+")
 final_results()
