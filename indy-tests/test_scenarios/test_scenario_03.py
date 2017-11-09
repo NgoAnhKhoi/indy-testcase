@@ -13,6 +13,7 @@ from utils.report import TestReport
 
 
 class MyVars:
+    begin_time = 0
     pool_handle = 0
     wallet_handle = 0
     pool_name = "pool_genesis_test3"
@@ -150,20 +151,19 @@ def final_result():
             if not value:
                 # print('{}: {}'.format(test_num, value))
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
+    MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
+    MyVars.test_report.write_result_to_file("")
 
 
 def test():
+    MyVars.begin_time = time.time()
     test_precondition()
 
-    begin_time = time.time()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(test_scenario_03_check_connection())
     loop.close()
 
-    MyVars.test_report.set_duration(time.time() - begin_time)
     final_result()
-
-    MyVars.test_report.write_result_to_file("")
 
 
 test()

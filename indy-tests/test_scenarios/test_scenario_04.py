@@ -25,7 +25,7 @@ from utils.report import TestReport
 
 class MyVars:
     """  Needed some global variables. """
-
+    begin_time = 0
     pool_handle = 0
     # Need the path to the pool transaction file location
     pool_genesis_txn_file = Constant.pool_genesis_txn_file
@@ -175,19 +175,20 @@ def final_results():
             if not value:
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
 
+    MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
+    MyVars.test_report.write_result_to_file("")
+
 
 def test():
+
+    MyVars.begin_time = time.time()
     # Run the cleanup first...
     test_prep()
-    begin_time = time.time()
 
     # Create the loop instance using asyncio
     loop = asyncio.get_event_loop()
     loop.run_until_complete(test_scenario_04_keyrings_wallets())
     loop.close()
-
-    MyVars.test_report.set_duration(time.time() - begin_time)
-    MyVars.test_report.write_result_to_file("")
 
     print("\n\nResults\n+" + 40 * "=" + "+")
     final_results()
