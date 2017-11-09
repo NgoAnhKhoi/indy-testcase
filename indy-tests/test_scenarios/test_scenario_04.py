@@ -168,7 +168,6 @@ async def test_scenario_04_keyrings_wallets():
 
 def final_results():
     """  Show the test results  """
-
     if all(value == True for value in MyVars.test_results.values()):
         print(Colors.OKGREEN + "\n\tAll the tests passed...\n" + Colors.ENDC)
     else:
@@ -177,17 +176,21 @@ def final_results():
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
 
 
-# Run the cleanup first...
-test_prep()
-begin_time = time.time()
+def test():
+    # Run the cleanup first...
+    test_prep()
+    begin_time = time.time()
 
-# Create the loop instance using asyncio
-loop = asyncio.get_event_loop()
-loop.run_until_complete(test_scenario_04_keyrings_wallets())
-loop.close()
+    # Create the loop instance using asyncio
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(test_scenario_04_keyrings_wallets())
+    loop.close()
 
-MyVars.test_report.set_duration(time.time() - begin_time)
-MyVars.test_report.write_result_to_file("")
+    MyVars.test_report.set_duration(time.time() - begin_time)
+    MyVars.test_report.write_result_to_file("")
 
-print("\n\nResults\n+" + 40 * "=" + "+")
-final_results()
+    print("\n\nResults\n+" + 40 * "=" + "+")
+    final_results()
+
+
+test()
