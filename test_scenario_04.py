@@ -157,12 +157,10 @@ def final_results():
     if all(value == True for value in MyVars.test_results.values()):
         print(Colors.OKGREEN + "\n\tAll the tests passed...\n" + Colors.ENDC)
     else:
-        for test_num, [result, message] in MyVars.test_results.items():
-            if not result:
+        for test_num, value in MyVars.test_results.items():
+            if not value:
                 # print('{}: {}'.format(test_num, value))
-                print('%s: ' % str(test_num) + Colors.FAIL + 'failed with reason: ' + message + Colors.ENDC)
-            else:
-                print('%s: ' % str(test_num) + Colors.FAIL + 'passed with message default: ' + message + Colors.ENDC)
+                print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
 
 
 # Run the cleanup first...
