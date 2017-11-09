@@ -3,7 +3,7 @@ Created on Nov 8, 2017
 
 @author: khoi.ngo
 '''
-#! /usr/bin/env python3.6
+# /usr/bin/env python3.6
 import sys
 import asyncio
 import json
@@ -12,13 +12,13 @@ import logging
 import shutil
 from indy import signus, wallet, pool
 from indy.error import IndyError
+sys.path.append('../utils')
 from utils.constant import Colors, Constant
 from utils.utils import generate_random_string
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
 # -----------------------------------------------------------------------------------------
-
 
 
 class MyVars:
