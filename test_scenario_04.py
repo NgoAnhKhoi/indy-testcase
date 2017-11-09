@@ -161,6 +161,8 @@ def final_results():
             if not result:
                 # print('{}: {}'.format(test_num, value))
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed with reason: ' + message + Colors.ENDC)
+            else:
+                print('%s: ' % str(test_num) + Colors.FAIL + 'passed with message default: ' + message + Colors.ENDC)
 
 
 # Run the cleanup first...
