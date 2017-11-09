@@ -30,7 +30,7 @@ class MyVars:
     pool_name = generate_random_string("test_pool", length=10)
     wallet_name = generate_random_string("test_wallet", length=10)
     debug = False
-    test_results = {'Test 4': False, 'Test 5': False}
+    test_results = {'Test 4': [False, "no message"], 'Test 5': [False, "no message"]}
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -156,10 +156,10 @@ def final_results():
     if all(value == True for value in MyVars.test_results.values()):
         print(Colors.OKGREEN + "\n\tAll the tests passed...\n" + Colors.ENDC)
     else:
-        for test_num, value in MyVars.test_results.items():
-            if not value:
+        for test_num, [result, message] in MyVars.test_results.items():
+            if not result:
                 # print('{}: {}'.format(test_num, value))
-                print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
+                print('%s: ' % str(test_num) + Colors.FAIL + 'failed with reason: ' + message + Colors.ENDC)
 
 
 # Run the cleanup first...
