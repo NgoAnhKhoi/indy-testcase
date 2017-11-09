@@ -38,7 +38,7 @@ class MyVars:
     pool_name = "test_pool_" + str(random.randrange(100, 1000, 2))
     wallet_name = "test_wallet_" + str(random.randrange(100, 1000, 1))
     debug = False
-    test_results = {'Test 4': False, 'Test 5':False}
+    test_results = {'Test 4': False, 'Test 5': False}
 
 
 logger = logging.getLogger(__name__)
@@ -103,7 +103,6 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         sys.exit[1]
 
     # Get wallet handle
-    print(Colors.HEADER + "\n\t4. Get wallet handle\n" + Colors.ENDC)
     try:
         MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
     except IndyError as E:
@@ -111,7 +110,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
 
     # 4. verify wallet was created in .indy/wallet
     try:
-        print(Colors.HEADER + "\n\t4. Verifying wallet exist\n" + Colors.ENDC)
+        print(Colors.HEADER + "\n\t4. Verifying the new wallet was created\n" + Colors.ENDC)
         work_dir = os.path.expanduser('~') + os.sep + ".indy"
         wallet_path = work_dir + "/wallet/" + MyVars.wallet_name
         result = os.path.exists(wallet_path)
@@ -123,7 +122,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     await asyncio.sleep(0)
 
     # 5. create DID to check the new wallet work well.
-    print(Colors.HEADER + "\n\t5. Create DID's\n" + Colors.ENDC)
+    print(Colors.HEADER + "\n\t5. Create DID to check the new wallet work well\n" + Colors.ENDC)
     try:
         # create and store did to check the new wallet work well.
         (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
