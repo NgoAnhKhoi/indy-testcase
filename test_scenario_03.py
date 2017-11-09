@@ -1,31 +1,16 @@
-from indy import agent, ledger, pool, signus, wallet
 import json
-from indy.error import IndyError
 import sys
 import logging
 import os
 import asyncio
 import shutil
-
-
-class Colors:
-    """ Class to set the colors for text.  Syntax:  print(Colors.OKGREEN +"TEXT HERE" +Colors.ENDC) """
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'  # Normal default color
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+from indy import agent, ledger, pool, signus, wallet
+from indy.error import IndyError
+from utils import Colors, Constant
 
 
 class MyVars:
-    """  Needed some global variables. """
-
     pool_handle = 0
-    # Need the path to the pool transaction file location
-    pool_genesis_txn_file = ".sovrin/pool_transactions_sandbox_genesis"
     wallet_handle = 0
     pool_name = "pool_genesis_test3"
     wallet_name = "test_wallet3"
@@ -41,21 +26,15 @@ def test_prep():
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
           + Colors.ENDC)
 
-    if os.path.exists(".indy/wallet/" + MyVars.wallet_name):
+    if os.path.exists(Constant.work_dir + "wallet/" + MyVars.wallet_name):
         try:
-            shutil.rmtree(".indy/wallet/" + MyVars.wallet_name)
+            shutil.rmtree(Constant.work_dir + "wallet/" + MyVars.wallet_name)
         except IOError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    if os.path.exists(".indy/wallet/" + MyVars.wallet_name):
+    if os.path.exists(Constant.work_dir + "pool/" + MyVars.pool_name):
         try:
-            shutil.rmtree(".indy/wallet/" + MyVars.wallet_name)
-        except IOError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    if os.path.exists(".indy/pool/" + MyVars.pool_name):
-        try:
-            shutil.rmtree(".indy/pool/" + MyVars.pool_name)
+            shutil.rmtree(Constant.work_dir + "pool/" + MyVars.pool_name)
         except IOError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -63,8 +42,8 @@ def test_prep():
 async def do():
     logger.info("Test scenario 3 -> started")
 
-    seed_trustee01 = "000000000000000000000000Steward1"
-    pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file)})
+    seed_steward01 = "000000000000000000000000Steward1"
+    pool_config = json.dumps({"genesis_txn": str(Constant.pool_genesis_txn_file)})
 
     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
     try:
@@ -88,14 +67,14 @@ async def do():
     # 4. Create DID
     print(Colors.HEADER + "\n\t4. Create DID's\n" + Colors.ENDC)
     try:
-        await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({"seed": seed_trustee01}))
+        await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({"seed": seed_steward01}))
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 5. Connect to pool.
     # Verify that the default wallet move to Test from NoEnv?
-    # Cannot verify because .indy/wallet don't have any folder that name
-    # no-env and test and default wallet cannot be created via indy-sdk
+    # Cannot verify because ".indy/wallet" do not include any folder that name
+    # no-env and test, and default wallet cannot be created via indy-sdk
     print(Colors.HEADER + "\n\t5.  Connect to pool\n" + Colors.ENDC)
     try:
         MyVars.pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
@@ -139,8 +118,9 @@ async def do():
 
 
 def final_result():
+    print("\nTest result================================================" + Colors.ENDC)
     if all(value is True for value in MyVars.test_results.values()):
-        print(Colors.OKGREEN + "\n\tAll the tests passed...\n" + Colors.ENDC)
+        print(Colors.OKGREEN + "\tAll the tests passed...\n" + Colors.ENDC)
     else:
         for test_num, value in MyVars.test_results.items():
             if not value:
