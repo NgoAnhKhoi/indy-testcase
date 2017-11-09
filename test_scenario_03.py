@@ -118,7 +118,7 @@ async def do():
 
 
 def final_result():
-    print(Colors.HEADER + "\n\tTest result\n" + Colors.ENDC)
+    print("\nTest result================================================" + Colors.ENDC)
     if all(value is True for value in MyVars.test_results.values()):
         print(Colors.OKGREEN + "\tAll the tests passed...\n" + Colors.ENDC)
     else:
