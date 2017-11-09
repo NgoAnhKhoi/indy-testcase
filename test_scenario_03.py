@@ -71,6 +71,10 @@ async def do():
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
+    # ==========================================================================================================
+    # Test starts here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # ==========================================================================================================
+
     # 5. Connect to pool.
     # Verify that the default wallet move to Test from NoEnv?
     # Cannot verify because ".indy/wallet" do not include any folder that name
@@ -97,7 +101,7 @@ async def do():
         MyVars.test_results["Test 7"] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
-
+    print(Colors.HEADER + "\n\t==Clean up==" + Colors.ENDC)
     # 8. Close pool ledger and wallet.
     print(Colors.HEADER + "\n\t8.  Close pool ledger and wallet\n" + Colors.ENDC)
     try:
