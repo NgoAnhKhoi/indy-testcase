@@ -12,8 +12,8 @@ import logging
 import shutil
 from indy import signus, wallet, pool
 from indy.error import IndyError
-from utility.utils import generate_random_string
-from utility.constant import Colors, Constant
+from ..utility.utils import generate_random_string
+from ..utility.constant import Colors, Constant
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
