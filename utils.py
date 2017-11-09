@@ -43,6 +43,6 @@ def generate_random_string(prefix="", suffix="", length=20):
     """
     import random
     import string
-    chars = str(prefix) + string.ascii_uppercase + string.digits + str(suffix)
-    result = ''.join(random.choice(chars) for _ in range(length))
+    random_str = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
+    result = str(prefix) + random_str + str(suffix)
     return result
