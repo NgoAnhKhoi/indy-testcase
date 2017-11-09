@@ -130,6 +130,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
             MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
         if default_trustee_did:
             MyVars.test_results['Test 5'] = True
+            print("===PASSED===")
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
