@@ -38,7 +38,7 @@ class MyVars:
     pool_name = "test_pool_" + str(random.randrange(100, 1000, 2))
     wallet_name = "test_wallet_" + str(random.randrange(100, 1000, 1))
     debug = False
-    test_results = {'Test 4': False}
+    test_results = {'Test 4': False, 'Test 5':False}
 
 
 logger = logging.getLogger(__name__)
@@ -69,6 +69,7 @@ def test_prep():
 
 async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles():
     logger.info("Test Scenario 04 -> started")
+    seed_default_trustee = "000000000000000000000000Trustee1"
 
     # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
@@ -108,7 +109,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # 4. verify wallet moved to .indy/wallet
+    # 4. verify wallet was created in .indy/wallet
     try:
         print(Colors.HEADER + "\n\t4. Verifying wallet exist\n" + Colors.ENDC)
         work_dir = os.path.expanduser('~') + os.sep + ".indy"
@@ -121,12 +122,22 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
 
     await asyncio.sleep(0)
 
+    # 5. create DID to check the new wallet work well.
+    print(Colors.HEADER + "\n\t5. Create DID's\n" + Colors.ENDC)
+    try:
+        # create and store did to check the new wallet work well.
+        (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
+            MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
+        if default_trustee_did:
+            MyVars.test_results['Test 5'] = True
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # ==================================================================================================================
     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # ==================================================================================================================
-    # 5. Close wallet and pool ------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t==Clean up==\n\t7. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
+    # 6. Close wallet and pool ------------------------------------------------------------------------------
+    print(Colors.HEADER + "\n\t==Clean up==\n\t6. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
     try:
         await wallet.close_wallet(MyVars.wallet_handle)
         await pool.close_pool_ledger(MyVars.pool_handle)
@@ -135,8 +146,8 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
 
     await asyncio.sleep(0)
 
-    #6. Delete wallet and pool ledger --------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t8. Delete the wallet and pool ledger...\n" + Colors.ENDC)
+    #7. Delete wallet and pool ledger --------------------------------------------------------------------
+    print(Colors.HEADER + "\n\t7. Delete the wallet and pool ledger...\n" + Colors.ENDC)
     try:
         await wallet.delete_wallet(MyVars.wallet_name, None)
         await pool.delete_pool_ledger_config(MyVars.pool_name)
