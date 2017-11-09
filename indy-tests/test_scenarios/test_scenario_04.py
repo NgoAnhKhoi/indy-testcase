@@ -11,14 +11,12 @@ import os.path
 import logging
 import shutil
 import time
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-
-from utils.report import TestReport
 from indy import signus, wallet, pool
 from indy.error import IndyError
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import generate_random_string
 from utils.constant import Colors, Constant
+from utils.report import TestReport
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
@@ -35,7 +33,6 @@ class MyVars:
     test_report = TestReport("Test_scenario_04_Keyrings_Wallets")
     pool_name = generate_random_string("test_pool", length=10)
     wallet_name = generate_random_string("test_wallet", length=10)
-    print(("pool_name: %s\nwallet_name: %s") % (pool_name, wallet_name))
     debug = False
     test_results = {'Step 4': False, 'Step 5': False}
 
