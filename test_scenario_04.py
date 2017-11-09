@@ -114,6 +114,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         work_dir = os.path.expanduser('~') + os.sep + ".indy"
         wallet_path = work_dir + "/wallet/" + MyVars.wallet_name
         result = os.path.exists(wallet_path)
+        print("===PASSED===")
         if result:
             MyVars.test_results['Test 4'] = True
     except IndyError as E:
