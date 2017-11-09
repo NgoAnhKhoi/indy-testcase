@@ -11,7 +11,7 @@ import os.path
 import logging
 import shutil
 import random
-from indy import ledger, signus, wallet, pool
+from indy import signus, wallet, pool
 from indy.error import IndyError
 
 # -----------------------------------------------------------------------------------------
