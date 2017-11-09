@@ -3,7 +3,7 @@ Created on Nov 8, 2017
 
 @author: khoi.ngo
 '''
-#! /usr/bin/env python3.6
+# /usr/bin/env python3.6
 import sys
 import asyncio
 import json
@@ -12,13 +12,12 @@ import logging
 import shutil
 from indy import signus, wallet, pool
 from indy.error import IndyError
-from utils.utils import generate_random_string
-from utils.constant import Colors, Constant
+from utility.utils import generate_random_string
+from utility.constant import Colors, Constant
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
 # -----------------------------------------------------------------------------------------
-
 
 
 class MyVars:
@@ -34,11 +33,12 @@ class MyVars:
     debug = False
     test_results = {'Step 4': False, 'Step 5': False}
 
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-def test_prep():
+def test_precondition():
     """  Delete all files out of the .sovrin/pool and .sovrin/wallet directories  """
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
     work_dir = Constant.work_dir
@@ -139,7 +139,7 @@ async def test_scenario_04_keyrings_wallets():
 
     await asyncio.sleep(0)
 
-    #7. Delete wallet and pool ledger --------------------------------------------------------------------
+    # 7. Delete wallet and pool ledger --------------------------------------------------------------------
     print(Colors.HEADER + "\n\t7. Delete the wallet and pool ledger...\n" + Colors.ENDC)
     try:
         await wallet.delete_wallet(MyVars.wallet_name, None)
@@ -155,7 +155,7 @@ async def test_scenario_04_keyrings_wallets():
 def final_results():
     """  Show the test results  """
 
-    if all(value == True for value in MyVars.test_results.values()):
+    if all(value is True for value in MyVars.test_results.values()):
         print(Colors.OKGREEN + "\n\tAll the tests passed...\n" + Colors.ENDC)
     else:
         for test_num, value in MyVars.test_results.items():
@@ -165,12 +165,12 @@ def final_results():
 
 
 # Run the cleanup first...
-test_prep()
+test_precondition()
 
 # Create the loop instance using asyncio
 loop = asyncio.get_event_loop()
 loop.run_until_complete(test_scenario_04_keyrings_wallets())
 loop.close()
 
-print("\n\nResults\n+" + 40*"=" + "+")
+print("\n\nResults\n+" + 40 * "=" + "+")
 final_results()

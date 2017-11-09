@@ -6,7 +6,7 @@ import asyncio
 import shutil
 from indy import pool, signus, wallet
 from indy.error import IndyError
-from utils.constant import Colors, Constant
+from utility.constant import Colors, Constant
 
 
 class MyVars:
