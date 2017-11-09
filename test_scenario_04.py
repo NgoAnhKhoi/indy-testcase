@@ -10,22 +10,14 @@ import json
 import os.path
 import logging
 import shutil
-import random
 from indy import signus, wallet, pool
 from indy.error import IndyError
+from utils import Colors, Constant, generate_random_string
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
 # -----------------------------------------------------------------------------------------
 
-
-class Colors:
-    """ Class to set the colors for text.  Syntax:  print(Colors.OKGREEN +"TEXT HERE" +Colors.ENDC) """
-    HEADER = '\033[95m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'  # Normal default color
 
 
 class MyVars:
@@ -33,13 +25,12 @@ class MyVars:
 
     pool_handle = 0
     # Need the path to the pool transaction file location
-    pool_genesis_txn_file = ".sovrin/pool_transactions_sandbox_genesis"
+    pool_genesis_txn_file = Constant.pool_genesis_txn_file
     wallet_handle = 0
-    pool_name = "test_pool_" + str(random.randrange(100, 1000, 2))
-    wallet_name = "test_wallet_" + str(random.randrange(100, 1000, 1))
+    pool_name = generate_random_string("test_pool", length=10)
+    wallet_name = generate_random_string("test_wallet", length=10)
     debug = False
     test_results = {'Test 4': False, 'Test 5': False}
-
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -48,8 +39,7 @@ logging.basicConfig(level=logging.INFO)
 def test_prep():
     """  Delete all files out of the .sovrin/pool and .sovrin/wallet directories  """
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
-    x = os.path.expanduser('~')
-    work_dir = x + os.sep + ".indy"
+    work_dir = Constant.work_dir
 
     if os.path.exists(work_dir + "/pool/" + MyVars.pool_name):
         try:

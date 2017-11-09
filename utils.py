@@ -42,6 +42,7 @@ def generate_random_string(prefix="", suffix="", length=20):
     :return: The random string.
     """
     import random
-    random_str = str(random.randrange(1, length, 1))
-    result = str(prefix) + random_str + str(suffix)
+    import string
+    chars = str(prefix) + string.ascii_uppercase + string.digits + str(suffix)
+    result = ''.join(random.choice(chars) for _ in range(length))
     return result
