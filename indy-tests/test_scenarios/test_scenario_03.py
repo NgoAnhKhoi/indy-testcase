@@ -4,9 +4,9 @@ import logging
 import os
 import asyncio
 import shutil
+from utils.constant import Colors, Constant
 from indy import pool, signus, wallet
 from indy.error import IndyError
-from utility.constant import Colors, Constant
 
 
 class MyVars:

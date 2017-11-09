@@ -10,8 +10,8 @@ import json
 import os.path
 import logging
 import shutil
-from utility.utils import generate_random_string
-from utility.constant import Colors, Constant
+from utils.utils import generate_random_string
+from utils.constant import Colors, Constant
 from indy import signus, wallet, pool
 from indy.error import IndyError
 
