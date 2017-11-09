@@ -4,9 +4,9 @@ import logging
 import os
 import asyncio
 import shutil
-from utils.constant import Colors, Constant
 from indy import pool, signus, wallet
 from indy.error import IndyError
+from utils.constant import Colors, Constant
 
 
 class MyVars:
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-def test_precondition():
+def test_prep():
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
 
     if os.path.exists(Constant.work_dir + "wallet/" + MyVars.wallet_name):
@@ -38,7 +38,7 @@ def test_precondition():
             print(Colors.FAIL + str(E) + Colors.ENDC)
 
 
-async def test_scenario_03_check_connection():
+async def do():
     logger.info("Test scenario 3 -> started")
 
     seed_steward01 = "000000000000000000000000Steward1"
@@ -132,9 +132,9 @@ def final_result():
 
 
 def test():
-    test_precondition()
+    test_prep()
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(test_scenario_03_check_connection())
+    loop.run_until_complete(do())
     loop.close()
     final_result()
 
