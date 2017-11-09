@@ -103,7 +103,7 @@ async def do():
         print(Colors.FAIL + str(E) + Colors.ENDC)
     print(Colors.HEADER + "\n\t==Clean up==" + Colors.ENDC)
     # 8. Close pool ledger and wallet.
-    print(Colors.HEADER + "\n\t8.  Close pool ledger and wallet\n" + Colors.ENDC)
+    print(Colors.HEADER + "\t8.  Close pool ledger and wallet\n" + Colors.ENDC)
     try:
         await wallet.close_wallet(MyVars.wallet_handle)
         await pool.close_pool_ledger(MyVars.pool_handle)
