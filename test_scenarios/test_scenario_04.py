@@ -12,7 +12,7 @@ import logging
 import shutil
 from indy import signus, wallet, pool
 from indy.error import IndyError
-from utils import Colors, Constant, generate_random_string
+from utils.utils import Colors, Constant, generate_random_string
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
@@ -31,7 +31,7 @@ class MyVars:
     wallet_name = generate_random_string("test_wallet", length=10)
     print(("pool_name: %s\nwallet_name: %s") % (pool_name, wallet_name))
     debug = False
-    test_results = {'Test 4': [False, "no message"], 'Test 5': [False, "no message"]}
+    test_results = {'Step 4': False, 'Step 5': False}
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -58,7 +58,7 @@ def test_prep():
         input(Colors.WARNING + "Pause after test prep\n" + Colors.ENDC)
 
 
-async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles():
+async def test_scenario_04_keyrings_wallets():
     logger.info("Test Scenario 04 -> started")
     seed_default_trustee = "000000000000000000000000Trustee1"
 
@@ -107,7 +107,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         result = os.path.exists(wallet_path)
         print("===PASSED===")
         if result:
-            MyVars.test_results['Test 4'] = True
+            MyVars.test_results['Step 4'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -120,7 +120,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
         if default_trustee_did:
-            MyVars.test_results['Test 5'] = True
+            MyVars.test_results['Step 5'] = True
             print("===PASSED===")
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
@@ -168,7 +168,7 @@ test_prep()
 
 # Create the loop instance using asyncio
 loop = asyncio.get_event_loop()
-loop.run_until_complete(verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles())
+loop.run_until_complete(test_scenario_04_keyrings_wallets())
 loop.close()
 
 print("\n\nResults\n+" + 40*"=" + "+")
