@@ -30,7 +30,9 @@ class TestReport:
         self.__test_result[step] = content
 
     def write_result_to_file(self, path):
-        path = str(path)
-        with open(path + self.__test_result["testcase"] + ".json", "w") as outfile:
+        filename = "{0}{1}_{3}.json".format(str(path), self.__test_result["testcase"],
+                                            self.__test_result["starttime"])
+
+        with open(filename, "w") as outfile:
             json.dump(self.__test_result, outfile, ensure_ascii=False)
 
