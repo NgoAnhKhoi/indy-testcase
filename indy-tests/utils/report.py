@@ -10,7 +10,7 @@ import os
 
 
 class TestReport:
-    result_dir = os.path.join(os.path.dirname(__file__)) + "/test_results/"
+    result_dir = os.path.join("..") + "/test_results/"
 
     def __init__(self, test_case_name):
         self.__test_result = {}
