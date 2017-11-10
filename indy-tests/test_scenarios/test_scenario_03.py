@@ -152,7 +152,7 @@ def final_result():
                 # print('{}: {}'.format(test_num, value))
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
     MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
-    MyVars.test_report.write_result_to_file("")
+    MyVars.test_report.write_result_to_file()
 
 
 def test():
