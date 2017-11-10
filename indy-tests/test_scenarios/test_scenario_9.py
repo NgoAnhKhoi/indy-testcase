@@ -563,10 +563,12 @@ def final_result():
             if not value:
                 # print('{}: {}'.format(test_num, value))
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
+    MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
+    MyVars.test_report.write_result_to_file()
 
 
 def test():
-    MyVars.begin_time = time.
+    MyVars.begin_time = time.time()
     test_prep()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(test_09_remove_and_add_role())
