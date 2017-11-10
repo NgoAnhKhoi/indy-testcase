@@ -10,6 +10,7 @@ from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Constant, Colors, Roles
 from utils.report import TestReport
+from utils import utils
 
 
 class MyVars:
@@ -145,63 +146,78 @@ async def test_09_remove_and_add_role():
 
         (trustee1_did,
          trustee1_verkey,
-         trustee1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustee1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                             json.dumps({"seed": utils.generate_random_string(32)}))
 
         (trustee2_did,
          trustee2_verkey,
-         trustee2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustee2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                             json.dumps({"seed": utils.generate_random_string(32)}))
 
         (steward1_did,
          steward1_verkey,
-         steward1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         steward1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                             json.dumps({"seed": utils.generate_random_string(32)}))
 
         (steward2_did,
          steward2_verkey,
-         steward2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         steward2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                             json.dumps({"seed": utils.generate_random_string(32)}))
 
         (steward3_did,
          steward3_verkey,
-         steward3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         steward3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                             json.dumps({"seed": utils.generate_random_string(32)}))
 
         (tgb1_did,
          tgb1_verkey,
-         tgb1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         tgb1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                         json.dumps({"seed": utils.generate_random_string(32)}))
 
         (trustanchor1_did,
          trustanchor1_verkey,
-         trustanchor1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustanchor1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                                 json.dumps({"seed": utils.generate_random_string(32)}))
 
         (trustanchor2_did,
          trustanchor2_verkey,
-         trustanchor2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustanchor2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                                 json.dumps({"seed": utils.generate_random_string(32)}))
 
         (trustanchor3_did,
          trustanchor3_verkey,
-         trustanchor3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustanchor3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                                 json.dumps({"seed": utils.generate_random_string(32)}))
 
         (user1_did,
          user1_verkey,
-         user1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                          json.dumps({"seed": utils.generate_random_string(32)}))
 
         (user2_did,
          user2_verkey,
-         user2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                          json.dumps({"seed": utils.generate_random_string(32)}))
 
         (user3_did,
          user3_verkey,
-         user3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                          json.dumps({"seed": utils.generate_random_string(32)}))
 
         (user4_did,
          user4_verkey,
-         user4_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user4_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                          json.dumps({"seed": utils.generate_random_string(32)}))
 
         (user5_did,
          user5_verkey,
-         user5_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user5_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                          json.dumps({"seed": utils.generate_random_string(32)}))
 
         (user6_did,
          user6_verkey,
-         user6_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user6_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                          json.dumps({"seed": utils.generate_random_string(32)}))
         MyVars.test_results["Step 4"] = True
     except IndyError as E:
         MyVars.test_report.set_test_failed()
