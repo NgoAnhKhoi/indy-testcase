@@ -453,7 +453,7 @@ async def test_09_remove_and_add_role():
     # 26. Using Trustee1 to add Steward1 and TGB1.
     print(Colors.HEADER + "\n\t26.  Using Trustee1 to add Steward1 and TGB1\n" + Colors.ENDC)
     message_26 = ""
-    (temp, message) = await add_nym(trustee1_did, steward1_did, steward2_verkey, None, Roles.STEWARD, can_add=True)
+    (temp, message) = await add_nym(trustee1_did, steward1_did, steward1_verkey, None, Roles.STEWARD, can_add=True)
     MyVars.test_results["Test 26"] = temp
     if not temp:
         message_26 += "\nCannot use Trustee1 to add Steward1 - " + message
