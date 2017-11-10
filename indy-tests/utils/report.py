@@ -42,10 +42,6 @@ class TestReport:
     def set_test_passed(self):
         self.__test_result[KeyWord.RESULT] = KeyWord.PASSED
 
-    @staticmethod
-    def change_result_dir(new_dir):
-        TestReport.result_dir = new_dir
-
 
 class KeyWord:
     TEST_CASE = "testcase"
