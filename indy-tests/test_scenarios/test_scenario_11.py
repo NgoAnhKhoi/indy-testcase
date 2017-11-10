@@ -66,12 +66,12 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     logger.info("Test Scenario 11 -> started")
 
     # Declare all values use in the test
-    seed_trustee1 = "TestTrustee100000000000000000000"
-    seed_trustee2 = "TestTrustee200000000000000000000"
-    seed_steward1 = "TestSteward100000000000000000000"
-    seed_steward2 = "TestSteward200000000000000000000"
-    seed_trustanchor1 = "TestTrustAnchor10000000000000000"
-    seed_trustanchor2 = "TestTrustAnchor20000000000000000"
+    seed_trustee1 = generate_random_string(prefix="TestTrustee1", length=32)
+    seed_trustee2 = generate_random_string(prefix="TestTrustee2", length=32)
+    seed_steward1 = generate_random_string(prefix="TestSteward1", length=32)
+    seed_steward2 = generate_random_string(prefix="TestSteward2", length=32)
+    seed_trustanchor1 = generate_random_string(prefix="TestTrustAnchor1", length=32)
+    seed_trustanchor2 = generate_random_string(prefix="TestTrustAnchor2", length=32)
 
     # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
