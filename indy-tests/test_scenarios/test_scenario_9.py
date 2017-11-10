@@ -118,6 +118,8 @@ async def test_09_remove_and_add_role():
         await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
         temp = True
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.add_error("Create wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
 
@@ -126,77 +128,85 @@ async def test_09_remove_and_add_role():
         MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
         temp = temp and True
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.add_error("Open wallet", str(E))
         temp = temp and False
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    MyVars.test_results["Step "]
+    MyVars.test_results["Step 3"] = temp
 
     # 4. Create DIDs.
     print(Colors.HEADER + "\n\t4.  Create DIDs\n" + Colors.ENDC)
-    (default_trustee_did,
-     default_trustee_verkey,
-     default_trustee_pk) = await signus.create_and_store_my_did(
-            MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
+    try:
+        (default_trustee_did,
+         default_trustee_verkey,
+         default_trustee_pk) = await signus.create_and_store_my_did(
+                MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
 
-    (trustee1_did,
-     trustee1_verkey,
-     trustee1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (trustee1_did,
+         trustee1_verkey,
+         trustee1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (trustee2_did,
-     trustee2_verkey,
-     trustee2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (trustee2_did,
+         trustee2_verkey,
+         trustee2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (steward1_did,
-     steward1_verkey,
-     steward1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (steward1_did,
+         steward1_verkey,
+         steward1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (steward2_did,
-     steward2_verkey,
-     steward2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (steward2_did,
+         steward2_verkey,
+         steward2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (steward3_did,
-     steward3_verkey,
-     steward3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (steward3_did,
+         steward3_verkey,
+         steward3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (tgb1_did,
-     tgb1_verkey,
-     tgb1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (tgb1_did,
+         tgb1_verkey,
+         tgb1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (trustanchor1_did,
-     trustanchor1_verkey,
-     trustanchor1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (trustanchor1_did,
+         trustanchor1_verkey,
+         trustanchor1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (trustanchor2_did,
-     trustanchor2_verkey,
-     trustanchor2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (trustanchor2_did,
+         trustanchor2_verkey,
+         trustanchor2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (trustanchor3_did,
-     trustanchor3_verkey,
-     trustanchor3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (trustanchor3_did,
+         trustanchor3_verkey,
+         trustanchor3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (user1_did,
-     user1_verkey,
-     user1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (user1_did,
+         user1_verkey,
+         user1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (user2_did,
-     user2_verkey,
-     user2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (user2_did,
+         user2_verkey,
+         user2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (user3_did,
-     user3_verkey,
-     user3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (user3_did,
+         user3_verkey,
+         user3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (user4_did,
-     user4_verkey,
-     user4_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (user4_did,
+         user4_verkey,
+         user4_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (user5_did,
-     user5_verkey,
-     user5_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (user5_did,
+         user5_verkey,
+         user5_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
-    (user6_did,
-     user6_verkey,
-     user6_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        (user6_did,
+         user6_verkey,
+         user6_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+        MyVars.test_results["Step 4"] = True
+    except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.add_error("Create DID", str(E))
+        print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # ==========================================================================================================
     # Test starts here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -555,7 +565,10 @@ async def test_09_remove_and_add_role():
     try:
         await wallet.close_wallet(MyVars.wallet_handle)
         await pool.close_pool_ledger(MyVars.pool_handle)
+        MyVars.test_results["Step 32"] = True
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.add_error("Close pool ledger and wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 33. Delete wallet.
@@ -563,7 +576,10 @@ async def test_09_remove_and_add_role():
     try:
         await wallet.delete_wallet(MyVars.wallet_name, None)
         await pool.delete_pool_ledger_config(MyVars.pool_name)
+        MyVars.test_results["Step 33"] = True
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.add_error("Delete pool ledger and wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
 
