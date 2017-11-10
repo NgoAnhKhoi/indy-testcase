@@ -32,7 +32,7 @@ class TestReport:
     def write_result_to_file(self):
         filename = "{0}{1}_{2}.json".format(TestReport.result_dir, self.__test_result[KeyWord.TEST_CASE],
                                             self.__test_result[KeyWord.START_TIME])
-
+        print(TestReport.result_dir)
         with open(filename, "w") as outfile:
             json.dump(self.__test_result, outfile, ensure_ascii=False)
 
