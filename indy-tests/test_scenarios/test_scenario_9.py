@@ -16,12 +16,12 @@ class MyVars:
     """  Needed some global variables. """
 
     pool_handle = 0
-    test_report = TestReport("Step_Scenario_09_Remove_And_Add_Role")
+    test_report = TestReport("Test_Scenario_09_Remove_And_Add_Role")
     # Need the path to the pool transaction file location
     begin_time = 0
     wallet_handle = 0
     pool_name = "pool_genesis_test9"
-    wallet_name = "Step_wallet9"
+    wallet_name = "test_wallet9"
     roles = ["TRUSTEE", "STEWARD", "TRUST_ANCHOR", "TGB", ""]
     test_results = {"Step 1": False, "Step 2": False, "Step 3": False, "Step 4": False,
                     "Step 5": False, "Step 6": False, "Step 7": False, "Step 8": False, "Step 9": False,

@@ -48,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_scenario_9.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test_scenario_9.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_9.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="564" column="8" lean-forward="true" selection-start-line="564" selection-start-column="8" selection-end-line="564" selection-end-column="8" />
+            <state relative-caret-position="306">
+              <caret line="18" column="34" lean-forward="false" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -70,7 +70,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_scenario_04.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="test_scenario_04.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_04.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
@@ -135,8 +135,8 @@
         <option value="$PROJECT_DIR$/utils/constant.py" />
         <option value="$PROJECT_DIR$/utils/report.py" />
         <option value="$PROJECT_DIR$/test_scenarios/test_scenario_03.py" />
-        <option value="$PROJECT_DIR$/test_scenarios/test_scenario_9.py" />
         <option value="$PROJECT_DIR$/test_scenarios/test_scenario_04.py" />
+        <option value="$PROJECT_DIR$/test_scenarios/test_scenario_9.py" />
       </list>
     </option>
   </component>
@@ -786,16 +786,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_9.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="564" column="8" lean-forward="true" selection-start-line="564" selection-start-column="8" selection-end-line="564" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -810,6 +800,16 @@
           <caret line="30" column="58" lean-forward="true" selection-start-line="30" selection-start-column="58" selection-end-line="30" selection-end-column="58" />
           <folding>
             <element signature="e#75#85#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_9.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="34" lean-forward="false" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
