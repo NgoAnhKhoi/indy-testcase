@@ -51,8 +51,8 @@
       <file leaf-file-name="test_scenario_9.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_9.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="203" column="76" lean-forward="false" selection-start-line="203" selection-start-column="76" selection-end-line="203" selection-end-column="76" />
+            <state relative-caret-position="284">
+              <caret line="191" column="19" lean-forward="true" selection-start-line="191" selection-start-column="19" selection-end-line="191" selection-end-column="19" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -120,12 +120,14 @@
       <find>set_result(&quot;Failed&quot;)</find>
       <find>&quot;Test</find>
       <find>set_step_status</find>
+      <find>utils.generate_random_string(32)</find>
     </findStrings>
     <replaceStrings>
       <replace>set_test_fail</replace>
       <replace>set_test_failed()</replace>
       <replace>&quot;Step</replace>
       <replace>add_error</replace>
+      <replace>utils.generate_random_string(size=32)</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -808,8 +810,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_9.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="203" column="76" lean-forward="false" selection-start-line="203" selection-start-column="76" selection-end-line="203" selection-end-column="76" />
+        <state relative-caret-position="284">
+          <caret line="191" column="19" lean-forward="true" selection-start-line="191" selection-start-column="19" selection-end-line="191" selection-end-column="19" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
