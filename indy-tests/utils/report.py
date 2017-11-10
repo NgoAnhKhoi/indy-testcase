@@ -10,8 +10,6 @@ import os
 
 
 class TestReport:
-    result_dir = os.path.join(os.path.dirname(__file__), '..') + "/test_results/"
-
     def __init__(self, test_case_name):
         self.__test_result = {}
         self.__test_result[KeyWord.TEST_CASE] = test_case_name
@@ -30,7 +28,7 @@ class TestReport:
         self.__test_result[step] = content
 
     def write_result_to_file(self):
-        filename = "{0}{1}_{3}.json".format(TestReport.result_dir, self.__test_result[KeyWord.TEST_CASE],
+        filename = "{0}{1}_{3}.json".format("", self.__test_result[KeyWord.TEST_CASE],
                                             self.__test_result[KeyWord.START_TIME])
 
         with open(filename, "w") as outfile:
