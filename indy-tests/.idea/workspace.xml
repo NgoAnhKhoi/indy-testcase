@@ -51,8 +51,8 @@
       <file leaf-file-name="test_scenario_9.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_9.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="34" lean-forward="false" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
+            <state relative-caret-position="704">
+              <caret line="580" column="46" lean-forward="false" selection-start-line="580" selection-start-column="46" selection-end-line="580" selection-end-column="46" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -119,11 +119,13 @@
       <find>set_test_fail</find>
       <find>set_result(&quot;Failed&quot;)</find>
       <find>&quot;Test</find>
+      <find>set_step_status</find>
     </findStrings>
     <replaceStrings>
       <replace>set_test_fail</replace>
       <replace>set_test_failed()</replace>
       <replace>&quot;Step</replace>
+      <replace>add_error</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -806,8 +808,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_9.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="34" lean-forward="false" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
+        <state relative-caret-position="704">
+          <caret line="580" column="46" lean-forward="false" selection-start-line="580" selection-start-column="46" selection-end-line="580" selection-end-column="46" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
