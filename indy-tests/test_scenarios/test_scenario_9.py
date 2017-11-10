@@ -90,7 +90,7 @@ async def test_09_remove_and_add_role():
 
     # 1. Create ledger config from genesis txn file.
     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
-    pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file)})
+    pool_config = json.dumps({"genesis_txn": str(Constant.pool_genesis_txn_file)})
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
     except IndyError as E:
