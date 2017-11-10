@@ -53,10 +53,10 @@ def test_prep():
 
 
 async def add_nym(submitter_did, target_did, ver_key, alias, role, can_add):
-    nym_request = await ledger.build_nym_request(submitter_did, target_did, ver_key, alias, role)
     result = False
     e = None
     try:
+        nym_request = await ledger.build_nym_request(submitter_did, target_did, ver_key, alias, role)
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, submitter_did, nym_request)
         if can_add:
             result = True
@@ -72,9 +72,8 @@ async def add_nym(submitter_did, target_did, ver_key, alias, role, can_add):
 
 
 async def get_nym(submitter_did, target_did):
-    get_nym_request = await ledger.build_get_nym_request(submitter_did, target_did)
-
     try:
+        get_nym_request = await ledger.build_get_nym_request(submitter_did, target_did)
         await ledger.submit_request(MyVars.pool_handle, get_nym_request)
         return True, None
     except IndyError as E:
