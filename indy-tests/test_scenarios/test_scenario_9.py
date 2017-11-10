@@ -4,6 +4,7 @@ import logging
 import os
 import asyncio
 import shutil
+import time
 from indy import agent, ledger, pool, signus, wallet
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -17,6 +18,7 @@ class MyVars:
     pool_handle = 0
     test_report = TestReport("Test_Scenario_09_Remove_And_Add_Role")
     # Need the path to the pool transaction file location
+    begin_time = 0
     wallet_handle = 0
     pool_name = "pool_genesis_test9"
     wallet_name = "test_wallet9"
@@ -564,6 +566,7 @@ def final_result():
 
 
 def test():
+    MyVars.begin_time = time.
     test_prep()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(test_09_remove_and_add_role())
