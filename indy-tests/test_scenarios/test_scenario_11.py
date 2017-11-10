@@ -428,7 +428,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         input(Colors.WARNING + "\n\nTrustAnchor cannot create another TrustAnchor" + Colors.ENDC)
 
     # 11b. Verify that TrustAnchor3 cannot add an Identity Owner-------------------------------------------
-    nym_txn_req11b = await ledger.build_nym_request(trustanchor3_did, trustanchor3_did, trustanchor3_verkey, None)
+    nym_txn_req11b = await ledger.build_nym_request(trustanchor3_did, trustanchor3_did, trustanchor3_verkey, None, Roles.NONE)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req11b)
     except Exception as E:
