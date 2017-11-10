@@ -3,7 +3,7 @@ Created on Nov 8, 2017
 
 @author: khoi.ngo
 '''
-#! /usr/bin/env python3.6
+# /usr/bin/env python3.6
 import sys
 import asyncio
 import json
@@ -31,10 +31,11 @@ class MyVars:
     pool_genesis_txn_file = Constant.pool_genesis_txn_file
     wallet_handle = 0
     test_report = TestReport("Test_scenario_04_Keyrings_Wallets")
-    pool_name = generate_random_string("test_pool", length=10)
-    wallet_name = generate_random_string("test_wallet", length=10)
+    pool_name = generate_random_string("test_pool", size=10)
+    wallet_name = generate_random_string("test_wallet", size=10)
     debug = False
     test_results = {'Step 4': False, 'Step 5': False}
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -71,7 +72,7 @@ async def test_scenario_04_keyrings_wallets():
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
     except IndyError as E:
-        MyVars.test_report.set_result("Failed")
+        MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status(1, "Create Ledger", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
@@ -84,7 +85,7 @@ async def test_scenario_04_keyrings_wallets():
         pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
         MyVars.pool_handle = pool_handle
     except IndyError as E:
-        MyVars.test_report.set_result("Failed")
+        MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status(2, "Open pool ledger", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -97,7 +98,7 @@ async def test_scenario_04_keyrings_wallets():
     try:
         await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
     except IndyError as E:
-        MyVars.test_report.set_result("Failed")
+        MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status(3, "Create wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
@@ -106,7 +107,7 @@ async def test_scenario_04_keyrings_wallets():
     try:
         MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
     except IndyError as E:
-        MyVars.test_report.set_result("Failed")
+        MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status(3, "Create wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -120,7 +121,7 @@ async def test_scenario_04_keyrings_wallets():
         if result:
             MyVars.test_results['Step 4'] = True
     except IndyError as E:
-        MyVars.test_report.set_result("Failed")
+        MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status(4, "Verify wallet was created in \".indy/wallet\"", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -136,7 +137,7 @@ async def test_scenario_04_keyrings_wallets():
             MyVars.test_results['Step 5'] = True
             print("===PASSED===")
     except IndyError as E:
-        MyVars.test_report.set_result("Failed")
+        MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status(5, "Create DID to check the new wallet work well", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -153,7 +154,7 @@ async def test_scenario_04_keyrings_wallets():
 
     await asyncio.sleep(0)
 
-    #7. Delete wallet and pool ledger --------------------------------------------------------------------
+    # 7. Delete wallet and pool ledger --------------------------------------------------------------------
     print(Colors.HEADER + "\n\t7. Delete the wallet and pool ledger...\n" + Colors.ENDC)
     try:
         await wallet.delete_wallet(MyVars.wallet_name, None)
@@ -168,7 +169,7 @@ async def test_scenario_04_keyrings_wallets():
 
 def final_results():
     """  Show the test results  """
-    if all(value == True for value in MyVars.test_results.values()):
+    if all(value is True for value in MyVars.test_results.values()):
         print(Colors.OKGREEN + "\n\tAll the tests passed...\n" + Colors.ENDC)
     else:
         for test_num, value in MyVars.test_results.items():
@@ -176,7 +177,7 @@ def final_results():
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
 
     MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
-    MyVars.test_report.write_result_to_file("")
+    MyVars.test_report.write_result_to_file()
 
 
 def test():
