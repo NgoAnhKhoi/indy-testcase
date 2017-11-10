@@ -9,9 +9,10 @@ import asyncio
 import json
 import logging
 import shutil
-import random
+import os
 from indy import ledger, signus, wallet, pool
 from indy.error import IndyError
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import generate_random_string
 from utils.constant import Colors, Constant, Roles
 from utils.report import TestReport
