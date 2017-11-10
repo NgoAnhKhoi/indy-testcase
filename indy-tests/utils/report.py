@@ -51,6 +51,6 @@ class KeyWord:
     RESULT = "result"
     START_TIME = "starttime"
     DURATION = "duration"
-    STEP = "step"
+    STEP = "Step"
     PASSED = "Passed"
     FAILED = "Failed"
