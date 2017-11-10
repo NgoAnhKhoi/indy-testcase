@@ -36,6 +36,7 @@ class MyVars:
     debug = False
     test_results = {'Step 4': False, 'Step 5': False}
 
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -153,7 +154,7 @@ async def test_scenario_04_keyrings_wallets():
 
     await asyncio.sleep(0)
 
-    #7. Delete wallet and pool ledger --------------------------------------------------------------------
+    # 7. Delete wallet and pool ledger --------------------------------------------------------------------
     print(Colors.HEADER + "\n\t7. Delete the wallet and pool ledger...\n" + Colors.ENDC)
     try:
         await wallet.delete_wallet(MyVars.wallet_name, None)
@@ -168,7 +169,7 @@ async def test_scenario_04_keyrings_wallets():
 
 def final_results():
     """  Show the test results  """
-    if all(value == True for value in MyVars.test_results.values()):
+    if all(value is True for value in MyVars.test_results.values()):
         print(Colors.OKGREEN + "\n\tAll the tests passed...\n" + Colors.ENDC)
     else:
         for test_num, value in MyVars.test_results.items():

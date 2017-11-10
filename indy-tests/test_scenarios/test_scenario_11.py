@@ -3,7 +3,7 @@ Created on Nov 8, 2017
 
 @author: khoi.ngo
 '''
-#! /usr/bin/env python3.6
+# /usr/bin/env python3.6
 import sys
 import asyncio
 import json
@@ -12,22 +12,12 @@ import shutil
 import random
 from indy import ledger, signus, wallet, pool
 from indy.error import IndyError
-
+from utils.utils import generate_random_string
+from utils.constant import Colors, Constant, Roles
+from utils.report import TestReport
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
 # -----------------------------------------------------------------------------------------
-
-
-class Colors:
-    """ Class to set the colors for text.  Syntax:  print(Colors.OKGREEN +"TEXT HERE" +Colors.ENDC) """
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'  # Normal default color
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
 
 
 class MyVars:
@@ -42,24 +32,6 @@ class MyVars:
     debug = False
     test_results = {'Test 5': False, 'Test 6': False, 'Test 7': False, 'Test 8': False, 'Test 9': False,
                     'Test 10': False, 'Test 11': False, 'Test 12': False}
-
-class Role:
-    TRUSTEE = "TRUSTEE"
-    STEWARD = "STEWARD"
-    TRUST_ANCHOR = "TRUST_ANCHOR"
-    TGB = "TGB"
-    NONE = ""
-
-class Data:
-    data_file = json.load(open("E:\\data.js", "r"))
-    seed_default_trustee = data_file['seed_default_trustee']
-    seed_trustee1 = data_file['seed_trustee1']
-    seed_trustee2 = data_file['seed_trustee2']
-    seed_steward1 = data_file['seed_steward1']
-    seed_steward2 = data_file['seed_steward2']
-    seed_trustanchor1 = data_file['seed_trustanchor1']
-    seed_trustanchor2 = data_file['seed_trustanchor2']
-    seed_trustanchor3 = data_file['seed_trustanchor3']
 
 
 logger = logging.getLogger(__name__)
@@ -91,6 +63,24 @@ def test_prep():
 
 async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles():
     logger.info("Test Scenario 11 -> started")
+
+    # Declare all values use in the test
+    seed_default_trustee = "000000000000000000000000Trustee1"
+    seed_trustee1 = "TestTrustee100000000000000000000"
+    seed_trustee2 = "TestTrustee200000000000000000000"
+    seed_steward1 = "TestSteward100000000000000000000"
+    seed_steward2 = "TestSteward200000000000000000000"
+    seed_steward3 = "TestSteward300000000000000000000"
+    seed_tgb1 = "TestTGB1000000000000000000000000"
+    seed_trustanchor1 = "TestTrustAnchor10000000000000000"
+    seed_trustanchor2 = "TestTrustAnchor20000000000000000"
+    seed_trustanchor3 = "TestTrustAnchor30000000000000000"
+    seed_user1 = "RandomUser1000000000000000000000"
+    seed_user2 = "RandomUser2000000000000000000000"
+    seed_user3 = "RandomUser3000000000000000000000"
+    seed_user4 = "RandomUser4000000000000000000000"
+    seed_user5 = "RandomUser5000000000000000000000"
+    seed_user6 = "RandomUser6000000000000000000000"
 
     # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
@@ -139,24 +129,24 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         # Changed to not use seeds so the test can run more than once on the same pool except for the default
         # trustee did
         (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
-            MyVars.wallet_handle, Data.seed_default_trustee)
+            MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
 
         (trustee1_did, trustee1_verkey, trustee1_pk) = await signus.create_and_store_my_did(
-            MyVars.wallet_handle, Data.seed_trustee1)
+            MyVars.wallet_handle, json.dumps({}))
 
 #         print("trustee1: DID[%s] verkey[%s] public_key[%s]" % str(trustee1_did), str(trustee1_verkey), str(trustee1_pk))
 
         (trustee2_did, trustee2_verkey, trustee2_pk) = await signus.create_and_store_my_did(
-            MyVars.wallet_handle, Data.seed_trustee2)
+            MyVars.wallet_handle, json.dumps({}))
 
         (steward1_did, steward1_verkey, steward1_pk) = await signus.create_and_store_my_did(
-            MyVars.wallet_handle, Data.seed_steward1)
+            MyVars.wallet_handle, json.dumps({}))
         (steward2_did, steward2_verkey, steward2_pk) = await signus.create_and_store_my_did(
-            MyVars.wallet_handle, Data.seed_steward2)
+            MyVars.wallet_handle, json.dumps({}))
         (trustanchor1_did, trustanchor1_verkey, trustanchor1_pk) = await signus.create_and_store_my_did(
-            MyVars.wallet_handle, Data.seed_trustanchor1)
+            MyVars.wallet_handle, json.dumps({}))
         (trustanchor2_did, trustanchor2_verkey, trustanchor2_pk) = await signus.create_and_store_my_did(
-            MyVars.wallet_handle, Data.seed_trustanchor2)
+            MyVars.wallet_handle, json.dumps({}))
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -172,7 +162,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     parts5 = {'trustee1': False, 'trusteenym': False, 'trustanchor1': False, 'trustanchor1nym': False}
 
     print(Colors.HEADER + "\n\t5. Use default Trustee to create a Trustee\n" + Colors.ENDC)
-    nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, trustee1_did, trustee1_verkey, None, Role.TRUSTEE)
+    nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, trustee1_did, trustee1_verkey, None, Roles.TRUSTEE)
 
     try:
         res = await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
@@ -194,7 +184,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     # 5b. TrustAnchor1
     print(Colors.HEADER + "\n\t5b. Use Trustee to create a TrustAnchor\n" + Colors.ENDC)
     nym_txn_req5b = await ledger.build_nym_request(default_trustee_did, trustanchor1_did, trustanchor1_verkey, None,
-                                                  Role.TRUST_ANCHOR)
+                                                  Roles.TRUST_ANCHOR)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
                                              nym_txn_req5b)
