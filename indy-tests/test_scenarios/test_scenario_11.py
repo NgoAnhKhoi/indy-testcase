@@ -73,6 +73,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     seed_steward2 = generate_random_string(prefix="Steward2", size=32)
     seed_trustanchor1 = generate_random_string(prefix="TrustAnchor1", size=32)
     seed_trustanchor2 = generate_random_string(prefix="TrustAnchor2", size=32)
+    seed_trustanchor3 = generate_random_string(prefix="TrustAnchor3", size=32)
 
     # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
@@ -135,6 +136,8 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
             MyVars.wallet_handle, json.dumps({"seed": seed_trustanchor1}))
         (trustanchor2_did, trustanchor2_verkey, trustanchor2_pk) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_trustanchor2}))
+        (trustanchor3_did, trustanchor3_verkey, trustanchor3_pk) = await signus.create_and_store_my_did(
+            MyVars.wallet_handle, json.dumps({"seed": seed_trustanchor3}))
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
