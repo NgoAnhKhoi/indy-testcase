@@ -71,7 +71,7 @@ async def test_scenario_04_keyrings_wallets():
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
     except IndyError as E:
-        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_result("Failed")
         MyVars.test_report.set_step_status(1, "Create Ledger", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
@@ -84,7 +84,7 @@ async def test_scenario_04_keyrings_wallets():
         pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
         MyVars.pool_handle = pool_handle
     except IndyError as E:
-        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_result("Failed")
         MyVars.test_report.set_step_status(2, "Open pool ledger", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -97,7 +97,7 @@ async def test_scenario_04_keyrings_wallets():
     try:
         await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
     except IndyError as E:
-        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_result("Failed")
         MyVars.test_report.set_step_status(3, "Create wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
@@ -106,7 +106,7 @@ async def test_scenario_04_keyrings_wallets():
     try:
         MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
     except IndyError as E:
-        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_result("Failed")
         MyVars.test_report.set_step_status(3, "Create wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -120,7 +120,7 @@ async def test_scenario_04_keyrings_wallets():
         if result:
             MyVars.test_results['Step 4'] = True
     except IndyError as E:
-        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_result("Failed")
         MyVars.test_report.set_step_status(4, "Verify wallet was created in \".indy/wallet\"", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -136,7 +136,7 @@ async def test_scenario_04_keyrings_wallets():
             MyVars.test_results['Step 5'] = True
             print("===PASSED===")
     except IndyError as E:
-        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_result("Failed")
         MyVars.test_report.set_step_status(5, "Create DID to check the new wallet work well", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
@@ -149,8 +149,6 @@ async def test_scenario_04_keyrings_wallets():
         await wallet.close_wallet(MyVars.wallet_handle)
         await pool.close_pool_ledger(MyVars.pool_handle)
     except IndyError as E:
-        MyVars.test_report.set_test_failed()
-        MyVars.test_report.set_step_status(6, "Close wallet", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
@@ -161,8 +159,6 @@ async def test_scenario_04_keyrings_wallets():
         await wallet.delete_wallet(MyVars.wallet_name, None)
         await pool.delete_pool_ledger_config(MyVars.pool_name)
     except IndyError as E:
-        MyVars.test_report.set_test_failed()
-        MyVars.test_report.set_step_status(7, "Delete wallet and poll ledger", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
