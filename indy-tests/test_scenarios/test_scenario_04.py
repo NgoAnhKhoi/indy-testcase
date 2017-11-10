@@ -31,8 +31,8 @@ class MyVars:
     pool_genesis_txn_file = Constant.pool_genesis_txn_file
     wallet_handle = 0
     test_report = TestReport("Test_scenario_04_Keyrings_Wallets")
-    pool_name = generate_random_string("test_pool", length=10)
-    wallet_name = generate_random_string("test_wallet", length=10)
+    pool_name = generate_random_string("test_pool", size=10)
+    wallet_name = generate_random_string("test_wallet", size=10)
     debug = False
     test_results = {'Step 4': False, 'Step 5': False}
 
