@@ -28,8 +28,8 @@ class MyVars:
     # Need the path to the pool transaction file location
     pool_genesis_txn_file = Constant.pool_genesis_txn_file
     wallet_handle = 0
-    pool_name = generate_random_string("test_pool", length=10)
-    wallet_name = generate_random_string("test_wallet", length=10)
+    pool_name = generate_random_string("test_pool", size=10)
+    wallet_name = generate_random_string("test_wallet", size=10)
     print("[%s] - [%s]" % (pool_name, wallet_name))
     debug = False
     test_results = {'Test 5': False, 'Test 6': False, 'Test 7': False, 'Test 8': False, 'Test 9': False,
@@ -67,12 +67,12 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     logger.info("Test Scenario 11 -> started")
 
     # Declare all values use in the test
-    seed_trustee1 = generate_random_string(prefix="TestTrustee1", length=32)
-    seed_trustee2 = generate_random_string(prefix="TestTrustee2", length=32)
-    seed_steward1 = generate_random_string(prefix="TestSteward1", length=32)
-    seed_steward2 = generate_random_string(prefix="TestSteward2", length=32)
-    seed_trustanchor1 = generate_random_string(prefix="TestTrustAnchor1", length=32)
-    seed_trustanchor2 = generate_random_string(prefix="TestTrustAnchor2", length=32)
+    seed_trustee1 = generate_random_string(prefix="TestTrustee1", size=32)
+    seed_trustee2 = generate_random_string(prefix="TestTrustee2", size=32)
+    seed_steward1 = generate_random_string(prefix="TestSteward1", size=32)
+    seed_steward2 = generate_random_string(prefix="TestSteward2", size=32)
+    seed_trustanchor1 = generate_random_string(prefix="TestTrustAnchor1", size=32)
+    seed_trustanchor2 = generate_random_string(prefix="TestTrustAnchor2", size=32)
 
     # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
