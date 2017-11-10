@@ -16,7 +16,7 @@ class TestReport:
         self.__test_result = {}
         self.__test_result[KeyWord.TEST_CASE] = test_case_name
         self.__test_result[KeyWord.RESULT] = KeyWord.PASSED
-        self.__test_result[KeyWord.START_TIME] = str(time.strftime("%Y%m%d_%H:%M:%S"))
+        self.__test_result[KeyWord.START_TIME] = str(time.strftime("%Y%m%d_%H-%M-%S"))
 
     def set_result(self, result):
         self.__test_result[KeyWord.RESULT] = result
