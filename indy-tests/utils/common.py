@@ -18,8 +18,8 @@ class Common():
 
     @staticmethod
     async def prepare_pool_and_wallet(pool_name, wallet_name, pool_genesis_txn_file):
-        pool_handle = await Common.create_and_open_pool(pool_name, pool_genesis_txn_file)
-        wallet_handle = await Common.create_and_open_wallet(pool_name, wallet_name)
+        pool_handle = await Common().create_and_open_pool(pool_name, pool_genesis_txn_file)
+        wallet_handle = await Common().create_and_open_wallet(pool_name, wallet_name)
         return pool_handle, wallet_handle
 
 
