@@ -8,7 +8,7 @@ import sys
 import asyncio
 import json
 import os.path
-import logging
+import logging.handlers
 # import shutil
 import time
 from indy import signus, wallet, pool
