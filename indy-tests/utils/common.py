@@ -7,16 +7,17 @@ Created on Nov 13, 2017
 from .constant import Colors
 import asyncio
 import json
-from indy import signus, wallet, pool
+from indy import wallet, pool
 from indy.error import IndyError
 
 
-class Common(object):
+class Common():
     '''
     Wrapper common steps.
     '''
 
-    async def create_and_open_pool(self, pool_name, pool_genesis_txn_file):
+    @staticmethod
+    async def create_and_open_pool(pool_name, pool_genesis_txn_file):
         print(Colors.HEADER + "\n\ Create Ledger\n" + Colors.ENDC)
         pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_file)})
         # Create pool
@@ -35,7 +36,8 @@ class Common(object):
         await asyncio.sleep(0)
         return pool_handle
 
-    async def create_and_open_wallet(self, pool_name, wallet_name):
+    @staticmethod
+    async def create_and_open_wallet(pool_name, wallet_name):
         print(Colors.HEADER + "\nCreate wallet\n" + Colors.ENDC)
         try:
             await wallet.create_wallet(pool_name, wallet_name, None, None, None)
