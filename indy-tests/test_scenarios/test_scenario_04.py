@@ -110,7 +110,7 @@ async def test_scenario_04_keyrings_wallets():
     # 4. Close wallet and pool ------------------------------------------------------------------------------
     print(Colors.HEADER + "\n\t==Clean up==\n\t4. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
     try:
-        Common.clean_up_pool_and_wallet(MyVars.pool_name, MyVars.pool_handle, MyVars.wallet_name, MyVars.wallet_handle)
+        await Common.clean_up_pool_and_wallet(MyVars.pool_name, MyVars.pool_handle, MyVars.wallet_name, MyVars.wallet_handle)
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
