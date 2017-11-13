@@ -35,7 +35,7 @@ class MyVars:
     pool_name = generate_random_string("test_pool")
     wallet_name = generate_random_string("test_wallet")
     debug = False
-    test_results = {'Step 4': False, 'Step 5': False}
+    test_results = {'Step 2': False, 'Step 3': False}
 
 # logger = logging.getLogger(__name__)
 # logging.basicConfig(level=logging.INFO)
