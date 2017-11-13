@@ -18,7 +18,7 @@ class Common():
 
     @staticmethod
     async def create_and_open_pool(pool_name, pool_genesis_txn_file):
-        print(Colors.HEADER + "\n\ Create Ledger\n" + Colors.ENDC)
+        print(Colors.HEADER + "\nCreate Ledger\n" + Colors.ENDC)
         pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_file)})
         # Create pool
         try:
@@ -26,7 +26,7 @@ class Common():
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
             raise Exception
-        print(Colors.HEADER + "\n\ Open pool ledger\n" + Colors.ENDC)
+        print(Colors.HEADER + "\nOpen pool ledger\n" + Colors.ENDC)
         # get pool handle
         try:
             pool_handle = await pool.open_pool_ledger(pool_name, None)

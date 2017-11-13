@@ -95,7 +95,7 @@ async def test_scenario_04_keyrings_wallets():
         result = os.path.exists(wallet_path)
         print("===PASSED===")
         if result:
-            MyVars.test_results['Step 3'] = True
+            MyVars.test_results['Step 4'] = True
     except IndyError as E:
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status(4, "Verify wallet was created in \".indy/wallet\"", str(E))
@@ -110,7 +110,7 @@ async def test_scenario_04_keyrings_wallets():
         (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
         if default_trustee_did:
-            MyVars.test_results['Step 4'] = True
+            MyVars.test_results['Step 5'] = True
             print("===PASSED===")
     except IndyError as E:
         MyVars.test_report.set_test_failed()
