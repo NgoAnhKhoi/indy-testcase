@@ -9,7 +9,7 @@ import asyncio
 import json
 import os.path
 import logging
-import shutil
+# import shutil
 import time
 from indy import signus, wallet, pool
 from indy.error import IndyError
