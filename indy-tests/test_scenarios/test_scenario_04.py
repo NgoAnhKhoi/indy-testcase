@@ -64,7 +64,7 @@ async def test_scenario_04_keyrings_wallets():
     seed_default_trustee = "000000000000000000000000Trustee1"
 
     # 1. Create and open pool Ledger  ---------------------------------------------------------
-    print((Colors.HEADER + "\n\t1.  Create and open pool Ledger\n" + Colors.ENDC) % (MyVars.current_step))
+    print(Colors.HEADER + "\n\t1.  Create and open pool Ledger\n" + Colors.ENDC)
     try:
         MyVars.pool_handle = await Common.create_and_open_pool(MyVars.pool_name, MyVars.pool_genesis_txn_file)
     except IndyError as E:
