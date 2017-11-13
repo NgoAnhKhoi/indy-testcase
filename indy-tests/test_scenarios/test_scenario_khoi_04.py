@@ -14,9 +14,10 @@ import time
 from indy import signus, wallet, pool
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from utils.utils import generate_random_string, clean_up_pool_and_wallet
+from utils.utils import generate_random_string
 from utils.constant import Colors, Constant
 from utils.report import TestReport
+from utils.common import Common
 
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
@@ -43,7 +44,7 @@ logging.basicConfig(level=logging.INFO)
 
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
-    clean_up_pool_and_wallet(MyVars.pool_name, MyVars.wallet_name)
+    Common.clean_up_pool_and_wallet(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def test_scenario_04_keyrings_wallets():
