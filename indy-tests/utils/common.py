@@ -17,7 +17,13 @@ class Common():
     '''
 
     @staticmethod
-    async def create_and_open_pool(pool_name, pool_genesis_txn_file):
+    async def prepare_pool_and_wallet(pool_name, wallet_name, pool_genesis_txn_file):
+        pool_handle = await Common.create_and_open_pool(pool_name, pool_genesis_txn_file)
+        wallet_handle = await Common.create_and_open_wallet(pool_name, wallet_name)
+        return pool_handle, wallet_handle
+
+
+    async def create_and_open_pool(self, pool_name, pool_genesis_txn_file):
         print(Colors.HEADER + "\nCreate Ledger\n" + Colors.ENDC)
         pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_file)})
         # Create pool
@@ -36,8 +42,8 @@ class Common():
         await asyncio.sleep(0)
         return pool_handle
 
-    @staticmethod
-    async def create_and_open_wallet(pool_name, wallet_name):
+
+    async def create_and_open_wallet(self, pool_name, wallet_name):
         print(Colors.HEADER + "\nCreate wallet\n" + Colors.ENDC)
         try:
             await wallet.create_wallet(pool_name, wallet_name, None, None, None)

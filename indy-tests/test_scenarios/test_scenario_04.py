@@ -66,26 +66,26 @@ async def test_scenario_04_keyrings_wallets():
     # 1. Create and open pool Ledger  ---------------------------------------------------------
     print(Colors.HEADER + "\n\t1.  Create and open pool Ledger\n" + Colors.ENDC)
     try:
-        MyVars.pool_handle = await Common.create_and_open_pool(MyVars.pool_name, MyVars.pool_genesis_txn_file)
+        MyVars.pool_handle, MyVars.wallet_handle = await Common.prepare_pool_and_wallet(MyVars.pool_name, MyVars.wallet_name, MyVars.pool_genesis_txn_file)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status(1, "Create and open pool Ledger", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         return None
-
-    await asyncio.sleep(0)
-    if MyVars.debug:
-        input(Colors.WARNING + "\n\nPoolHandle is %s" % str(MyVars.pool_handle) + Colors.ENDC)
-
-    # 2. Create and open Wallet -----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t2. Create wallet\n" + Colors.ENDC)
-    try:
-        MyVars.wallet_handle = await Common.create_and_open_wallet(MyVars.pool_name, MyVars.wallet_name)
-    except IndyError as E:
-        MyVars.test_report.set_test_failed()
-        MyVars.test_report.set_step_status(2, "Create and open wallet", str(E))
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-        return None
+# 
+#     await asyncio.sleep(0)
+#     if MyVars.debug:
+#         input(Colors.WARNING + "\n\nPoolHandle is %s" % str(MyVars.pool_handle) + Colors.ENDC)
+# 
+#     # 2. Create and open Wallet -----------------------------------------------------------------------------------
+#     print(Colors.HEADER + "\n\t2. Create wallet\n" + Colors.ENDC)
+#     try:
+#         MyVars.wallet_handle = await Common.create_and_open_wallet(MyVars.pool_name, MyVars.wallet_name)
+#     except IndyError as E:
+#         MyVars.test_report.set_test_failed()
+#         MyVars.test_report.set_step_status(2, "Create and open wallet", str(E))
+#         print(Colors.FAIL + str(E) + Colors.ENDC)
+#         return None
 
     # 3. verify wallet was created in .indy/wallet
     try:
