@@ -28,10 +28,9 @@ def generate_random_string(prefix="", suffix="", size=20):
 def clean_up_pool_and_wallet(pool_name="", wallet_name=""):
     import os
     import shutil
-    from .constant import Colors
+    from .constant import Colors, Constant
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
-    x = os.path.expanduser('~')
-    work_dir = x + os.sep + ".indy"
+    work_dir = Constant.work_dir
 
     if os.path.exists(work_dir + "/pool/" + pool_name):
         try:
