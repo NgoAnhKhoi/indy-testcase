@@ -14,7 +14,7 @@ import time
 from indy import signus, wallet, pool
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from utils.utils import generate_random_string
+from utils.utils import generate_random_string, clean_up_pool_and_wallet
 from utils.constant import Colors, Constant
 from utils.report import TestReport
 
@@ -43,23 +43,7 @@ logging.basicConfig(level=logging.INFO)
 
 def test_prep():
     """  Delete all files out of the .sovrin/pool and .sovrin/wallet directories  """
-    print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
-    work_dir = Constant.work_dir
-
-    if os.path.exists(work_dir + "/pool/" + MyVars.pool_name):
-        try:
-            shutil.rmtree(work_dir + "/pool/" + MyVars.pool_name)
-        except IOError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    if os.path.exists(work_dir + "/wallet/" + MyVars.wallet_name):
-        try:
-            shutil.rmtree(work_dir + "/wallet/" + MyVars.wallet_name)
-        except IOError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    if MyVars.debug:
-        input(Colors.WARNING + "Pause after test prep\n" + Colors.ENDC)
+    clean_up_pool_and_wallet(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def test_scenario_04_keyrings_wallets():
