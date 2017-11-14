@@ -289,6 +289,8 @@ async def test_09_remove_and_add_role():
     #     MyVars.test_report.set_test_failed()
     #     MyVars.test_report.set_step_status("Step11. Using Trustee1 to create a TGB role", str(message))
 
+    MyVars.test_report.set_step_status("Step11. Using Trustee1 to create a TGB role (SKIP)")
+
     # Role TGB is not exist so we do not execute step 12.
     # 12. Verify GET NYM.
     # print(Colors.HEADER + "\n\t12.  Verify GET NYM - TGB1\n" + Colors.ENDC)
@@ -297,6 +299,7 @@ async def test_09_remove_and_add_role():
     # if MyVars.test_results["Step 12"] is False:
     #     MyVars.test_report.set_test_failed()
     #     MyVars.test_report.set_step_status("Step12. Verify GET NYM - TGB1", str(message))
+    MyVars.test_report.set_step_status("Step12. Verify GET NYM - TGB1 (SKIP)")
 
     # 13. Using Steward1 to create TrustAnchor1.
     print(Colors.HEADER + "\n\t13.  Using Steward1 to create TrustAnchor1\n" + Colors.ENDC)

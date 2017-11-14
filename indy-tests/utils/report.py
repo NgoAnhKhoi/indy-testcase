@@ -40,7 +40,7 @@ class TestReport:
         self.__test_result[KeyWord.RESULT] = result
 
     def set_duration(self, duration):
-        self.__test_result[KeyWord.DURATION] = duration
+        self.__test_result[KeyWord.DURATION] = round(duration * 1000)
 
     def set_step_status(self, step_summary: str, status: str = Status.PASSED, message: str = None):
         temp = {KeyWord.STEP: step_summary, KeyWord.STATUS: status, KeyWord.MESSAGE: message}
