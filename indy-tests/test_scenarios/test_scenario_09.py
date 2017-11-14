@@ -98,7 +98,7 @@ async def test_09_remove_and_add_role():
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step01. Create Ledger", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
+        return
 
     # 2. Open pool ledger.
     print(Colors.HEADER + "\n\t2.  Open Pool Ledger\n" + Colors.ENDC)
@@ -110,33 +110,29 @@ async def test_09_remove_and_add_role():
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step02. Open pool ledger", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
+        return
 
     # 3. Create wallet.
     print(Colors.HEADER + "\n\t3.  Create Wallet\n" + Colors.ENDC)
-    temp = False
     try:
         await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
-        temp = True
     except IndyError as E:
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step03. Create wallet", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
+        return
 
     # Get wallet handle.
     try:
         MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
-        temp = temp and True
     except IndyError as E:
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step03. Create wallet", Status.FAILED, str(E))
-        temp = temp and False
         print(Colors.FAIL + str(E) + Colors.ENDC)
+        return
 
-    MyVars.test_results["Step 3"] = temp
-    if temp:
-        MyVars.test_report.set_step_status("Step03. Create wallet", Status.PASSED)
+    MyVars.test_results["Step 3"] = True
+    MyVars.test_report.set_step_status("Step03. Create wallet", Status.PASSED)
 
     # 4. Create DIDs.
     print(Colors.HEADER + "\n\t4.  Create DIDs\n" + Colors.ENDC)
@@ -419,7 +415,7 @@ async def test_09_remove_and_add_role():
     print(Colors.HEADER + "\n\t22.  Using default Trustee to remove new roles\n" + Colors.ENDC)
     message_22 = ""
     (temp, message) = await add_nym(default_trustee_did, trustee1_did, trustee1_verkey,
-                                    None, Roles.NONE, can_add=True)
+                                    None, "", can_add=True)
     MyVars.test_results["Step 22"] = temp
     if not temp:
         message_22 += "\nCannot remove Trustee1's role - " + message
