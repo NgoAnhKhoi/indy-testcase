@@ -36,25 +36,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="report.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="report.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/utils/report.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="459">
               <caret line="27" column="38" lean-forward="false" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
               <folding>
                 <element signature="e#54#65#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_scenario_9.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_9.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1558">
-              <caret line="226" column="44" lean-forward="true" selection-start-line="226" selection-start-column="44" selection-end-line="226" selection-end-column="44" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,7 +63,24 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="748">
               <caret line="360" column="26" lean-forward="true" selection-start-line="360" selection-start-column="26" selection-end-line="360" selection-end-column="26" />
-              <folding />
+              <folding>
+                <marker date="1510634513867" expanded="true" signature="2351:20525" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="18432:18597" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="18624:18903" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="18656:18845" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="18859:18903" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="19032:19486" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="19615:19728" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="20140:20264" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="20570:21705" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="20875:21705" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="20901:21705" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="21728:22151" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="21922:22151" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="21982:22151" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="22008:22151" ph="..." />
+                <marker date="1510634513867" expanded="true" signature="22167:22200" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -743,16 +748,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/report.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="38" lean-forward="false" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
-          <folding>
-            <element signature="e#54#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2017.2/system/python_stubs/-2110551528/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="287">
@@ -781,7 +776,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="748">
           <caret line="360" column="26" lean-forward="true" selection-start-line="360" selection-start-column="26" selection-end-line="360" selection-end-column="26" />
-          <folding />
+          <folding>
+            <marker date="1510634513867" expanded="true" signature="2351:20525" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="18432:18597" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="18624:18903" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="18656:18845" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="18859:18903" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="19032:19486" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="19615:19728" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="20140:20264" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="20570:21705" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="20875:21705" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="20901:21705" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="21728:22151" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="21922:22151" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="21982:22151" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="22008:22151" ph="..." />
+            <marker date="1510634513867" expanded="true" signature="22167:22200" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -789,8 +801,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1558">
           <caret line="226" column="44" lean-forward="true" selection-start-line="226" selection-start-column="44" selection-end-line="226" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/report.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="38" lean-forward="false" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#54#65#0" expanded="true" />
           </folding>
         </state>
       </provider>
