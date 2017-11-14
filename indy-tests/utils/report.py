@@ -35,7 +35,7 @@ class TestReport:
                                             self.__test_result[KeyWord.START_TIME])
         self.__test_result[KeyWord.RUN] = self.__run
         with open(filename, "w+") as outfile:
-            json.dump(self.__test_result, outfile, ensure_ascii=False)
+            json.dump(self.__test_result, outfile, ensure_ascii=False, indent=2)
 
     def set_test_failed(self):
         self.set_result(Status.FAILED)
