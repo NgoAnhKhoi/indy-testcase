@@ -36,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="report.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="report.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/utils/report.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+            <state relative-caret-position="-68">
+              <caret line="8" column="9" lean-forward="false" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
               <folding>
                 <element signature="e#54#65#0" expanded="true" />
               </folding>
@@ -48,10 +48,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_scenario_09.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="test_scenario_09.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_09.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1975">
+            <state relative-caret-position="1618">
               <caret line="649" column="47" lean-forward="false" selection-start-line="649" selection-start-column="47" selection-end-line="649" selection-end-column="47" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -150,8 +150,8 @@
         <option value="$PROJECT_DIR$/test_scenarios/test_scenario_03.py" />
         <option value="$PROJECT_DIR$/test_scenarios/test_scenario_04.py" />
         <option value="$PROJECT_DIR$/test_scenarios/test_scenario_9.py" />
-        <option value="$PROJECT_DIR$/utils/report.py" />
         <option value="$PROJECT_DIR$/test_scenarios/test_scenario_09.py" />
+        <option value="$PROJECT_DIR$/utils/report.py" />
       </list>
     </option>
   </component>
@@ -765,16 +765,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/report.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding>
-            <element signature="e#54#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_04.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -785,10 +775,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_09.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1975">
+        <state relative-caret-position="1618">
           <caret line="649" column="47" lean-forward="false" selection-start-line="649" selection-start-column="47" selection-end-line="649" selection-end-column="47" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/report.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-68">
+          <caret line="8" column="9" lean-forward="false" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
+          <folding>
+            <element signature="e#54#65#0" expanded="true" />
           </folding>
         </state>
       </provider>

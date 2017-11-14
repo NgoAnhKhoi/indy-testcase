@@ -7,7 +7,6 @@ Created on Nov 9, 2017
 import json
 import time
 import os
-from enum import Enum
 
 
 class TestReport:
@@ -21,13 +20,13 @@ class TestReport:
         self.__test_result[KeyWord.RESULT] = KeyWord.PASSED
         self.__test_result[KeyWord.START_TIME] = str(time.strftime("%Y%m%d_%H-%M-%S"))
 
-    def set_result(self, result: Status):
+    def set_result(self, result):
         self.__test_result[KeyWord.RESULT] = result
 
     def set_duration(self, duration):
         self.__test_result[KeyWord.DURATION] = duration
 
-    def set_step_status(self, step_summary: str, status: Status, message: str = None):
+    def set_step_status(self, step_summary: str, status, message: str = None):
         temp = {KeyWord.STEP: step_summary, KeyWord.STATUS: status, KeyWord.MESSAGE: message}
         self.__run.append(temp)
 
@@ -49,7 +48,7 @@ class TestReport:
         TestReport.result_dir = new_dir
 
 
-class KeyWord(Enum):
+class KeyWord:
     TEST_CASE = "testcase"
     RESULT = "result"
     START_TIME = "starttime"
@@ -60,6 +59,6 @@ class KeyWord(Enum):
     MESSAGE = "message"
 
 
-class Status(Enum):
+class Status:
     PASSED = "Passed"
     FAILED = "Failed"
