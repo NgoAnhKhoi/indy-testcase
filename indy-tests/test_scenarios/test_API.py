@@ -66,8 +66,10 @@ def test_cli_to_val():
 #         p.stdin.write("Yes".encode(encoding='utf_8'))
 #         out, err = p.communicate(password + "\nexit\n")
 #         print("[out: %s]\n[err: %s]" % (str(out), str(err)))
-        error_code = p.stdin.write("vagrant".encode(encoding='utf_8', errors='strict'))
-        print("error code: " + str(error_code))
+        print("stderr: " + str(p.stderr))
+        out, err = p.communicate(password, 30)
+#         error_code = p.stdin.write("vagrant".encode(encoding='utf_8', errors='strict'))
+#         print("error code: " + str(error_code))
 #         p.stdin.write("exit".encode(encoding='utf_8'))
 
 test_cli_to_val()
