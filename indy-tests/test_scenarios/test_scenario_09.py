@@ -10,7 +10,6 @@ from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Constant, Colors, Roles
 from utils.report import TestReport
-from utils import utils
 
 
 class MyVars:
@@ -23,7 +22,6 @@ class MyVars:
     wallet_handle = 0
     pool_name = "pool_genesis_test9"
     wallet_name = "test_wallet9"
-    roles = ["TRUSTEE", "STEWARD", "TRUST_ANCHOR", "TGB", ""]
     test_results = {"Step 1": False, "Step 2": False, "Step 3": False, "Step 4": False,
                     "Step 5": False, "Step 6": False, "Step 7": False, "Step 8": False, "Step 9": False,
                     "Step 10": False, "Step 11": False, "Step 12": False, "Step 13": False, "Step 14": False,
@@ -146,78 +144,63 @@ async def test_09_remove_and_add_role():
 
         (trustee1_did,
          trustee1_verkey,
-         trustee1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                             json.dumps({"seed": utils.generate_random_string(size=32)}))
+         trustee1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (trustee2_did,
          trustee2_verkey,
-         trustee2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                             json.dumps({"seed": utils.generate_random_string(size=32)}))
+         trustee2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (steward1_did,
          steward1_verkey,
-         steward1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                             json.dumps({"seed": utils.generate_random_string(size=32)}))
+         steward1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (steward2_did,
          steward2_verkey,
-         steward2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                             json.dumps({"seed": utils.generate_random_string(size=32)}))
+         steward2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (steward3_did,
          steward3_verkey,
-         steward3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                             json.dumps({"seed": utils.generate_random_string(size=32)}))
+         steward3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (tgb1_did,
          tgb1_verkey,
-         tgb1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                         json.dumps({"seed": utils.generate_random_string(size=32)}))
+         tgb1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (trustanchor1_did,
          trustanchor1_verkey,
-         trustanchor1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                                 json.dumps({"seed": utils.generate_random_string(size=32)}))
+         trustanchor1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (trustanchor2_did,
          trustanchor2_verkey,
-         trustanchor2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                                 json.dumps({"seed": utils.generate_random_string(size=32)}))
+         trustanchor2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (trustanchor3_did,
          trustanchor3_verkey,
-         trustanchor3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                                 json.dumps({"seed": utils.generate_random_string(size=32)}))
+         trustanchor3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user1_did,
          user1_verkey,
-         user1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                          json.dumps({"seed": utils.generate_random_string(size=32)}))
+         user1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user2_did,
          user2_verkey,
-         user2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                          json.dumps({"seed": utils.generate_random_string(size=32)}))
+         user2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user3_did,
          user3_verkey,
-         user3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                          json.dumps({"seed": utils.generate_random_string(size=32)}))
+         user3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user4_did,
          user4_verkey,
-         user4_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                          json.dumps({"seed": utils.generate_random_string(size=32)}))
+         user4_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user5_did,
          user5_verkey,
-         user5_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                          json.dumps({"seed": utils.generate_random_string(size=32)}))
+         user5_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user6_did,
          user6_verkey,
-         user6_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle,
-                                                          json.dumps({"seed": utils.generate_random_string(size=32)}))
+         user6_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
         MyVars.test_results["Step 4"] = True
     except IndyError as E:
         MyVars.test_report.set_test_failed()
@@ -278,22 +261,24 @@ async def test_09_remove_and_add_role():
         MyVars.test_report.set_test_failed()
         MyVars.test_report.add_error("Step10. Verify GET NYM - no role", str(message))
 
+    # Role TGB is not exist so we do not execute step 11.
     # 11. Using Trustee1 to create a TGB role.
-    print(Colors.HEADER + "\n\t11.  Using Trustee1 to create a TGB role\n" + Colors.ENDC)
-    (MyVars.test_results["Step 11"], message) = await add_nym(trustee1_did, tgb1_did, tgb1_verkey,
-                                                              None, Roles.TGB, can_add=True)
+    # print(Colors.HEADER + "\n\t11.  Using Trustee1 to create a TGB role\n" + Colors.ENDC)
+    # (MyVars.test_results["Step 11"], message) = await add_nym(trustee1_did, tgb1_did, tgb1_verkey,
+    #                                                           None, Roles.TGB, can_add=True)
+    #
+    # if MyVars.test_results["Step 11"] is False:
+    #     MyVars.test_report.set_test_failed()
+    #     MyVars.test_report.add_error("Step11. Using Trustee1 to create a TGB role", str(message))
 
-    if MyVars.test_results["Step 11"] is False:
-        MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step11. Using Trustee1 to create a TGB role", str(message))
-
+    # Role TGB is not exist so we do not execute step 12.
     # 12. Verify GET NYM.
-    print(Colors.HEADER + "\n\t12.  Verify GET NYM - TGB1\n" + Colors.ENDC)
-    (MyVars.test_results["Step 12"], message) = await get_nym(trustee1_did, tgb1_did)
-
-    if MyVars.test_results["Step 12"] is False:
-        MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step12. Verify GET NYM - TGB1", str(message))
+    # print(Colors.HEADER + "\n\t12.  Verify GET NYM - TGB1\n" + Colors.ENDC)
+    # (MyVars.test_results["Step 12"], message) = await get_nym(trustee1_did, tgb1_did)
+    #
+    # if MyVars.test_results["Step 12"] is False:
+    #     MyVars.test_report.set_test_failed()
+    #     MyVars.test_report.add_error("Step12. Verify GET NYM - TGB1", str(message))
 
     # 13. Using Steward1 to create TrustAnchor1.
     print(Colors.HEADER + "\n\t13.  Using Steward1 to create TrustAnchor1\n" + Colors.ENDC)
@@ -390,7 +375,7 @@ async def test_09_remove_and_add_role():
     print(Colors.HEADER + "\n\t22.  Using default Trustee to remove new roles\n" + Colors.ENDC)
     message_22 = ""
     (temp, message) = await add_nym(default_trustee_did, trustee1_did, trustee1_verkey,
-                                    None, Roles.NONE, can_add=True)
+                                    None, Roles.TRUST_ANCHOR, can_add=True)
     MyVars.test_results["Step 22"] = temp
     if not temp:
         message_22 += "\nCannot remove Trustee1's role - " + message
@@ -410,7 +395,7 @@ async def test_09_remove_and_add_role():
     (temp, message) = await get_nym(default_trustee_did, steward1_did)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
     if not temp:
-        message_22 += "\nCannot check GET_NYM fo Steward1 - " + message
+        message_22 += "\nCannot check GET_NYM for Steward1 - " + message
 
     (temp, message) = await add_nym(default_trustee_did, tgb1_did, tgb1_verkey, None, Roles.NONE, can_add=True)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
@@ -489,21 +474,22 @@ async def test_09_remove_and_add_role():
         MyVars.test_report.add_error("Step25. Using default Trustee to create Trustee1", message)
 
     # 26. Using Trustee1 to add Steward1 and TGB1.
-    print(Colors.HEADER + "\n\t26.  Using Trustee1 to add Steward1 and TGB1\n" + Colors.ENDC)
+    print(Colors.HEADER + "\n\t26.  Using Trustee1 to add Steward1\n" + Colors.ENDC)
     message_26 = ""
     (temp, message) = await add_nym(trustee1_did, steward1_did, steward1_verkey, None, Roles.STEWARD, can_add=True)
     MyVars.test_results["Step 26"] = temp
     if not temp:
         message_26 += "\nCannot use Trustee1 to add Steward1 - " + message
 
-    (temp, message) = await add_nym(trustee1_did, tgb1_did, tgb1_verkey, None, Roles.TGB, can_add=True)
-    MyVars.test_results["Step 26"] = MyVars.test_results["Step 26"] and temp
-    if not temp:
-        message_26 += "\nCannot use Trustee1 to add TGB1 - " + message
+    # Role TGB is not exist so we do not execute this step
+    # (temp, message) = await add_nym(trustee1_did, tgb1_did, tgb1_verkey, None, Roles.TGB, can_add=True)
+    # MyVars.test_results["Step 26"] = MyVars.test_results["Step 26"] and temp
+    # if not temp:
+    #     message_26 += "\nCannot use Trustee1 to add TGB1 - " + message
 
     if MyVars.test_results["Step 26"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step26. Using Trustee1 to add Steward1 and TGB1", message_26[1:])
+        MyVars.test_report.add_error("Step26. Using Trustee1 to add Steward1", message_26[1:])
 
     # 27. Verify that Steward1 cannot add back a TrustAnchor removed by TrustTee.
     print(Colors.HEADER + "\n\t27. Verify that Steward1 cannot add back a TrustAnchor removed by TrustTee\n"
