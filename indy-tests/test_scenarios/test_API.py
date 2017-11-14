@@ -52,9 +52,9 @@ def command(command_str):
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
-    command("cd /usr/local/bin")
-    command("reset_client")
-    command("YeS")
+    subprocess.run('cd', '/usr/local/bin')
+    subprocess.run('reset_client')
+    subprocess.run('YeS')
 
 test_precondition()
 
