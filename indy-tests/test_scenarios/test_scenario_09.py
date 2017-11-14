@@ -9,7 +9,7 @@ from indy import agent, ledger, pool, signus, wallet
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Constant, Colors, Roles
-from utils.report import TestReport
+from utils.report import TestReport, Status
 
 
 class MyVars:
@@ -93,9 +93,10 @@ async def test_09_remove_and_add_role():
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
         MyVars.test_results["Step 1"] = True
+        MyVars.test_report.set_step_status("Step01. Create Ledger", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step01. Create Ledger", str(E))
+        MyVars.test_report.set_step_status("Step01. Create Ledger", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
 
@@ -104,9 +105,10 @@ async def test_09_remove_and_add_role():
     try:
         MyVars.pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
         MyVars.test_results["Step 2"] = True
+        MyVars.test_report.set_step_status("Step02. Open pool ledger", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step02. Open pool ledger", str(E))
+        MyVars.test_report.set_step_status("Step02. Open pool ledger", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
 
@@ -118,7 +120,7 @@ async def test_09_remove_and_add_role():
         temp = True
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step03. Create wallet", str(E))
+        MyVars.test_report.set_step_status("Step03. Create wallet", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
 
@@ -128,11 +130,13 @@ async def test_09_remove_and_add_role():
         temp = temp and True
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step03. Open wallet", str(E))
+        MyVars.test_report.set_step_status("Step03. Create wallet", Status.FAILED, str(E))
         temp = temp and False
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     MyVars.test_results["Step 3"] = temp
+    if temp:
+        MyVars.test_report.set_step_status("Step03. Create wallet", Status.PASSED)
 
     # 4. Create DIDs.
     print(Colors.HEADER + "\n\t4.  Create DIDs\n" + Colors.ENDC)
@@ -202,9 +206,10 @@ async def test_09_remove_and_add_role():
          user6_verkey,
          user6_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
         MyVars.test_results["Step 4"] = True
+        MyVars.test_report.set_step_status("Step04. Create DID", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step04. Create DID", str(E))
+        MyVars.test_report.set_step_status("Step04. Create DID", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # ==========================================================================================================
@@ -217,7 +222,10 @@ async def test_09_remove_and_add_role():
                                                              None, Roles.TRUSTEE, can_add=True)
     if MyVars.test_results["Step 5"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step05. Using default Trustee to create Trustee1", str(message))
+        MyVars.test_report.set_step_status("Step05. Using default Trustee to create Trustee1",
+                                           Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step05. Using default Trustee to create Trustee1", Status.PASSED)
 
     # 6. Verify GET NYM.
     print(Colors.HEADER + "\n\t6.  Verify GET NYM - Trustee1\n" + Colors.ENDC)
@@ -225,7 +233,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 6"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step06. Verify GET NYM - Trustee1", str(message))
+        MyVars.test_report.set_step_status("Step06. Verify GET NYM - Trustee1", Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step06. Verify GET NYM - Trustee1", Status.PASSED)
 
     # 7. Using Trustee1 to create Steward1.
     print(Colors.HEADER + "\n\t7.  Using Trustee1 to create Steward1\n" + Colors.ENDC)
@@ -234,7 +244,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 7"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step07. Using Trustee1 to create Steward1", str(message))
+        MyVars.test_report.set_step_status("Step07. Using Trustee1 to create Steward1", Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step07. Using Trustee1 to create Steward1", Status.PASSED)
 
     # 8. Verify GET NYM.
     print(Colors.HEADER + "\n\t8.  Verify GET NYM - Steward1\n" + Colors.ENDC)
@@ -242,7 +254,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 8"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step08. Verify GET NYM - Steward1", str(message))
+        MyVars.test_report.set_step_status("Step08. Verify GET NYM - Steward1", Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step08. Verify GET NYM - Steward1", Status.PASSED)
 
     # 9. Verify add identity (no role) by Trustee1.
     print(Colors.HEADER + "\n\t9.  Add identity (no role) by Trustee1\n" + Colors.ENDC)
@@ -251,7 +265,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 9"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step09. Add identity (no role) by Trustee1", str(message))
+        MyVars.test_report.set_step_status("Step09. Add identity (no role) by Trustee1", Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step09. Add identity (no role) by Trustee1", Status.PASSED)
 
     # 10. Verify GET NYM.
     print(Colors.HEADER + "\n\t10.  Verify GET NYM - no role\n" + Colors.ENDC)
@@ -259,7 +275,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 10"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step10. Verify GET NYM - no role", str(message))
+        MyVars.test_report.set_step_status("Step10. Verify GET NYM - no role", Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step10. Verify GET NYM - no role", Status.PASSED)
 
     # Role TGB is not exist so we do not execute step 11.
     # 11. Using Trustee1 to create a TGB role.
@@ -269,7 +287,7 @@ async def test_09_remove_and_add_role():
     #
     # if MyVars.test_results["Step 11"] is False:
     #     MyVars.test_report.set_test_failed()
-    #     MyVars.test_report.add_error("Step11. Using Trustee1 to create a TGB role", str(message))
+    #     MyVars.test_report.set_step_status("Step11. Using Trustee1 to create a TGB role", str(message))
 
     # Role TGB is not exist so we do not execute step 12.
     # 12. Verify GET NYM.
@@ -278,7 +296,7 @@ async def test_09_remove_and_add_role():
     #
     # if MyVars.test_results["Step 12"] is False:
     #     MyVars.test_report.set_test_failed()
-    #     MyVars.test_report.add_error("Step12. Verify GET NYM - TGB1", str(message))
+    #     MyVars.test_report.set_step_status("Step12. Verify GET NYM - TGB1", str(message))
 
     # 13. Using Steward1 to create TrustAnchor1.
     print(Colors.HEADER + "\n\t13.  Using Steward1 to create TrustAnchor1\n" + Colors.ENDC)
@@ -287,7 +305,10 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 13"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step13. Using Steward1 to create TrustAnchor1", str(message))
+        MyVars.test_report.set_step_status("Step13. Using Steward1 to create TrustAnchor1",
+                                           Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step13. Using Steward1 to create TrustAnchor1", Status.PASSED)
 
     # 14. Verify GET NYM.
     print(Colors.HEADER + "\n\t14.  Verify GET NYM - TrustAnchor1\n" + Colors.ENDC)
@@ -295,7 +316,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 14"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step14. Verify GET NYM - TrustAnchor1", str(message))
+        MyVars.test_report.set_step_status("Step14. Verify GET NYM - TrustAnchor1", Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step14. Verify GET NYM - TrustAnchor1", Status.PASSED)
 
     # 15. Verify add identity (no role) by Steward1.
     print(Colors.HEADER + "\n\t15.  Add identity (no role) by Steward1\n" + Colors.ENDC)
@@ -304,7 +327,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 15"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step15. Add identity (no role) by Steward1", str(message))
+        MyVars.test_report.set_step_status("Step15. Add identity (no role) by Steward1", Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step15. Add identity (no role) by Steward1", Status.PASSED)
 
     # 16. Verify GET NYM.
     print(Colors.HEADER + "\n\t16.  Verify GET NYM - no role\n" + Colors.ENDC)
@@ -312,7 +337,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 16"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step16. Verify GET NYM - no role", str(message))
+        MyVars.test_report.set_step_status("Step16. Verify GET NYM - no role", Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step16. Verify GET NYM - no role", Status.PASSED)
 
     # 17. Verify that a Steward cannot create another Steward.
     print(Colors.HEADER + "\n\t17.  Verify Steward cannot create another Steward\n" + Colors.ENDC)
@@ -321,11 +348,14 @@ async def test_09_remove_and_add_role():
     if temp:
         print(Colors.OKGREEN + "::PASS::Validated that a Steward cannot create a Steward!\n" + Colors.ENDC)
         MyVars.test_results["Step 17"] = True
+        MyVars.test_report.set_step_status("Step17. Verify that a Steward cannot create another Steward",
+                                           Status.PASSED)
     else:
         MyVars.test_report.set_test_failed()
         if message is None:
             message = "Steward can create another Steward (should fail)"
-        MyVars.test_report.add_error("Step17. Verify that a Steward cannot create another Steward", str(message))
+        MyVars.test_report.set_step_status("Step17. Verify that a Steward cannot create another Steward",
+                                           Status.FAILED, str(message))
 
     # 18. Verify that a Steward cannot create a Trustee.
     print(Colors.HEADER + "\n\t18.  Verify Steward cannot create a Trustee\n" + Colors.ENDC)
@@ -334,11 +364,14 @@ async def test_09_remove_and_add_role():
     if temp:
         print(Colors.OKGREEN + "::PASS::Validated that a Steward cannot create a Trustee!\n" + Colors.ENDC)
         MyVars.test_results["Step 18"] = True
+        MyVars.test_report.set_step_status("Step18. Verify that a Steward cannot create a Trustee",
+                                           Status.PASSED)
     else:
         MyVars.test_report.set_test_failed()
         if message is None:
             message = "Steward can create a Trustee (should fail)"
-        MyVars.test_report.add_error("Step18. Verify that a Steward cannot create a Trustee", str(message))
+        MyVars.test_report.set_step_status("Step18. Verify that a Steward cannot create a Trustee",
+                                           Status.FAILED, str(message))
 
     # 19. Using TrustAnchor1 to add a NYM.
     print(Colors.HEADER + "\n\t19.  Using TrustAnchor1 to add a NYM\n" + Colors.ENDC)
@@ -347,7 +380,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 19"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step19. Using TrustAnchor1 to add a NYM", str(message))
+        MyVars.test_report.set_step_status("Step19. Using TrustAnchor1 to add a NYM", Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step19. Using TrustAnchor1 to add a NYM", Status.PASSED)
 
     # 20. Verify GET NYM.
     print(Colors.HEADER + "\n\t20.  Verify that new NYM added with TrustAnchor1\n" + Colors.ENDC)
@@ -355,7 +390,10 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 20"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step20. Verify that new NYM added with TrustAnchor1", str(message))
+        MyVars.test_report.set_step_status("Step20. Verify that new NYM added with TrustAnchor1",
+                                           Status.FAILED, str(message))
+    else:
+        MyVars.test_report.set_step_status("Step20. Verify that new NYM added with TrustAnchor1", Status.PASSED)
 
     # 21. Verify that TrustAnchor cannot create another TrustAnchor.
     print(Colors.HEADER + "\n\t21.  Verify that TrustAnchor cannot create another TrustAnchor\n" + Colors.ENDC)
@@ -365,11 +403,14 @@ async def test_09_remove_and_add_role():
         MyVars.test_results["Step 21"] = True
         print(Colors.OKGREEN + "::PASS::Validated that a TrustAnchor cannot create another TrustAnchor!\n"
               + Colors.ENDC)
+        MyVars.test_report.set_step_status("Step21. Verify that TrustAnchor cannot create another TrustAnchor",
+                                           Status.PASSED)
     else:
         MyVars.test_report.set_test_failed()
         if message is None:
             message = "TrustAnchor can create another TrustAnchor (should fail)"
-        MyVars.test_report.add_error("Step21. Verify that TrustAnchor cannot create another TrustAnchor", str(message))
+        MyVars.test_report.set_step_status("Step21. Verify that TrustAnchor cannot create another TrustAnchor",
+                                           Status.FAILED, str(message))
 
     # 22. Using default Trustee to remove new roles.
     print(Colors.HEADER + "\n\t22.  Using default Trustee to remove new roles\n" + Colors.ENDC)
@@ -421,7 +462,10 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 22"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step22. Using default Trustee to remove roles", message_22[1:])
+        MyVars.test_report.set_step_status("Step22. Using default Trustee to remove roles",
+                                           Status.FAILED, message_22[1:])
+    else:
+        MyVars.test_report.set_step_status("Step22. Using default Trustee to remove roles", Status.PASSED)
 
     # 23. Verify that removed Trustee1 cannot create Trustee or Steward.
     print(Colors.HEADER + "\n\t23.  Verify that removed Trustee1 cannot create Trustee or Steward\n" + Colors.ENDC)
@@ -449,8 +493,11 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 23"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step23. Verify that removed Trustee1 cannot create Trustee or Steward",
-                                     message_23[1:])
+        MyVars.test_report.set_step_status("Step23. Verify that removed Trustee1 cannot create Trustee or Steward",
+                                           Status.FAILED, message_23[1:])
+    else:
+        MyVars.test_report.set_step_status("Step23. Verify that removed Trustee1 cannot create Trustee or Steward",
+                                           Status.PASSED)
 
     # 24. Verify that removed Steward1 cannot create TrustAnchor.
     print(Colors.HEADER + "\n\t24.  Verify that removed Steward1 cannot create TrustAnchor\n" + Colors.ENDC)
@@ -459,11 +506,14 @@ async def test_09_remove_and_add_role():
     if temp:
         print(Colors.OKGREEN + "::PASS::Validated that removed Steward1 cannot create a TrustAnchor!\n" + Colors.ENDC)
         MyVars.test_results["Step 24"] = True
+        MyVars.test_report.set_step_status("Step24. Verify that removed Steward1 cannot create TrustAnchor",
+                                           Status.PASSED)
     else:
         MyVars.test_report.set_test_failed()
         if message is None:
             message = "Steward1 can create a TrustAnchor (should fail)"
-        MyVars.test_report.add_error("Step24. Verify that removed Steward1 cannot create TrustAnchor", message)
+        MyVars.test_report.set_step_status("Step24. Verify that removed Steward1 cannot create TrustAnchor",
+                                           Status.FAILED, message)
 
     # 25. Using default Trustee to create Trustee1.
     print(Colors.HEADER + "\n\t25.  Using default Trustee to create Trustee1\n" + Colors.ENDC)
@@ -471,7 +521,9 @@ async def test_09_remove_and_add_role():
                                                               None, Roles.TRUSTEE, can_add=True)
     if MyVars.test_results["Step 25"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step25. Using default Trustee to create Trustee1", message)
+        MyVars.test_report.set_step_status("Step25. Using default Trustee to create Trustee1", Status.FAILED, message)
+    else:
+        MyVars.test_report.set_step_status("Step25. Using default Trustee to create Trustee1", Status.PASSED)
 
     # 26. Using Trustee1 to add Steward1 and TGB1.
     print(Colors.HEADER + "\n\t26.  Using Trustee1 to add Steward1\n" + Colors.ENDC)
@@ -489,7 +541,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 26"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step26. Using Trustee1 to add Steward1", message_26[1:])
+        MyVars.test_report.set_step_status("Step26. Using Trustee1 to add Steward1",Status.FAILED, message_26[1:])
+    else:
+        MyVars.test_report.set_step_status("Step26. Using Trustee1 to add Steward1", Status.PASSED)
 
     # 27. Verify that Steward1 cannot add back a TrustAnchor removed by TrustTee.
     print(Colors.HEADER + "\n\t27. Verify that Steward1 cannot add back a TrustAnchor removed by TrustTee\n"
@@ -500,12 +554,16 @@ async def test_09_remove_and_add_role():
         print(Colors.OKGREEN + "::PASS::Validated that Steward1 cannot add back a TrustAnchor removed by TrustTee!\n"
               + Colors.ENDC)
         MyVars.test_results["Step 27"] = True
+        MyVars.test_report.set_step_status("Step27. Verify that Steward1 cannot "
+                                           "add back a TrustAnchor removed by TrustTee",
+                                           Status.PASSED)
     else:
         MyVars.test_report.set_test_failed()
         if message is None:
             message = "Steward1 can add back TrustAnchor removed by Trustee (should fail)"
-        MyVars.test_report.add_error("Step27. Verify that Steward1 cannot add back a TrustAnchor removed by TrustTee",
-                                     message)
+        MyVars.test_report.set_step_status("Step27. Verify that Steward1 cannot "
+                                           "add back a TrustAnchor removed by TrustTee",
+                                           Status.FAILED, message)
 
     # 28. Verify that Steward cannot remove a Trustee.
     print(Colors.HEADER + "\n\t28.  Verify that Steward cannot remove a Trustee\n" + Colors.ENDC)
@@ -513,11 +571,13 @@ async def test_09_remove_and_add_role():
     if temp:
         print(Colors.OKGREEN + "::PASS::Validated that Steward cannot remove a Trustee!\n" + Colors.ENDC)
         MyVars.test_results["Step 28"] = True
+        MyVars.test_report.set_step_status("Step28. Verify that Steward cannot remove a Trustee", Status.PASSED)
     else:
         MyVars.test_report.set_test_failed()
         if message is None:
             message = "Steward can create a Trustee (should fail)"
-        MyVars.test_report.add_error("Step28. Verify that Steward cannot remove a Trustee", message)
+        MyVars.test_report.set_step_status("Step28. Verify that Steward cannot remove a Trustee",
+                                           Status.FAILED, message)
 
     # 29. Verify that Trustee can add new Steward.
     print(Colors.HEADER + "\n\t29.  Verify that Trustee can add new Steward\n" + Colors.ENDC)
@@ -534,7 +594,10 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 29"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step29. Verify that Trustee can add new Steward", message_29[1:])
+        MyVars.test_report.set_step_status("Step29. Verify that Trustee can add new Steward",
+                                           Status.FAILED, message_29[1:])
+    else:
+        MyVars.test_report.set_step_status("Step29. Verify that Trustee can add new Steward", Status.PASSED)
 
     # 30. Verify that Steward cannot remove another Steward.
     print(Colors.HEADER + "\n\t30.  Verify that Steward cannot remove another Steward\n" + Colors.ENDC)
@@ -542,11 +605,14 @@ async def test_09_remove_and_add_role():
     if temp:
         print(Colors.OKGREEN + "::PASS::Validated that Steward cannot remove another Steward!\n" + Colors.ENDC)
         MyVars.test_results["Step 30"] = True
+        MyVars.test_report.set_step_status("Step30. Verify that Steward cannot remove another Steward",
+                                           Status.PASSED)
     else:
         if message is None:
             message = "Steward can remove another Steward (should fail)"
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step30. Verify that Steward cannot remove another Steward", message)
+        MyVars.test_report.set_step_status("Step30. Verify that Steward cannot remove another Steward",
+                                           Status.FAILED, message)
 
     # 31. Verify Steward can add a TrustAnchor.
     print(Colors.HEADER + "\n\t31.  Verify Steward can add a TrustAnchor\n" + Colors.ENDC)
@@ -555,7 +621,9 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 31"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step31. Verify Steward can add a TrustAnchor", message)
+        MyVars.test_report.set_step_status("Step31. Verify Steward can add a TrustAnchor", Status.FAILED, message)
+    else:
+        MyVars.test_report.set_step_status("Step31. Verify Steward can add a TrustAnchor", Status.PASSED)
 
     # =========================================================================================
     # Clean up here
@@ -567,9 +635,10 @@ async def test_09_remove_and_add_role():
         await wallet.close_wallet(MyVars.wallet_handle)
         await pool.close_pool_ledger(MyVars.pool_handle)
         MyVars.test_results["Step 32"] = True
+        MyVars.test_report.set_step_status("Step32. Close pool ledger and wallet", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step32. Close pool ledger and wallet", str(E))
+        MyVars.test_report.set_step_status("Step32. Close pool ledger and wallet", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 33. Delete wallet.
@@ -578,9 +647,10 @@ async def test_09_remove_and_add_role():
         await wallet.delete_wallet(MyVars.wallet_name, None)
         await pool.delete_pool_ledger_config(MyVars.pool_name)
         MyVars.test_results["Step 33"] = True
+        MyVars.test_report.set_step_status("Step33. Delete pool ledger and wallet", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Step33. Delete pool ledger and wallet", str(E))
+        MyVars.test_report.set_step_status("Step33. Delete pool ledger and wallet", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
 
