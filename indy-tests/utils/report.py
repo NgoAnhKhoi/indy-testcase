@@ -26,7 +26,8 @@ class Status:
 
 
 class TestReport:
-    result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
+    __default_result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
+    __result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
 
     def __init__(self, test_case_name):
         self.__error_id = 1
@@ -47,7 +48,8 @@ class TestReport:
         self.__run.append(temp)
 
     def write_result_to_file(self):
-        filename = "{0}{1}_{2}.json".format(TestReport.result_dir, self.__test_result[KeyWord.TEST_CASE],
+        temp_dir = self.__create_result_folder()
+        filename = "{0}{1}_{2}.json".format(temp_dir, self.__test_result[KeyWord.TEST_CASE],
                                             self.__test_result[KeyWord.START_TIME])
         self.__test_result[KeyWord.RUN] = self.__run
         with open(filename, "w+") as outfile:
@@ -59,6 +61,21 @@ class TestReport:
     def set_test_passed(self):
         self.set_test_passed(Status.PASSED)
 
+    def __create_result_folder(self):
+        temp_dir = self.__result_dir
+        if self.__result_dir == TestReport.__default_result_dir:
+            self.__result_dir += self.__test_result[KeyWord.TEST_CASE]
+
+        if not os.path.exists(temp_dir):
+            try:
+                os.makedirs(temp_dir)
+            except IOError as E:
+                print(str(E))
+
+        return temp_dir
+
     @staticmethod
-    def change_result_dir(new_dir):
+    def change_result_dir(new_dir: str):
+        if not new_dir.endswith("/"):
+            new_dir += "/"
         TestReport.result_dir = new_dir
