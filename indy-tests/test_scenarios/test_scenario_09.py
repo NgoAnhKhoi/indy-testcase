@@ -34,8 +34,6 @@ class MyVars:
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-print(Colors.HEADER + "\n\t" + __name__ +"\n" + Colors.ENDC)
-
 
 def test_prep():
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
