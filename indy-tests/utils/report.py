@@ -64,8 +64,8 @@ class TestReport:
     def __create_result_folder(self):
         temp_dir = self.__result_dir
         if self.__result_dir == TestReport.__default_result_dir:
-            self.__result_dir += self.__test_result[KeyWord.TEST_CASE]
-
+            temp_dir = "{0}{1}_{2}".format(temp_dir, self.__test_result[KeyWord.TEST_CASE],
+                                                self.__test_result[KeyWord.START_TIME])
         if not os.path.exists(temp_dir):
             try:
                 os.makedirs(temp_dir)
