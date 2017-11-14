@@ -54,7 +54,7 @@ def test_precondition():
     print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
 #     work_dir = os.path.expanduser('~') + os.sep
     data_folder ='/usr/local/bin' 
-    subprocess.run(["cd " + data_folder])
+    subprocess.run(["cd " + data_folder], shell=True)
     subprocess.run(["reset_client"], shell=True)
     subprocess.run(["YeS"], shell=True)
 
