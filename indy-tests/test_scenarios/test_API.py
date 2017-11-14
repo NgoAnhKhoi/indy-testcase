@@ -62,12 +62,13 @@ def command(command_str):
 def test_cli_to_val():
         machine_name = 'validator01'
         password = 'vagrant'
-        p = subprocess.Popen(["ssh -T " + machine_name], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = subprocess.Popen(["ssh " + machine_name], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
 #         p.stdin.write("Yes".encode(encoding='utf_8'))
 #         out, err = p.communicate(password + "\nexit\n")
 #         print("[out: %s]\n[err: %s]" % (str(out), str(err)))
-        p.stdin.write(password.encode(encoding='utf_8'))
-        p.stdin.write("exit".encode(encoding='utf_8'))
+        error_code = p.stdin.write("vagrant".encode(encoding='utf_8', errors='strict'))
+        print("error code: " + str(error_code))
+#         p.stdin.write("exit".encode(encoding='utf_8'))
 
 test_cli_to_val()
 
