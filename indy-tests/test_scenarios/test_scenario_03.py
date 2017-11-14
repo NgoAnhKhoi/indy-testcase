@@ -31,15 +31,15 @@ logging.basicConfig(level=logging.INFO)
 def test_precondition():
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
 
-    if os.path.exists(Constant.work_dir + "wallet/" + MyVars.wallet_name):
+    if os.path.exists(Constant.work_dir + "/wallet/" + MyVars.wallet_name):
         try:
-            shutil.rmtree(Constant.work_dir + "wallet/" + MyVars.wallet_name)
+            shutil.rmtree(Constant.work_dir + "/wallet/" + MyVars.wallet_name)
         except IOError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    if os.path.exists(Constant.work_dir + "pool/" + MyVars.pool_name):
+    if os.path.exists(Constant.work_dir + "/pool/" + MyVars.pool_name):
         try:
-            shutil.rmtree(Constant.work_dir + "pool/" + MyVars.pool_name)
+            shutil.rmtree(Constant.work_dir + "/pool/" + MyVars.pool_name)
         except IOError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
 
