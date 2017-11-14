@@ -369,7 +369,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     # 12. Verify that a TrustAnchor1 cannot blacklist another TrustAnchor2 -------------------------------------
     print(Colors.HEADER + "\n\t12. Verify TrustAnchor1 cannot blacklist TrustAnchor2\n" + Colors.ENDC)
     nym_txn_req11 = await ledger.build_nym_request(trustanchor1_did, trustanchor2_did, trustanchor2_verkey, None,
-                                                   Roles.TRUST_ANCHOR)
+                                                   Roles.NONE)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor2_did,
                                              nym_txn_req11)
