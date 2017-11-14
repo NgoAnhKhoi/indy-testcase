@@ -26,7 +26,7 @@ class TestReport:
     def set_duration(self, duration):
         self.__test_result[KeyWord.DURATION] = duration
 
-    def set_step_status(self, step_summary: str, status, message: str = None):
+    def set_step_status(self, step_summary: str, status: str = Status.PASSED, message: str = None):
         temp = {KeyWord.STEP: step_summary, KeyWord.STATUS: status, KeyWord.MESSAGE: message}
         self.__run.append(temp)
 

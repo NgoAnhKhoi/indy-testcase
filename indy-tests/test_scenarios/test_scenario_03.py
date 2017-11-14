@@ -9,7 +9,7 @@ from indy import pool, signus, wallet
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Colors, Constant
-from utils.report import TestReport
+from utils.report import TestReport, Status
 
 
 class MyVars:
@@ -55,9 +55,10 @@ async def test_scenario_03_check_connection():
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
         MyVars.test_results["Step 1"] = True
+        MyVars.test_report.set_step_status("Step01. Create pool ledger", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Create pool ledger", str(E))
+        MyVars.test_report.set_step_status("Step01. Create pool ledger", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
 
@@ -67,21 +68,24 @@ async def test_scenario_03_check_connection():
     try:
         await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
         temp = True
+        MyVars.test_report.set_step_status("Step02. Create wallet", Status.PASSED)
     except IndyError as E:
         temp = False
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Create wallet", str(E))
+        MyVars.test_report.set_step_status("Step02. Create wallet", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
         sys.exit[1]
+
     MyVars.test_results["Step 2"] = temp
 
     try:
         MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
         temp = True
+        MyVars.test_report.set_step_status("Step02. Create wallet", Status.PASSED)
     except IndyError as E:
         temp = False
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Create wallet", str(E))
+        MyVars.test_report.set_step_status("Step02. Create wallet", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
     MyVars.test_results["Step 2"] = MyVars.test_results["Step 2"] and temp
 
@@ -90,9 +94,10 @@ async def test_scenario_03_check_connection():
     try:
         await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({"seed": seed_steward01}))
         MyVars.test_results["Step 3"] = True
+        MyVars.test_report.set_step_status("Step03. Create DID", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Create DID", str(E))
+        MyVars.test_report.set_step_status("Step03. Create DID", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # ==========================================================================================================
@@ -107,9 +112,10 @@ async def test_scenario_03_check_connection():
     try:
         MyVars.pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
         MyVars.test_results["Step 4"] = True
+        MyVars.test_report.set_step_status("Step04. Connect to pool", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Connect to pool", str(E))
+        MyVars.test_report.set_step_status("Step04. Connect to pool", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 5. Disconnect from pool.
@@ -117,9 +123,10 @@ async def test_scenario_03_check_connection():
     try:
         await pool.close_pool_ledger(MyVars.pool_handle)
         MyVars.test_results["Step 5"] = True
+        MyVars.test_report.set_step_status("Step05. Disconnect form pool", Status.PASSED, str(E))
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Disconnect form pool", str(E))
+        MyVars.test_report.set_step_status("Step05. Disconnect form pool", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 6. Reconnect to pool.
@@ -127,9 +134,10 @@ async def test_scenario_03_check_connection():
     try:
         MyVars.pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
         MyVars.test_results["Step 6"] = True
+        MyVars.test_report.set_step_status("Step06. Reconnect to pool", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Reconnect to pool", str(E))
+        MyVars.test_report.set_step_status("Step06. Reconnect to pool", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     print(Colors.HEADER + "\n\t==Clean up==" + Colors.ENDC)
@@ -139,9 +147,10 @@ async def test_scenario_03_check_connection():
         await wallet.close_wallet(MyVars.wallet_handle)
         await pool.close_pool_ledger(MyVars.pool_handle)
         MyVars.test_results["Step 7"] = True
+        MyVars.test_report.set_step_status("Step07. Close pool ledger and wallet", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Close pool ledger and wallet", str(E))
+        MyVars.test_report.set_step_status("Step07. Close pool ledger and wallet", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 8. Delete wallet.
@@ -150,9 +159,10 @@ async def test_scenario_03_check_connection():
         await wallet.delete_wallet(MyVars.wallet_name, None)
         await pool.delete_pool_ledger_config(MyVars.pool_name)
         MyVars.test_results["Step 8"] = True
+        MyVars.test_report.set_step_status("Step08. Delete pool ledger and wallet", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.add_error("Delete pool ledger and wallet", str(E))
+        MyVars.test_report.set_step_status("Step08. Delete pool ledger and wallet", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     logger.info("Test scenario 3 -> finished")
