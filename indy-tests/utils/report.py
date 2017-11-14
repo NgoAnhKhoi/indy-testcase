@@ -49,8 +49,8 @@ class TestReport:
 
     def write_result_to_file(self):
         temp_dir = self.__create_result_folder()
-        filename = "{0}{1}_{2}.json".format(temp_dir, self.__test_result[KeyWord.TEST_CASE],
-                                            self.__test_result[KeyWord.START_TIME])
+        filename = "{0}/{1}_{2}.json".format(temp_dir, self.__test_result[KeyWord.TEST_CASE],
+                                             self.__test_result[KeyWord.START_TIME])
         self.__test_result[KeyWord.RUN] = self.__run
         with open(filename, "w+") as outfile:
             json.dump(self.__test_result, outfile, ensure_ascii=False, indent=2)
@@ -65,7 +65,7 @@ class TestReport:
         temp_dir = self.__result_dir
         if self.__result_dir == TestReport.__default_result_dir:
             temp_dir = "{0}{1}_{2}".format(temp_dir, self.__test_result[KeyWord.TEST_CASE],
-                                                self.__test_result[KeyWord.START_TIME])
+                                           self.__test_result[KeyWord.START_TIME])
         if not os.path.exists(temp_dir):
             try:
                 os.makedirs(temp_dir)
