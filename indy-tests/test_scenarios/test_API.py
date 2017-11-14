@@ -55,7 +55,7 @@ def test_precondition():
 #     work_dir = os.path.expanduser('~') + os.sep
     data_folder ='/usr/local/bin' 
     subprocess.run(["cd " + data_folder], shell=True)
-    p = subprocess.run(["reset_client"], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p = subprocess.Popen(["reset_client"], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
     p.stdin.write("YeS".encode(encoding='utf_8'))
 
 
