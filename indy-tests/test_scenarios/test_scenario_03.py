@@ -123,7 +123,7 @@ async def test_scenario_03_check_connection():
     try:
         await pool.close_pool_ledger(MyVars.pool_handle)
         MyVars.test_results["Step 5"] = True
-        MyVars.test_report.set_step_status("Step05. Disconnect form pool", Status.PASSED, str(E))
+        MyVars.test_report.set_step_status("Step05. Disconnect form pool", Status.PASSED)
     except IndyError as E:
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step05. Disconnect form pool", Status.FAILED, str(E))
