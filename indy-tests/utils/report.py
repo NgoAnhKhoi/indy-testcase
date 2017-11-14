@@ -71,6 +71,7 @@ class TestReport:
                 os.makedirs(temp_dir)
             except IOError as E:
                 print(str(E))
+                raise E
 
         return temp_dir
 
