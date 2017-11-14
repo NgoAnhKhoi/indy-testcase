@@ -9,6 +9,22 @@ import time
 import os
 
 
+class KeyWord:
+    TEST_CASE = "testcase"
+    RESULT = "result"
+    START_TIME = "starttime"
+    DURATION = "duration"
+    RUN = "run"
+    STEP = "step"
+    STATUS = "status"
+    MESSAGE = "message"
+
+
+class Status:
+    PASSED = "Passed"
+    FAILED = "Failed"
+
+
 class TestReport:
     result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
 
@@ -46,19 +62,3 @@ class TestReport:
     @staticmethod
     def change_result_dir(new_dir):
         TestReport.result_dir = new_dir
-
-
-class KeyWord:
-    TEST_CASE = "testcase"
-    RESULT = "result"
-    START_TIME = "starttime"
-    DURATION = "duration"
-    RUN = "run"
-    STEP = "step"
-    STATUS = "status"
-    MESSAGE = "message"
-
-
-class Status:
-    PASSED = "Passed"
-    FAILED = "Failed"
