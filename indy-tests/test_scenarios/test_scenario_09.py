@@ -57,6 +57,11 @@ async def add_nym(submitter_did, target_did, ver_key, alias, role, can_add):
     e = None
     try:
         nym_request = await ledger.build_nym_request(submitter_did, target_did, ver_key, alias, role)
+        if role is "":
+            j = json.loads(nym_request)
+            j["operation"]["role"] = ""
+            nym_request = json.dumps(j).encode()
+
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, submitter_did, nym_request)
         if can_add:
             result = True
