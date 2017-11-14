@@ -15,6 +15,7 @@ from indy.error import IndyError
 from distutils.command.config import config
 
 
+
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
 # -----------------------------------------------------------------------------------------
@@ -59,21 +60,19 @@ def command(command_str):
 #     p.stdin.write("YeS".encode(encoding='utf_8'))
 
 
-def test_cli_to_val():
-        machine_name = 'validator01'
-        password = 'vagrant'
-        p = subprocess.Popen(["ssh " + machine_name], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
-#         p.stdin.write("Yes".encode(encoding='utf_8'))
-#         out, err = p.communicate(password + "\nexit\n")
-#         print("[out: %s]\n[err: %s]" % (str(out), str(err)))
-        print("stderr: " + str(p.stderr))
-        os.system(password)
-#         out, err = p.communicate(password.encode(encoding='utf_8', errors='strict'), 10)
-#         error_code = p.stdin.write("vagrant".encode(encoding='utf_8', errors='strict'))
-#         print("error code: " + str(error_code))
-#         p.stdin.write("exit".encode(encoding='utf_8'))
+# def test_cli_to_val():
+#         machine_name = 'validator01'
+#         password = 'vagrant'
+#         p = subprocess.Popen(["ssh " + machine_name], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+#         print("stderr: " + str(p.stderr))
+#         os.system(password)
 
-test_cli_to_val()
+def test_start_stop_node():
+        p = subprocess.Popen(["systemctl start sovrin-node"], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+        out, err = p.communicate(timeout=10)
+        print("[out:%s][err:%s]" % (str(out), str(err)))
+
+test_start_stop_node()
 
 async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool():
     logger.info("Test Scenario 02 -> started")
