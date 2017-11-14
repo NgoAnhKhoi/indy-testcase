@@ -49,18 +49,25 @@ logging.basicConfig(level=logging.INFO)
 def command(command_str):
     os.system(command_str)
 
-def test_precondition():
-    """  Make a copy of pool_transactions_sandbox_genesis  """
-    print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
-#     work_dir = os.path.expanduser('~') + os.sep
-    data_folder ='/usr/local/bin' 
-    subprocess.run(["cd " + data_folder], shell=True)
-    p = subprocess.Popen(["reset_client"], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
-    p.stdin.write("YeS".encode(encoding='utf_8'))
+# def test_precondition():
+#     """  Make a copy of pool_transactions_sandbox_genesis  """
+#     print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
+# #     work_dir = os.path.expanduser('~') + os.sep
+#     data_folder ='/usr/local/bin' 
+#     subprocess.run(["cd " + data_folder], shell=True)
+#     p = subprocess.Popen(["reset_client"], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+#     p.stdin.write("YeS".encode(encoding='utf_8'))
 
 
-test_precondition()
+def test_cli_to_val():
+        machine_name= "validator01"
+        password= "vagrant"
+        p = subprocess.run(["ssh " + machine_name], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p.stdin.write("YeS".encode(encoding='utf_8'))
+        p.stdin.write(password.encode(encoding='utf_8'))
+        p.stdin.write("exit".encode(encoding='utf_8'))
 
+test_cli_to_val()
 
 async def verifying_the_correct_message_is_shown_when_you_are_unable_to_connect_to_the_validator_pool():
     logger.info("Test Scenario 02 -> started")
