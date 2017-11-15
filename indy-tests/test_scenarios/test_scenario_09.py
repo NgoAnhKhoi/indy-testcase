@@ -84,7 +84,7 @@ def check_role_in_retrieved_nym(retrieved_nym, role):
     nym_dict = json.loads(retrieved_nym)
     if "data" in nym_dict:
         temp_dict = json.loads(nym_dict["data"].decode('string_escape'))
-        print(Colors.HEADER + "\n" + temp_dict + "\n" + Colors.ENDC)
+        print(Colors.HEADER + "\n" + "AAAAA" + "\n" + Colors.ENDC)
         if "role" in temp_dict:
             if temp_dict["role"] == role:
                 return False
