@@ -61,7 +61,7 @@ def test_prep():
 
 async def test_scenario_04_keyrings_wallets():
     logger.info("Test Scenario 07 -> started")
-    seed_default_trustee = "000000000000000000000000Trustee1"
+    seed_default_trustee = Constant.seed_default_trustee
     seed_steward_node5 = generate_random_string(prefix="StewardNode5", size=32)
     seed_steward_node6 = generate_random_string(prefix="StewardNode6", size=32)
     seed_trust_anchor = generate_random_string(prefix="TrustAnchor", size=32)
@@ -108,11 +108,8 @@ async def test_scenario_04_keyrings_wallets():
     # 3. Trustee create a steward
     print(Colors.HEADER + "\n\t3. Trustee create a steward\n" + Colors.ENDC)
     try:
-#         await Common.build_and_send_nym(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did, steward_node_5_did,
-#                                          steward_node_5_verkey, None, Roles.STEWARD)
-        nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, steward_node_5_did, steward_node_5_verkey, None, Roles.TRUSTEE)
-        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
-                                                 nym_txn_req5)
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did, steward_node_5_did,
+                                         steward_node_5_verkey, None, Roles.STEWARD)
         MyVars.test_results['Step 2'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)

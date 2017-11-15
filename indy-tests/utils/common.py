@@ -48,7 +48,7 @@ class Common():
                 print(Colors.FAIL + str(E) + Colors.ENDC)
 
     @staticmethod
-    async def build_and_send_nym(pool_handle, wallet_handle, submitter_did, target_did, target_verkey, alias, role):
+    async def build_and_send_nym_request(pool_handle, wallet_handle, submitter_did, target_did, target_verkey, alias, role):
         nym_txn_req = await ledger.build_nym_request(submitter_did, target_did, target_verkey, alias, role)
         result = False
         try:
