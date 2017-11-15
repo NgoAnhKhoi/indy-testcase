@@ -309,12 +309,12 @@ class HTMLReport:
             </tr>
             """
 
-    def make_suite_name(seft):
+    def make_suite_name(seft, suite_name):
         # os.path.basename(__file__)
         time = datetime.datetime.now().time()
         date = datetime.datetime.today().strftime('%Y%m%d')
         HTMLReport.__suite_name = HTMLReport.__suite_name.replace("s_name", "Summary_" + date + "_" + str(time))
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", os.path.basename(__file__) + "_" + date + "_" + str(time))
+        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", suite_name + "_" + date + "_" + str(time))
 
     def make_configurate_table(seft):
         HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("host_name", socket.gethostname())
@@ -395,22 +395,19 @@ class HTMLReport:
         HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("failed_num", str(failed))
         HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("total_time", str(total))
 
-    def make_html_report(seft, json_folder):
-        seft.make_suite_name()
+    def make_html_report(seft, json_folder, suite_name):
+        seft.make_suite_name(suite_name)
         seft.make_configurate_table()
         seft.make_report_content(json_folder)
 
         # Write to file.
-        f = open('summary.html', 'w')
+        print("Refer to " + json_folder + '/summary.html')
+        f = open(json_folder + '/summary.html', 'w')
         f.write(
             HTMLReport.__head + HTMLReport.__suite_name + HTMLReport.__configuration_table + HTMLReport.__statictics_table + HTMLReport.__summary_head + HTMLReport.__begin_summary_content + HTMLReport.__passed_testcase_table + HTMLReport.__end_summary_content + HTMLReport.__begin_summary_content + HTMLReport.__failed_testcase_table + HTMLReport.__end_summary_content + HTMLReport.__end_table + HTMLReport.__test_log_head +
             HTMLReport.__table_test_log_content + HTMLReport.__end_file)
 
         f.close()
 
-    #def make_single_html_report(self, folder_name):
-    #    if folder_name == TestReport.__default_result_dir:
-    #        self.make_html_report(folder_name,"Summary")
-
     def __init__(self):
-        print("Generating a html report")
+        print("Generating a html report...")
