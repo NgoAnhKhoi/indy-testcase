@@ -12,6 +12,10 @@ from utils.constant import Constant, Colors, Roles
 from utils.report import TestReport, Status
 
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+
 class MyVars:
     """  Needed some global variables. """
 
@@ -29,10 +33,6 @@ class MyVars:
                     "Step 20": False, "Step 21": False, "Step 22": False, "Step 23": False, "Step 24": False,
                     "Step 25": False, "Step 26": False, "Step 27": False, "Step 28": False, "Step 29": False,
                     "Step 30": False, "Step 31": False, "Step 32": False, "Step 33": False}
-            
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 
 def test_prep():
