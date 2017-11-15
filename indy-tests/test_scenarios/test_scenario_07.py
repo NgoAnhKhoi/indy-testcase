@@ -55,7 +55,6 @@ def command(command_str):
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
     print(Colors.HEADER + "\nMake a copy of pool_transactions_sandbox file\n" + Colors.ENDC)
-    MyVars.file_target += str(random.randrange(10, 1000, 2))
     copy_file(MyVars.pool_genesis_txn_file, MyVars.pool_genesis_bak)
 #     open(MyVars.pool_genesis_txn_file, 'w').close()
 
@@ -158,7 +157,7 @@ async def test_scenario_04_keyrings_wallets():
 
     # Revert pool transactions sandbox file ------------------------------------------------------------------------------
     try:
-        copy_file(MyVars.pool_genesis_bak, Constant.pool_genesis_txn_file)
+        copy_file(MyVars.pool_genesis_bak, MyVars.pool_genesis_txn_file)
     except Exception as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
