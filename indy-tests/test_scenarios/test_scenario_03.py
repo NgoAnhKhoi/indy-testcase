@@ -19,7 +19,9 @@ class MyVars:
     pool_name = "pool_genesis_test3"
     wallet_name = "test_wallet3"
     debug = False
-    test_report = TestReport("Test_scenario_03_Check_Connection")
+
+    test_name = "Test_scenario_03_Check_Connection"
+    test_report = TestReport(test_name)
     test_results = {"Step 1": False, "Step 2": False, "Step 3": False, "Step 4": False,
                     "Step 5": False, "Step 6": False, "Step 7": False, "Step 8": False}
 
@@ -179,10 +181,12 @@ def final_result():
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
     MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
     MyVars.test_report.write_result_to_file()
-	
-    print(MyVars.test_report.get_result_folder())
 
-    HTMLReport.make_single_html_report(MyVars.test_report.get_result_folder())
+    # Generate html single report:
+    folder = MyVars.test_report.get_result_folder()
+    if folder.find(MyVars.test_name) != -1:
+        HTMLReport().make_html_report(folder)
+
 
 def test():
     MyVars.begin_time = time.time()
