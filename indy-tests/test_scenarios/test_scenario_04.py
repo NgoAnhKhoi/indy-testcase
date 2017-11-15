@@ -85,7 +85,7 @@ async def test_scenario_04_keyrings_wallets():
             print("===PASSED===")
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.set_step_status(4, "Verify wallet was created in \".indy/wallet\"", str(E))
+        MyVars.test_report.set_step_status(2, "Verify wallet was created in \".indy/wallet\"", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
@@ -101,7 +101,7 @@ async def test_scenario_04_keyrings_wallets():
             print("===PASSED===")
     except IndyError as E:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.set_step_status(5, "Create DID to check the new wallet work well", str(E))
+        MyVars.test_report.set_step_status(3, "Create DID to check the new wallet work well", str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # ==================================================================================================================

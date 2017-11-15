@@ -7,7 +7,7 @@ Created on Nov 13, 2017
 from .constant import Colors, Constant
 import asyncio
 import json
-from indy import wallet, pool
+from indy import wallet, pool, ledger
 from indy.error import IndyError
 
 
@@ -16,6 +16,7 @@ class Common():
     Wrapper common steps.
     '''
 
+# Static methods =========================================================================================================
     @staticmethod
     async def prepare_pool_and_wallet(pool_name, wallet_name, pool_genesis_txn_file):
         pool_handle = await Common().create_and_open_pool(pool_name, pool_genesis_txn_file)
@@ -46,6 +47,18 @@ class Common():
             except IOError as E:
                 print(Colors.FAIL + str(E) + Colors.ENDC)
 
+    @staticmethod
+    async def build_and_send_nym(pool_handle, wallet_handle, submitter_did, target_did, role, verkey=None):
+        nym_txn_req = await ledger.build_nym_request(submitter_did, target_did, target_did, verkey, role)
+        result = False
+        try:
+            await ledger.sign_and_submit_request(pool_handle, wallet_handle, submitter_did, nym_txn_req)
+            result = True
+        except IndyError as E:
+            print(Colors.FAIL + str(E) + Colors.ENDC)
+        return result
+
+# Methods ==========================================================================================================
     async def create_and_open_pool(self, pool_name, pool_genesis_txn_file):
         print(Colors.HEADER + "\nCreate Ledger\n" + Colors.ENDC)
         pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_file)})
