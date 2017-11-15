@@ -61,7 +61,7 @@ def test_prep():
 
 async def test_scenario_04_keyrings_wallets():
     logger.info("Test Scenario 07 -> started")
-    seed_default_trustee = "000000000000000000000000Trustee1"
+    seed_default_trustee = generate_random_string(prefix="Trustee1", size=32) #"000000000000000000000000Trustee1"
     seed_steward_node5 = generate_random_string(prefix="StewardNode5", size=32)
     seed_steward_node6 = generate_random_string(prefix="StewardNode6", size=32)
     seed_trust_anchor = generate_random_string(prefix="TrustAnchor", size=32)
