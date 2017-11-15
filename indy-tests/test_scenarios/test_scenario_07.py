@@ -133,7 +133,6 @@ async def test_scenario_04_keyrings_wallets():
             print(Colors.OKGREEN + ("::PASS::Validated that a Trustee cannot add a validator node\n" + Colors.ENDC))
         else:
             print(str(E))
-            raise E
 
     # 5. Verify that a Trust Anchor cannot add a validator node
     print(Colors.HEADER + "\n\t5. Verify that a Trust Anchor cannot add a validator node\n" + Colors.ENDC)
@@ -147,7 +146,6 @@ async def test_scenario_04_keyrings_wallets():
             print(Colors.OKGREEN + ("::PASS::Validated that a Trust Anchor cannot add a validator node\n" + Colors.ENDC))
         else:
             print(str(E))
-            raise E
 
     # 6. Verify that a Identity Owner cannot add a validator node
     print(Colors.HEADER + "\n\t6. Verify that a Identity Owner cannot add a validator node\n" + Colors.ENDC)
@@ -160,7 +158,6 @@ async def test_scenario_04_keyrings_wallets():
             print(Colors.OKGREEN + ("::PASS::Validated that a Identity Owner cannot add a validator node\n" + Colors.ENDC))
         else:
             print(str(E))
-            raise E
 
     # 7. Verify that a Steward5 can add a validator node
     print(Colors.HEADER + "\n\t7. Verify that a Steward_node_5 can add a validator node\n" + Colors.ENDC)
@@ -171,7 +168,6 @@ async def test_scenario_04_keyrings_wallets():
         print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_5 can add a validator node\n" + Colors.ENDC))
     except IndyError as E:
         print(str(E))
-        raise E
 
     # 8. Verify that a steward can only add one node by trying to add another one.
     print(Colors.HEADER + "\n\t8. Verify that a Steward_node_5 can only add one node by trying to add another one\n" + Colors.ENDC)
@@ -184,7 +180,6 @@ async def test_scenario_04_keyrings_wallets():
             print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_5 can only add one node by trying to add another one\n" + Colors.ENDC))
         else:
             print(str(E))
-            raise E
 
     # 9. Verify that a steward can only add one node by trying to add another one.
     print(Colors.HEADER + "\n\t9. Verify that a Steward_node_6 can add a validator node\n" + Colors.ENDC)
@@ -197,7 +192,6 @@ async def test_scenario_04_keyrings_wallets():
             print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_6 can add a validator node\n" + Colors.ENDC))
         else:
             print(str(E))
-            raise E
 
 #     # ==================================================================================================================
 #     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
