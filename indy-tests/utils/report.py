@@ -34,12 +34,12 @@ class TestReport:
         self.__error_id = 1
         self.__test_result = {}
         self.__run = []
-        self.__result_dir = self.__create_result_folder()
         self.__test_result[KeyWord.TEST_CASE] = test_case_name
         self.__test_result[KeyWord.RESULT] = Status.PASSED
         self.__test_result[KeyWord.START_TIME] = str(time.strftime("%Y%m%d_%H-%M-%S"))
+        self.__result_dir = self.__create_result_folder()
         self.__file_path = "{0}/{1}_{2}".format(self.__result_dir, self.__test_result[KeyWord.TEST_CASE],
-                                                   self.__test_result[KeyWord.START_TIME])
+                                                self.__test_result[KeyWord.START_TIME])
         self.__log = open(self.__file_path + ".log", "w")
         sys.stdout = self.__log
 
@@ -71,8 +71,8 @@ class TestReport:
         self.set_test_passed(Status.PASSED)
 
     def __create_result_folder(self):
-        temp_dir = self.__result_dir
-        if self.__result_dir == TestReport.__default_result_dir:
+        temp_dir = TestReport.__result_dir
+        if temp_dir == TestReport.__default_result_dir:
             temp_dir = "{0}{1}_{2}".format(temp_dir, self.__test_result[KeyWord.TEST_CASE],
                                            self.__test_result[KeyWord.START_TIME])
         if not os.path.exists(temp_dir):
