@@ -395,22 +395,22 @@ class HTMLReport:
         HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("failed_num", str(failed))
         HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("total_time", str(total))
 
-    def make_html_report(seft, json_folder, file_name):
+    def make_html_report(seft, json_folder):
         seft.make_suite_name()
         seft.make_configurate_table()
         seft.make_report_content(json_folder)
 
         # Write to file.
-        f = open(file_name + '.html', 'w')
+        f = open('summary.html', 'w')
         f.write(
             HTMLReport.__head + HTMLReport.__suite_name + HTMLReport.__configuration_table + HTMLReport.__statictics_table + HTMLReport.__summary_head + HTMLReport.__begin_summary_content + HTMLReport.__passed_testcase_table + HTMLReport.__end_summary_content + HTMLReport.__begin_summary_content + HTMLReport.__failed_testcase_table + HTMLReport.__end_summary_content + HTMLReport.__end_table + HTMLReport.__test_log_head +
             HTMLReport.__table_test_log_content + HTMLReport.__end_file)
 
         f.close()
 
-    def make_single_html_report(self, folder_name):
-        if folder_name == TestReport.__default_result_dir:
-            self.make_html_report(folder_name,"Summary")
+    #def make_single_html_report(self, folder_name):
+    #    if folder_name == TestReport.__default_result_dir:
+    #        self.make_html_report(folder_name,"Summary")
 
     def __init__(self):
         print("Generating a html report")
