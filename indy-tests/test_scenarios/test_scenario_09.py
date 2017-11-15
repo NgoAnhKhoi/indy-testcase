@@ -12,10 +12,6 @@ from utils.constant import Constant, Colors, Roles
 from utils.report import TestReport, Status
 
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
-
-
 class MyVars:
     """  Needed some global variables. """
 
@@ -96,8 +92,6 @@ def check_role_in_retrieved_nym(retrieved_nym, role):
 
 
 async def test_09_remove_and_add_role():
-    logger.info("Step Scenario 09 -> started")
-
     # Declare all values use in the test
     seed_default_trustee = "000000000000000000000000Trustee1"
 
