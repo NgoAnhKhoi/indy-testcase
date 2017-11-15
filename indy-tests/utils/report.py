@@ -26,6 +26,20 @@ class Status:
     FAILED = "Failed"
 
 
+class Printer(object):
+    def __init__(self, *files):
+        self.files = files
+
+    def write(self, obj):
+        for f in self.files:
+            f.write(obj)
+            f.flush()  # If you want the output to be visible immediately
+
+    def flush(self):
+        for f in self.files:
+            f.flush()
+
+
 class TestReport:
     __default_result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
     __result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
@@ -41,7 +55,7 @@ class TestReport:
         self.__file_path = "{0}/{1}_{2}".format(self.__result_dir, self.__test_result[KeyWord.TEST_CASE],
                                                 self.__test_result[KeyWord.START_TIME])
         self.__log = open(self.__file_path + ".log", "w")
-        sys.stdout = self.__log
+        sys.stdout = Printer(sys.stdout, self.__log)
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     def set_result(self, result):
