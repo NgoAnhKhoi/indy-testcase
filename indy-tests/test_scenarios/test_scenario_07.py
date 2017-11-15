@@ -51,7 +51,7 @@ def command(command_str):
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
     print(Colors.HEADER + "\nMake a copy of pool_transactions_sandbox file\n" + Colors.ENDC)
-    MyVars.file_target += random.randrange(10, 1000, 2)
+    MyVars.file_target += str(random.randrange(10, 1000, 2))
     copy_file(Constant.pool_genesis_txn_file, MyVars.file_target)
 
 
