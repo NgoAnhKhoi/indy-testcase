@@ -74,11 +74,25 @@ async def add_nym(submitter_did, target_did, ver_key, alias, role, can_add):
 async def get_nym(submitter_did, target_did):
     try:
         get_nym_request = await ledger.build_get_nym_request(submitter_did, target_did)
-        await ledger.submit_request(MyVars.pool_handle, get_nym_request)
-        return True, None
+        message = await ledger.submit_request(MyVars.pool_handle, get_nym_request)
+        return True, message
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         return False, str(E)
+
+
+def check_role_in_retrieved_nym(retrieved_nym, role):
+    if retrieved_nym is None:
+        return False
+    nym_dict = json.loads(retrieved_nym)
+    if "data" in nym_dict:
+        if isinstance(nym_dict["data"], dict):
+            if "role" in nym_dict["data"]:
+                if not nym_dict["data"]["role"] == role:
+                    return False
+                else:
+                    return True
+    return False
 
 
 async def test_09_remove_and_add_role():
@@ -419,33 +433,46 @@ async def test_09_remove_and_add_role():
     MyVars.test_results["Step 22"] = temp
     if not temp:
         message_22 += "\nCannot remove Trustee1's role - " + message
+    else:
+        (temp, message) = await get_nym(default_trustee_did, trustee1_did)
+        if not temp:
+            message_22 += "\nCannot check GET_NYM for Trustee1 - " + message
+        else:
+            if not check_role_in_retrieved_nym(message, Roles.NONE):
+                temp = False
+                message_22 += "\nCannot remove Trustee1's role"
 
-    (temp, message) = await get_nym(default_trustee_did, trustee1_did)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
-    if not temp:
-        message_22 += "\nCannot check GET_NYM for Trustee1 - " + message
-
     (temp, message) = await add_nym(default_trustee_did, steward1_did, steward1_verkey,
                                     None, Roles.NONE, can_add=True)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
-    MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
     if not temp:
         message_22 += "\nCannot remove Steward1's role - " + message
+    else:
+        (temp, message) = await get_nym(default_trustee_did, steward1_did)
+        if not temp:
+            message_22 += "\nCannot check GET_NYM for Steward1 - " + message
+        else:
+            if not check_role_in_retrieved_nym(message, Roles.NONE):
+                temp = False
+                message_22 += "\nCannot remove Steward1's role"
 
-    (temp, message) = await get_nym(default_trustee_did, steward1_did)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
-    if not temp:
-        message_22 += "\nCannot check GET_NYM for Steward1 - " + message
 
     (temp, message) = await add_nym(default_trustee_did, tgb1_did, tgb1_verkey, None, Roles.NONE, can_add=True)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
     if not temp:
         message_22 += "\nCannot remove TGB's role - " + message
+    else:
+        (temp, message) = await get_nym(default_trustee_did, tgb1_did)
+        if not temp:
+            message_22 += "\nCannot check GET_NYM for TGB - " + message
+        else:
+            if not check_role_in_retrieved_nym(message, Roles.NONE):
+                temp = False
+                message_22 += "\nCannot remove TGB1's role"
 
-    (temp, message) = await get_nym(default_trustee_did, tgb1_did)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
-    if not temp:
-        message_22 += "\nCannot check GET_NYM for TGB - " + message
 
     (temp, message) = await add_nym(default_trustee_did, trustanchor1_did, trustanchor1_verkey,
                                     None, Roles.NONE, can_add=True)
@@ -453,11 +480,16 @@ async def test_09_remove_and_add_role():
 
     if not temp:
         message_22 += "\nCannot remove Trust_Anchor1's role - " + message
+    else:
+        (temp, message) = await get_nym(default_trustee_did, trustanchor1_did)
+        if not temp:
+            message_22 += "\nCannot check GET_NYM for Trust_Anchor1 - " + message
+        else:
+            if not check_role_in_retrieved_nym(message, Roles.NONE):
+                temp = False
+                message_22 += "\nCannot remove Trust_Anchor1's role"
 
-    (temp, message) = await get_nym(default_trustee_did, trustanchor1_did)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
-    if not temp:
-        message_22 += "\nCannot check GET_NYM for Trust_Anchor1 - " + message
 
     if MyVars.test_results["Step 22"] is False:
         MyVars.test_report.set_test_failed()
