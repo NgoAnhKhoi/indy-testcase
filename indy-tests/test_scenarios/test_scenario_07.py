@@ -12,7 +12,7 @@ import logging.handlers
 # import shutil
 import time
 import random
-from indy import signus, wallet, pool
+from indy import signus, wallet, pool, ledger
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import *
@@ -108,8 +108,12 @@ async def test_scenario_04_keyrings_wallets():
     # 3. Trustee create a steward
     print(Colors.HEADER + "\n\t3. Trustee create a steward\n" + Colors.ENDC)
     try:
-        await Common.build_and_send_nym(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did, steward_node_5_did,
-                                         steward_node_5_verkey, None, Roles.STEWARD)
+#         await Common.build_and_send_nym(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did, steward_node_5_did,
+#                                          steward_node_5_verkey, None, Roles.STEWARD)
+        nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, steward_node_5_did, steward_node_5_verkey, None, Roles.TRUSTEE)
+        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                 nym_txn_req5)
+        MyVars.test_results['Step 2'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         return None
