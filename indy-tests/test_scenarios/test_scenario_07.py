@@ -41,7 +41,7 @@ class MyVars:
     pool_name = generate_random_string("test_pool")
     wallet_name = generate_random_string("test_wallet")
     debug = False
-    test_results = {'Step 2': False, 'Step 3': False}
+    test_results = {'Step 4': False, 'Step 5': False}
 
 
 logger = logging.getLogger(__name__)
@@ -66,6 +66,8 @@ async def test_scenario_04_keyrings_wallets():
     seed_steward_node6 = generate_random_string(prefix="StewardNode6", size=32)
     seed_trust_anchor = generate_random_string(prefix="TrustAnchor", size=32)
     seed_identity_owner = generate_random_string(prefix="IdentityOwner", size=32)
+    base_58 = "4Tn3wZMNCvhSTXPcLinQDnHyj56DTLQtL61ki4jo2Loc"
+    base_58_node_6 = "6G9QhQa3HWjRKeRmEvEkLbWWf2t7cw6KLtafzi494G4G"
 #     seed_tgb = generate_random_string(prefix="TGB", size=32)
 
     # data
@@ -105,15 +107,34 @@ async def test_scenario_04_keyrings_wallets():
     if MyVars.debug:
         input(Colors.WARNING + "\n\nDID's created..." + Colors.ENDC)
 
-    # 3. Trustee create a steward
-    print(Colors.HEADER + "\n\t3. Trustee create a steward\n" + Colors.ENDC)
+    # 3. Trustee create a steward5, steward6, trustanchor, identityowner
+    print(Colors.HEADER + "\n\t3. Trustee create a steward5, steward6, trust anchor, identity owner\n" + Colors.ENDC)
     try:
-        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did, steward_node_5_did,
-                                         steward_node_5_verkey, None, Roles.STEWARD)
-        MyVars.test_results['Step 2'] = True
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                steward_node_5_did, steward_node_5_verkey, None, Roles.STEWARD)
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                steward_node_6_did, steward_node_6_verkey, None, Roles.STEWARD)
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                trust_anchor_did, trust_anchor_verkey, None, Roles.TRUST_ANCHOR)
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                identity_owner_did, identity_owner_verkey, None, Roles.NONE)
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         return None
+
+    # 4. Verify that a Trustee cannot add a validator node
+    print(Colors.HEADER + "\n\t4. Verify that a Trustee cannot add a validator node\n" + Colors.ENDC)
+    try:
+        await ledger.build_node_request(trust_anchor_did, base_58_node_6, data_node6)
+    except IndyError as E:
+        print("\nError: %s\n" % str(E.error_code))
+        if E.error_code == 304:
+            MyVars.test_results['Step 4'] = True
+            print(Colors.OKGREEN + ("::PASS::Validated that a Trustee cannot add a validator node\n" + Colors.ENDC))
+        else:
+            print(str(E))
+            raise
+
 #     # 2. verify wallet was created in .indy/wallet
 #     try:
 #         print(Colors.HEADER + "\n\t2. Verifying the new wallet was created\n" + Colors.ENDC)
@@ -166,7 +187,9 @@ def final_results():
     else:
         for test_num, value in MyVars.test_results.items():
             if not value:
-                print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
+                print('%s: ' % str(test_num) + Colors.FAIL + 'Failed' + Colors.ENDC)
+            else:
+                print('%s: ' % str(test_num) + Colors.OKGREEN + 'Passed' + Colors.ENDC)
 
     MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
     MyVars.test_report.write_result_to_file()
