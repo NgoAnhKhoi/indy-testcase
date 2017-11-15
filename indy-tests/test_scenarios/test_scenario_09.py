@@ -53,7 +53,6 @@ async def add_nym(submitter_did, target_did, ver_key, alias, role, can_add):
     e = None
     try:
         nym_request = await ledger.build_nym_request(submitter_did, target_did, ver_key, alias, role)
-        print(Colors.HEADER + "\n" + nym_request + "\n" + Colors.ENDC)
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, submitter_did, nym_request)
         if can_add:
             result = True
@@ -81,11 +80,9 @@ async def get_nym(submitter_did, target_did):
 def check_role_in_retrieved_nym(retrieved_nym, role):
     if retrieved_nym is None:
         return False
-    print(Colors.HEADER + "\n" + retrieved_nym + "\n" + Colors.ENDC)
     nym_dict = json.loads(retrieved_nym)
     if "data" in nym_dict["result"]:
         temp_dict = json.loads(nym_dict["result"]["data"])
-        print(Colors.HEADER + "\n" + str(temp_dict) + "\n" + Colors.ENDC)
         if "role" in temp_dict:
             if not temp_dict["role"] == role:
                 return False
