@@ -83,12 +83,12 @@ def check_role_in_retrieved_nym(retrieved_nym, role):
     print(Colors.HEADER + "\n" + retrieved_nym + "\n" + Colors.ENDC)
     nym_dict = json.loads(retrieved_nym)
     if "data" in nym_dict:
-        if isinstance(nym_dict["data"], dict):
-            if "role" in nym_dict["data"]:
-                if not nym_dict["data"]["role"] == role:
-                    return False
-                else:
-                    return True
+        temp_dict = json.loads(nym_dict["data"])
+        if "role" in temp_dict:
+            if temp_dict["role"] == role:
+                return False
+            else:
+                return True
     return False
 
 
