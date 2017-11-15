@@ -182,7 +182,7 @@ def final_result():
 
     folder = MyVars.test_report.get_result_folder()
 
-    HTMLReport.make_single_html_report(folder)
+    HTMLReport().make_single_html_report(folder)
 
 
 def test():

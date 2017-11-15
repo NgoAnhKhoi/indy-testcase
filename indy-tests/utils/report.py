@@ -411,3 +411,6 @@ class HTMLReport:
     def make_single_html_report(self, folder_name):
         if folder_name == TestReport.__default_result_dir:
             self.make_html_report(folder_name,"Summary")
+
+    def __init__(self):
+        print("Generating a html report")
