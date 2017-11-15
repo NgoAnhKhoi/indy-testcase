@@ -184,7 +184,10 @@ def final_result():
 
     # Generate html single report:
     folder = MyVars.test_report.get_result_folder()
+    print(folder)
+    print(MyVars.test_name)
     if folder.find(MyVars.test_name) != -1:
+        print("Making...")
         HTMLReport().make_html_report(folder)
 
 
