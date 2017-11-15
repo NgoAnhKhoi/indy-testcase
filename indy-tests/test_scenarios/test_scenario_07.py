@@ -109,22 +109,22 @@ async def test_scenario_07_add_node():
     # 3. Trustee create a steward5
     print(Colors.HEADER + "\n\t3. Trustee create a steward5, steward6, trust anchor, identity owner\n" + Colors.ENDC)
     parts3={'3': False, '3a': False, '3b': False, '3c': False}
-    try:
-        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
-                                                steward_node_5_did, steward_node_5_verkey, None, Roles.STEWARD)
-        parts3['3'] = True
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-        return None
-
-    # 3a. Trustee create a steward6
-    try:
-        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
-                                                steward_node_6_did, steward_node_6_verkey, None, Roles.STEWARD)
-        parts3['3a'] = True
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-        return None
+#     try:
+#         await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+#                                                 steward_node_5_did, steward_node_5_verkey, None, Roles.STEWARD)
+#         parts3['3'] = True
+#     except IndyError as E:
+#         print(Colors.FAIL + str(E) + Colors.ENDC)
+#         return None
+# 
+#     # 3a. Trustee create a steward6
+#     try:
+#         await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+#                                                 steward_node_6_did, steward_node_6_verkey, None, Roles.STEWARD)
+#         parts3['3a'] = True
+#     except IndyError as E:
+#         print(Colors.FAIL + str(E) + Colors.ENDC)
+#         return None
 
     # 3b. Trustee create a trustanchor
     try:
