@@ -53,6 +53,7 @@ def test_prep():
     print(Colors.HEADER + "\nMake a copy of pool_transactions_sandbox file\n" + Colors.ENDC)
     MyVars.file_target += str(random.randrange(10, 1000, 2))
     copy_file(Constant.pool_genesis_txn_file, MyVars.file_target)
+    open(MyVars.pool_genesis_txn_file_path, 'w').close()
 
 
 async def test_scenario_04_keyrings_wallets():
