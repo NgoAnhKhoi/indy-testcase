@@ -10,6 +10,7 @@ import os
 import sys
 import logging
 
+
 class KeyWord:
     TEST_CASE = "testcase"
     RESULT = "result"
@@ -43,6 +44,7 @@ class Printer(object):
 class TestReport:
     __default_result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
     __result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
+    __log_level = logging.DEBUG
 
     def __init__(self, test_case_name):
         self.__error_id = 1
@@ -57,7 +59,7 @@ class TestReport:
         self.__log = open(self.__file_path + ".log", "w")
         self.__original_stdout = sys.stdout;
         sys.stdout = Printer(sys.stdout, self.__log)
-        logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+        logging.basicConfig(stream=sys.stdout, level=TestReport.__log_level)
 
     def set_result(self, result):
         self.__test_result[KeyWord.RESULT] = result
