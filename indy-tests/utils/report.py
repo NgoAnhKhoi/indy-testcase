@@ -86,6 +86,9 @@ class TestReport:
     def set_test_failed(self):
         self.set_result(Status.FAILED)
 
+    def get_result_folder(self):
+        return self.__result_dir
+
     def set_test_passed(self):
         self.set_test_passed(Status.PASSED)
 
