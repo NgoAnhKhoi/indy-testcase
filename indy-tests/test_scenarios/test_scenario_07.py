@@ -71,9 +71,9 @@ async def test_scenario_04_keyrings_wallets():
 #     seed_tgb = generate_random_string(prefix="TGB", size=32)
 
     # data
-    data_node5={'client_port': 9702, 'client_ip': '10.0.0.105', 'alias': 'Node5', 'node_ip': '10.0.0.105',
+    data_node5={'client_port': 9702, 'client_ip': '10.20.30.205', 'alias': 'Node5', 'node_ip': '10.20.30.205',
                  'node_port': 9701, 'services': ['VALIDATOR']}
-    data_node6={'client_port': 9702, 'client_ip': '10.0.0.106', 'alias': 'Node6', 'node_ip': '10.0.0.106',
+    data_node6={'client_port': 9702, 'client_ip': '10.20.30.206', 'alias': 'Node6', 'node_ip': '10.20.30.206',
                  'node_port': 9701, 'services': ['VALIDATOR']}
 
     # 1. Create and open pool Ledger  ---------------------------------------------------------
@@ -125,7 +125,7 @@ async def test_scenario_04_keyrings_wallets():
     # 4. Verify that a Trustee cannot add a validator node
     print(Colors.HEADER + "\n\t4. Verify that a Trustee cannot add a validator node\n" + Colors.ENDC)
     try:
-        await ledger.build_node_request(trust_anchor_did, base_58_node_6, data_node6)
+        await ledger.build_node_request(trust_anchor_did, base_58_node_6, json.dumps(data_node6))
     except IndyError as E:
         print("\nError: %s\n" % str(E.error_code))
         if E.error_code == 304:
