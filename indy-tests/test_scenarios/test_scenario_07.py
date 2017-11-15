@@ -66,6 +66,7 @@ async def test_scenario_04_keyrings_wallets():
     seed_steward_node6 = generate_random_string(prefix="StewardNode6", size=32)
     seed_trust_anchor = generate_random_string(prefix="TrustAnchor", size=32)
     seed_identity_owner = generate_random_string(prefix="IdentityOwner", size=32)
+    base_58 = "4Tn3wZMNCvhSTXPcLinQDnHyj56DTLQtL61ki4jo2Loc"
 #     seed_tgb = generate_random_string(prefix="TGB", size=32)
 
     # data
@@ -123,7 +124,7 @@ async def test_scenario_04_keyrings_wallets():
     # 4. Verify that a Trustee cannot add a validator node
     print(Colors.HEADER + "\n\t4. Verify that a Trustee cannot add a validator node\n" + Colors.ENDC)
     try:
-        res = ledger.build_node_request(default_trustee_did, steward_node_6_did, json.dumps(data_node6))
+        res = ledger.build_node_request(trust_anchor_did, base_58, json.dumps(data_node6))
     except IndyError as E:
         if E.error_code == 304:
             MyVars.test_results['Step 4'] = True
