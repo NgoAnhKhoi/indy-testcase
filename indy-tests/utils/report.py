@@ -34,7 +34,7 @@ class Printer(object):
     def write(self, obj):
         for f in self.files:
             f.write(obj)
-            f.flush()  # If you want the output to be visible immediately
+            f.flush()
 
     def flush(self):
         for f in self.files:
@@ -57,7 +57,8 @@ class TestReport:
         self.__file_path = "{0}/{1}_{2}".format(self.__result_dir, self.__test_result[KeyWord.TEST_CASE],
                                                 self.__test_result[KeyWord.START_TIME])
         self.__log = open(self.__file_path + ".log", "w")
-        self.__original_stdout = sys.stdout;
+        self.__original_stdout = sys.stdout
+        sys.stdout.readlines()
         sys.stdout = Printer(sys.stdout, self.__log)
         logging.basicConfig(stream=sys.stdout, level=TestReport.__log_level)
 
