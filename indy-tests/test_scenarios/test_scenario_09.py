@@ -432,45 +432,45 @@ async def test_09_remove_and_add_role():
                                     None, "", can_add=True)
     MyVars.test_results["Step 22"] = temp
     if not temp:
-        message_22 += "\r\nCannot remove Trustee1's role - " + message
+        message_22 += "\nCannot remove Trustee1's role - " + message
     else:
         (temp, message) = await get_nym(default_trustee_did, trustee1_did)
         if not temp:
-            message_22 += "\r\nCannot check GET_NYM for Trustee1 - " + message
+            message_22 += "\nCannot check GET_NYM for Trustee1 - " + message
         else:
             if not check_role_in_retrieved_nym(message, Roles.NONE):
                 temp = False
-                message_22 += "\r\nCannot remove Trustee1's role"
+                message_22 += "\nCannot remove Trustee1's role"
 
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
     (temp, message) = await add_nym(default_trustee_did, steward1_did, steward1_verkey,
                                     None, Roles.NONE, can_add=True)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
     if not temp:
-        message_22 += "\r\nCannot remove Steward1's role - " + message
+        message_22 += "\nCannot remove Steward1's role - " + message
     else:
         (temp, message) = await get_nym(default_trustee_did, steward1_did)
         if not temp:
-            message_22 += "\r\nCannot check GET_NYM for Steward1 - " + message
+            message_22 += "\nCannot check GET_NYM for Steward1 - " + message
         else:
             if not check_role_in_retrieved_nym(message, Roles.NONE):
                 temp = False
-                message_22 += "\r\nCannot remove Steward1's role"
+                message_22 += "\nCannot remove Steward1's role"
 
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
 
     (temp, message) = await add_nym(default_trustee_did, tgb1_did, tgb1_verkey, None, Roles.NONE, can_add=True)
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
     if not temp:
-        message_22 += "\r\nCannot remove TGB's role - " + message
+        message_22 += "\nCannot remove TGB's role - " + message
     else:
         (temp, message) = await get_nym(default_trustee_did, tgb1_did)
         if not temp:
-            message_22 += "\r\nCannot check GET_NYM for TGB - " + message
+            message_22 += "\nCannot check GET_NYM for TGB - " + message
         else:
             if not check_role_in_retrieved_nym(message, Roles.NONE):
                 temp = False
-                message_22 += "\r\nCannot remove TGB1's role"
+                message_22 += "\nCannot remove TGB1's role"
 
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
 
@@ -479,22 +479,22 @@ async def test_09_remove_and_add_role():
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
 
     if not temp:
-        message_22 += "\r\nCannot remove Trust_Anchor1's role - " + message
+        message_22 += "\nCannot remove Trust_Anchor1's role - " + message
     else:
         (temp, message) = await get_nym(default_trustee_did, trustanchor1_did)
         if not temp:
-            message_22 += "\r\nCannot check GET_NYM for Trust_Anchor1 - " + message
+            message_22 += "\nCannot check GET_NYM for Trust_Anchor1 - " + message
         else:
             if not check_role_in_retrieved_nym(message, Roles.NONE):
                 temp = False
-                message_22 += "\r\nCannot remove Trust_Anchor1's role"
+                message_22 += "\nCannot remove Trust_Anchor1's role"
 
     MyVars.test_results["Step 22"] = MyVars.test_results["Step 22"] and temp
 
     if MyVars.test_results["Step 22"] is False:
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step22. Using default Trustee to remove roles",
-                                           Status.FAILED, message_22[2:])
+                                           Status.FAILED, message_22[1:])
     else:
         MyVars.test_report.set_step_status("Step22. Using default Trustee to remove roles", Status.PASSED)
 
@@ -508,7 +508,7 @@ async def test_09_remove_and_add_role():
     else:
         if message is None:
             message = ""
-        message_23 += "\r\nRemoved Trustee can create Trustee (should fail) " + message
+        message_23 += "\nRemoved Trustee can create Trustee (should fail) " + message
 
     MyVars.test_results["Step 23"] = temp
 
@@ -518,14 +518,14 @@ async def test_09_remove_and_add_role():
     else:
         if message is None:
             message = ""
-        message_23 += "\r\nRemoved Trustee can create Steward(should fail) " + message
+        message_23 += "\nRemoved Trustee can create Steward(should fail) " + message
 
     MyVars.test_results["Step 23"] = MyVars.test_results["Step 23"] and temp
 
     if MyVars.test_results["Step 23"] is False:
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step23. Verify that removed Trustee1 cannot create Trustee or Steward",
-                                           Status.FAILED, message_23[2:])
+                                           Status.FAILED, message_23[1:])
     else:
         MyVars.test_report.set_step_status("Step23. Verify that removed Trustee1 cannot create Trustee or Steward",
                                            Status.PASSED)
@@ -616,17 +616,17 @@ async def test_09_remove_and_add_role():
     (temp, message) = await add_nym(trustee1_did, steward2_did, steward2_verkey, None, Roles.STEWARD, can_add=True)
     MyVars.test_results["Step 29"] = temp
     if not temp:
-        message_29 += "\r\nTrustee cannot add Steward1 (should pass) - " + message
+        message_29 += "\nTrustee cannot add Steward1 (should pass) - " + message
 
     temp = await add_nym(trustee1_did, steward3_did, steward3_verkey, None, Roles.STEWARD, can_add=True)
     MyVars.test_results["Step 29"] = MyVars.test_results["Step 29"] and temp
     if not temp:
-        message_29 += "\r\nTrustee cannot add Steward2 (should pass) - " + message
+        message_29 += "\nTrustee cannot add Steward2 (should pass) - " + message
 
     if MyVars.test_results["Step 29"] is False:
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step29. Verify that Trustee can add new Steward",
-                                           Status.FAILED, message_29[2:])
+                                           Status.FAILED, message_29[1:])
     else:
         MyVars.test_report.set_step_status("Step29. Verify that Trustee can add new Steward", Status.PASSED)
 
