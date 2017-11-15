@@ -55,6 +55,7 @@ class TestReport:
         self.__file_path = "{0}/{1}_{2}".format(self.__result_dir, self.__test_result[KeyWord.TEST_CASE],
                                                 self.__test_result[KeyWord.START_TIME])
         self.__log = open(self.__file_path + ".log", "w")
+        self.__original_stdout = sys.stdout;
         sys.stdout = Printer(sys.stdout, self.__log)
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
@@ -74,6 +75,7 @@ class TestReport:
         if self.__test_result[KeyWord.RESULT] == Status.PASSED:
             if os.path.isfile(self.__file_path + ".log"):
                 os.remove(self.__file_path + ".log")
+        sys.stdout = self.__original_stdout
 
         self.__test_result[KeyWord.RUN] = self.__run
         with open(filename, "w+") as outfile:
