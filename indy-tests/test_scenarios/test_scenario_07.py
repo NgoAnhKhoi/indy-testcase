@@ -41,7 +41,7 @@ class MyVars:
     pool_name = generate_random_string("test_pool")
     wallet_name = generate_random_string("test_wallet")
     debug = False
-    test_results = {'Step4': False, 'Step5': False, 'Step6': False, 'Step7': False,}
+    test_results = {'Step4': False, 'Step5': False, 'Step6': False, 'Step7': False,'Step8': False, 'Step9': False}
 
 
 logger = logging.getLogger(__name__)
@@ -155,7 +155,6 @@ async def test_scenario_04_keyrings_wallets():
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, identity_owner_did, node_req6)
     except IndyError as E:
-        print("\nError: %s\n" % str(E.error_code))
         if E.error_code == 304:
             MyVars.test_results['Step6'] = True
             print(Colors.OKGREEN + ("::PASS::Validated that a Identity Owner cannot add a validator node\n" + Colors.ENDC))
@@ -163,47 +162,43 @@ async def test_scenario_04_keyrings_wallets():
             print(str(E))
             raise E
 
-    # 7. Verify that a Steward can add a validator node
-    print(Colors.HEADER + "\n\t7. Verify that a Steward can add a validator node\n" + Colors.ENDC)
+    # 7. Verify that a Steward5 can add a validator node
+    print(Colors.HEADER + "\n\t7. Verify that a Steward_node_5 can add a validator node\n" + Colors.ENDC)
     node_req7 = await ledger.build_node_request(steward_node_5_did, base_58_node_5, json.dumps(data_node5))
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, steward_node_5_did, node_req7)
         MyVars.test_results['Step7'] = True
-        print(Colors.OKGREEN + ("::PASS::Validated that a Steward can add a validator node\n" + Colors.ENDC))
+        print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_5 can add a validator node\n" + Colors.ENDC))
     except IndyError as E:
         print(str(E))
         raise E
 
-#     # 2. verify wallet was created in .indy/wallet
-#     try:
-#         print(Colors.HEADER + "\n\t2. Verifying the new wallet was created\n" + Colors.ENDC)
-#         work_dir = os.path.expanduser('~') + os.sep + ".indy"
-#         wallet_path = work_dir + "/wallet/" + MyVars.wallet_name
-#         result = os.path.exists(wallet_path)
-#         if result:
-#             MyVars.test_results['Step 2'] = True
-#             print("===PASSED===")
-#     except IndyError as E:
-#         MyVars.test_report.set_test_failed()
-#         MyVars.test_report.set_step_status(4, "Verify wallet was created in \".indy/wallet\"", str(E))
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-# 
-#     await asyncio.sleep(0)
-# 
-#     # 3. create DID to check the new wallet work well.
-#     print(Colors.HEADER + "\n\t3. Create DID to check the new wallet work well\n" + Colors.ENDC)
-#     try:
-#         # create and store did to check the new wallet work well.
-#         (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
-#             MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
-#         if default_trustee_did:
-#             MyVars.test_results['Step 3'] = True
-#             print("===PASSED===")
-#     except IndyError as E:
-#         MyVars.test_report.set_test_failed()
-#         MyVars.test_report.set_step_status(5, "Create DID to check the new wallet work well", str(E))
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-# 
+    # 8. Verify that a steward can only add one node by trying to add another one.
+    print(Colors.HEADER + "\n\t8. Verify that a Steward_node_5 can only add one node by trying to add another one\n" + Colors.ENDC)
+    node_req8 = await ledger.build_node_request(steward_node_5_did, base_58_node_6, json.dumps(data_node6))
+    try:
+        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, steward_node_5_did, node_req8)
+    except IndyError as E:
+        if E.error_code == 304:
+            MyVars.test_results['Step8'] = True
+            print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_5 can only add one node by trying to add another one\n" + Colors.ENDC))
+        else:
+            print(str(E))
+            raise E
+
+    # 9. Verify that a steward can only add one node by trying to add another one.
+    print(Colors.HEADER + "\n\t9. Verify that a Steward_node_6 can add a validator node\n" + Colors.ENDC)
+    node_req9 = await ledger.build_node_request(steward_node_6_did, base_58_node_6, json.dumps(data_node6))
+    try:
+        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, steward_node_6_did, node_req9)
+    except IndyError as E:
+        if E.error_code == 304:
+            MyVars.test_results['Step9'] = True
+            print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_6 can add a validator node\n" + Colors.ENDC))
+        else:
+            print(str(E))
+            raise E
+
 #     # ==================================================================================================================
 #     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #     # ==================================================================================================================
