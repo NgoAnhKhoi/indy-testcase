@@ -54,9 +54,8 @@ def command(command_str):
 
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
-#     print(Colors.HEADER + "\nMake a copy of pool_transactions_sandbox file\n" + Colors.ENDC)
-#     copy_file(MyVars.pool_genesis_txn_file, MyVars.pool_genesis_bak)
-#     open(MyVars.pool_genesis_txn_file, 'w').close()
+    print(Colors.HEADER + "\nPrecondition. Clean up pools and wallets\n" + Colors.ENDC)
+    Common.clean_up_pool_and_wallet_files(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def test_scenario_07_add_node():
