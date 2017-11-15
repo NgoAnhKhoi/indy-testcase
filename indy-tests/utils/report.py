@@ -117,6 +117,7 @@ class TestReport:
         TestReport.result_dir = new_dir
 
 
+
 class HTMLReport:
     __head = """<html>
             <head>
