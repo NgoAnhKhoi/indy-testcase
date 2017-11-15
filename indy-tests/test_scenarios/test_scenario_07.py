@@ -41,7 +41,7 @@ class MyVars:
     pool_name = generate_random_string("test_pool")
     wallet_name = generate_random_string("test_wallet")
     debug = False
-    test_results = {'Step 2': False, 'Step 3': False}
+    test_results = {'Step 4': False, 'Step 5': False}
 
 
 logger = logging.getLogger(__name__)
@@ -116,10 +116,22 @@ async def test_scenario_04_keyrings_wallets():
                                                 trust_anchor_did, trust_anchor_verkey, None, Roles.TRUST_ANCHOR)
         await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
                                                 identity_owner_did, identity_owner_verkey, None, Roles.NONE)
-        MyVars.test_results['Step 2'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         return None
+
+    # 4. Verify that a Trustee cannot add a validator node
+    print(Colors.HEADER + "\n\t4. Verify that a Trustee cannot add a validator node\n" + Colors.ENDC)
+    try:
+        res = ledger.build_node_request(default_trustee_did, steward_node_6_did, json.dumps(data_node6))
+    except IndyError as E:
+        if E.error_code == 304:
+            MyVars.test_results['Step 4'] = True
+            print(Colors.OKGREEN + ("::PASS::Validated that a Trustee cannot add a validator node\n" + Colors.ENDC))
+        else:
+            print(str(E))
+            raise
+
 #     # 2. verify wallet was created in .indy/wallet
 #     try:
 #         print(Colors.HEADER + "\n\t2. Verifying the new wallet was created\n" + Colors.ENDC)
