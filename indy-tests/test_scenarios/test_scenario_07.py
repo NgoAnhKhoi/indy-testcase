@@ -109,7 +109,7 @@ async def test_scenario_04_keyrings_wallets():
     print(Colors.HEADER + "\n\t3. Trustee create a steward\n" + Colors.ENDC)
     try:
         await Common.build_and_send_nym(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did, steward_node_5_did,
-                                         Roles.STEWARD, verkey=None)
+                                         steward_node_5_verkey, None, Roles.STEWARD)
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         return None
