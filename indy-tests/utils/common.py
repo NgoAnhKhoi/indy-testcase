@@ -50,13 +50,11 @@ class Common():
     @staticmethod
     async def build_and_send_nym_request(pool_handle, wallet_handle, submitter_did, target_did, target_verkey, alias, role):
         nym_txn_req = await ledger.build_nym_request(submitter_did, target_did, target_verkey, alias, role)
-        result = False
         try:
             await ledger.sign_and_submit_request(pool_handle, wallet_handle, submitter_did, nym_txn_req)
-            result = True
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
-        return result
+            raise E
 
 # Methods ==========================================================================================================
     async def create_and_open_pool(self, pool_name, pool_genesis_txn_file):

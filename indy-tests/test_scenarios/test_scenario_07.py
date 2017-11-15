@@ -105,11 +105,17 @@ async def test_scenario_04_keyrings_wallets():
     if MyVars.debug:
         input(Colors.WARNING + "\n\nDID's created..." + Colors.ENDC)
 
-    # 3. Trustee create a steward
-    print(Colors.HEADER + "\n\t3. Trustee create a steward\n" + Colors.ENDC)
+    # 3. Trustee create a steward5, steward6, trustanchor, identityowner
+    print(Colors.HEADER + "\n\t3. Trustee create a steward5, steward6, trust anchor, identity owner\n" + Colors.ENDC)
     try:
-        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did, steward_node_5_did,
-                                         steward_node_5_verkey, None, Roles.STEWARD)
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                steward_node_5_did, steward_node_5_verkey, None, Roles.STEWARD)
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                steward_node_6_did, steward_node_6_verkey, None, Roles.STEWARD)
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                trust_anchor_did, trust_anchor_verkey, None, Roles.TRUST_ANCHOR)
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                identity_owner_did, identity_owner_verkey, None, Roles.NONE)
         MyVars.test_results['Step 2'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
