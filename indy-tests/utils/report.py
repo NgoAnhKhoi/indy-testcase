@@ -42,7 +42,7 @@ class TestReport:
                                                 self.__test_result[KeyWord.START_TIME])
         self.__log = open(self.__file_path + ".log", "w")
         sys.stdout = self.__log
-        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+        logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
     def set_result(self, result):
         self.__test_result[KeyWord.RESULT] = result
