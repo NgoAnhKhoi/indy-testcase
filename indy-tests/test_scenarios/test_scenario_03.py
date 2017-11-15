@@ -181,6 +181,7 @@ def final_result():
     MyVars.test_report.write_result_to_file()
 
     folder = MyVars.test_report.get_result_folder()
+    
     HTMLReport.make_single_html_report(folder)
 
 
