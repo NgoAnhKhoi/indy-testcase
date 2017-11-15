@@ -30,3 +30,4 @@ class Constant:
     work_dir = os.path.expanduser('~') + os.sep + ".indy"
     seed_default_trustee = "000000000000000000000000Trustee1"
     pool_genesis_txn_file = os.path.expanduser('~') + os.sep + ".sovrin/pool_transactions_sandbox_genesis"
+    original_pool_genesis_txn_file = os.path.expanduser('~') + os.sep + ".sovrin/original_pool_transactions_sandbox_genesis"
