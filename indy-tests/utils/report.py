@@ -14,6 +14,7 @@ import socket
 import platform
 
 
+
 class KeyWord:
     TEST_CASE = "testcase"
     RESULT = "result"
@@ -30,9 +31,24 @@ class Status:
     FAILED = "Failed"
 
 
+class Printer(object):
+    def __init__(self, *files):
+        self.files = files
+
+    def write(self, obj):
+        for f in self.files:
+            f.write(obj)
+            f.flush()
+
+    def flush(self):
+        for f in self.files:
+            f.flush()
+
+
 class TestReport:
     __default_result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
     __result_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
+    __log_level = logging.DEBUG
 
     def __init__(self, test_case_name):
         self.__error_id = 1
@@ -45,8 +61,9 @@ class TestReport:
         self.__file_path = "{0}/{1}_{2}".format(self.__result_dir, self.__test_result[KeyWord.TEST_CASE],
                                                 self.__test_result[KeyWord.START_TIME])
         self.__log = open(self.__file_path + ".log", "w")
-        sys.stdout = self.__log
-        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+        self.__original_stdout = sys.stdout
+        sys.stdout = Printer(sys.stdout, self.__log)
+        logging.basicConfig(stream=sys.stdout, level=TestReport.__log_level)
 
     def set_result(self, result):
         self.__test_result[KeyWord.RESULT] = result
@@ -64,6 +81,7 @@ class TestReport:
         if self.__test_result[KeyWord.RESULT] == Status.PASSED:
             if os.path.isfile(self.__file_path + ".log"):
                 os.remove(self.__file_path + ".log")
+        sys.stdout = self.__original_stdout
 
         self.__test_result[KeyWord.RUN] = self.__run
         with open(filename, "w+") as outfile:
@@ -71,6 +89,9 @@ class TestReport:
 
     def set_test_failed(self):
         self.set_result(Status.FAILED)
+
+    def get_result_folder(self):
+        return self.__result_dir
 
     def set_test_passed(self):
         self.set_test_passed(Status.PASSED)

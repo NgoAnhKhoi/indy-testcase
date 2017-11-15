@@ -29,10 +29,6 @@ class MyVars:
                     "Step 20": False, "Step 21": False, "Step 22": False, "Step 23": False, "Step 24": False,
                     "Step 25": False, "Step 26": False, "Step 27": False, "Step 28": False, "Step 29": False,
                     "Step 30": False, "Step 31": False, "Step 32": False, "Step 33": False}
-            
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 
 def test_prep():
@@ -85,19 +81,17 @@ def check_role_in_retrieved_nym(retrieved_nym, role):
     if retrieved_nym is None:
         return False
     nym_dict = json.loads(retrieved_nym)
-    if "data" in nym_dict:
-        if isinstance(nym_dict["data"], dict):
-            if "role" in nym_dict["data"]:
-                if not nym_dict["data"]["role"] == role:
-                    return False
-                else:
-                    return True
+    if "data" in nym_dict["result"]:
+        temp_dict = json.loads(nym_dict["result"]["data"])
+        if "role" in temp_dict:
+            if not temp_dict["role"] == role:
+                return False
+            else:
+                return True
     return False
 
 
 async def test_09_remove_and_add_role():
-    logger.info("Step Scenario 09 -> started")
-
     # Declare all values use in the test
     seed_default_trustee = "000000000000000000000000Trustee1"
 
