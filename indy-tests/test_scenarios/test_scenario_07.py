@@ -41,7 +41,7 @@ class MyVars:
     pool_name = generate_random_string("test_pool")
     wallet_name = generate_random_string("test_wallet")
     debug = False
-    test_results = {'Step 4': False, 'Step 5': False}
+    test_results = {'Step4': False, 'Step5': False, 'Step6': False, 'Step7': False,}
 
 
 logger = logging.getLogger(__name__)
@@ -66,7 +66,7 @@ async def test_scenario_04_keyrings_wallets():
     seed_steward_node6 = generate_random_string(prefix="StewardNode6", size=32)
     seed_trust_anchor = generate_random_string(prefix="TrustAnchor", size=32)
     seed_identity_owner = generate_random_string(prefix="IdentityOwner", size=32)
-    base_58 = "4Tn3wZMNCvhSTXPcLinQDnHyj56DTLQtL61ki4jo2Loc"
+    base_58_node_5 = "4Tn3wZMNCvhSTXPcLinQDnHyj56DTLQtL61ki4jo2Loc"
     base_58_node_6 = "6G9QhQa3HWjRKeRmEvEkLbWWf2t7cw6KLtafzi494G4G"
 #     seed_tgb = generate_random_string(prefix="TGB", size=32)
 
@@ -125,15 +125,51 @@ async def test_scenario_04_keyrings_wallets():
     # 4. Verify that a Trustee cannot add a validator node
     print(Colors.HEADER + "\n\t4. Verify that a Trustee cannot add a validator node\n" + Colors.ENDC)
     try:
-        await ledger.build_node_request(trust_anchor_did, base_58_node_6, json.dumps(data_node6))
+        await ledger.build_node_request(default_trustee_did, base_58_node_5, json.dumps(data_node5))
     except IndyError as E:
         print("\nError: %s\n" % str(E.error_code))
         if E.error_code == 304:
-            MyVars.test_results['Step 4'] = True
+            MyVars.test_results['Step4'] = True
             print(Colors.OKGREEN + ("::PASS::Validated that a Trustee cannot add a validator node\n" + Colors.ENDC))
         else:
             print(str(E))
-            raise
+            raise E
+
+    # 5. Verify that a Trust Anchor cannot add a validator node
+    print(Colors.HEADER + "\n\t4. Verify that a Trust Anchor cannot add a validator node\n" + Colors.ENDC)
+    try:
+        await ledger.build_node_request(trust_anchor_did, base_58_node_5, json.dumps(data_node5))
+    except IndyError as E:
+        print("\nError: %s\n" % str(E.error_code))
+        if E.error_code == 304:
+            MyVars.test_results['Step5'] = True
+            print(Colors.OKGREEN + ("::PASS::Validated that a Trust Anchor cannot add a validator node\n" + Colors.ENDC))
+        else:
+            print(str(E))
+            raise E
+
+    # 6. Verify that a Identity Owner cannot add a validator node
+    print(Colors.HEADER + "\n\t6. Verify that a Identity Owner cannot add a validator node\n" + Colors.ENDC)
+    try:
+        await ledger.build_node_request(identity_owner_did, base_58_node_5, json.dumps(data_node5))
+    except IndyError as E:
+        print("\nError: %s\n" % str(E.error_code))
+        if E.error_code == 304:
+            MyVars.test_results['Step6'] = True
+            print(Colors.OKGREEN + ("::PASS::Validated that a Identity Owner cannot add a validator node\n" + Colors.ENDC))
+        else:
+            print(str(E))
+            raise E
+
+    # 7. Verify that a Steward can add a validator node
+    print(Colors.HEADER + "\n\t7. Verify that a Steward can add a validator node\n" + Colors.ENDC)
+    try:
+        await ledger.build_node_request(steward_node_5_did, base_58_node_5, json.dumps(data_node5))
+        MyVars.test_results['Step7'] = True
+        print(Colors.OKGREEN + ("::PASS::Validated that a Steward can add a validator node\n" + Colors.ENDC))
+    except IndyError as E:
+        print(str(E))
+        raise E
 
 #     # 2. verify wallet was created in .indy/wallet
 #     try:
