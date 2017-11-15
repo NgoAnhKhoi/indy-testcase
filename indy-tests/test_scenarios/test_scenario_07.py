@@ -12,11 +12,11 @@ import logging.handlers
 # import shutil
 import time
 import random
-from indy import signus, wallet, pool
+from indy import signus, wallet, pool, ledger
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import *
-from utils.constant import Colors, Constant
+from utils.constant import Colors, Constant, Roles
 from utils.report import TestReport
 from utils.common import Common
 
@@ -31,7 +31,11 @@ class MyVars:
     pool_handle = 0
     # Need the path to the pool transaction file location
     pool_genesis_txn_file = Constant.pool_genesis_txn_file
-    file_target = Constant.original_pool_genesis_txn_file
+    pool_genesis_bak = Constant.original_pool_genesis_txn_file + str(random.randrange(10, 1000, 2))
+
+    domain_transactions_sandbox_genesis = Constant.domain_transactions_sandbox_genesis
+    domain_transactions_sandbox_genesis_bak = Constant.domain_transactions_sandbox_genesis + str(random.randrange(10, 1000, 2))
+
     wallet_handle = 0
     test_report = TestReport("Test_scenario_07_Add_Node")
     pool_name = generate_random_string("test_pool")
@@ -41,7 +45,7 @@ class MyVars:
 
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.ERROR)
 
 
 def command(command_str):
@@ -50,26 +54,66 @@ def command(command_str):
 
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
-    print(Colors.HEADER + "\nMake a copy of pool_transactions_sandbox file\n" + Colors.ENDC)
-    MyVars.file_target += str(random.randrange(10, 1000, 2))
-    copy_file(MyVars.pool_genesis_txn_file, MyVars.file_target)
-    open(MyVars.pool_genesis_txn_file, 'w').close()
+#     print(Colors.HEADER + "\nMake a copy of pool_transactions_sandbox file\n" + Colors.ENDC)
+#     copy_file(MyVars.pool_genesis_txn_file, MyVars.pool_genesis_bak)
+#     open(MyVars.pool_genesis_txn_file, 'w').close()
 
 
 async def test_scenario_04_keyrings_wallets():
     logger.info("Test Scenario 07 -> started")
-    seed_default_trustee = "000000000000000000000000Trustee1"
+    seed_default_trustee = Constant.seed_default_trustee
+    seed_steward_node5 = generate_random_string(prefix="StewardNode5", size=32)
+    seed_steward_node6 = generate_random_string(prefix="StewardNode6", size=32)
+    seed_trust_anchor = generate_random_string(prefix="TrustAnchor", size=32)
+    seed_identity_owner = generate_random_string(prefix="IdentityOwner", size=32)
+#     seed_tgb = generate_random_string(prefix="TGB", size=32)
 
-#     # 1. Create and open pool Ledger  ---------------------------------------------------------
-#     print(Colors.HEADER + "\n\t1.  Create and open pool Ledger\n" + Colors.ENDC)
-#     try:
-#         MyVars.pool_handle, MyVars.wallet_handle = await Common.prepare_pool_and_wallet(MyVars.pool_name, MyVars.wallet_name, MyVars.pool_genesis_txn_file)
-#     except IndyError as E:
-#         MyVars.test_report.set_test_failed()
-#         MyVars.test_report.set_step_status(1, "Create and open pool Ledger", str(E))
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-#         return None
-# 
+    # data
+    data_node5={'client_port': 9702, 'client_ip': '10.0.0.105', 'alias': 'Node5', 'node_ip': '10.0.0.105',
+                 'node_port': 9701, 'services': ['VALIDATOR']}
+    data_node6={'client_port': 9702, 'client_ip': '10.0.0.106', 'alias': 'Node6', 'node_ip': '10.0.0.106',
+                 'node_port': 9701, 'services': ['VALIDATOR']}
+
+    # 1. Create and open pool Ledger  ---------------------------------------------------------
+    print(Colors.HEADER + "\n\t1. Create and open pool Ledger\n" + Colors.ENDC)
+    try:
+        MyVars.pool_handle, MyVars.wallet_handle = await Common.prepare_pool_and_wallet(MyVars.pool_name, MyVars.wallet_name, MyVars.pool_genesis_txn_file)
+    except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(1, "Create and open pool Ledger", str(E))
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+        return None
+
+    # 2. Create DIDs ----------------------------------------------------
+    print(Colors.HEADER + "\n\t2. Create DID's\n" + Colors.ENDC)
+    try:
+        (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
+            MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
+
+        (steward_node_5_did, steward_node_5_verkey, steward_node_5_pk) = await signus.create_and_store_my_did(
+            MyVars.wallet_handle, json.dumps({"seed": seed_steward_node5}))
+        (steward_node_6_did, steward_node_6_verkey, steward_node_6_pk) = await signus.create_and_store_my_did(
+            MyVars.wallet_handle, json.dumps({"seed": seed_steward_node6}))
+
+        (trust_anchor_did, trust_anchor_verkey, trust_anchor_pk) = await signus.create_and_store_my_did(
+            MyVars.wallet_handle, json.dumps({"seed": seed_trust_anchor}))
+        (identity_owner_did, identity_owner_verkey, identity_owner_pk) = await signus.create_and_store_my_did(
+            MyVars.wallet_handle, json.dumps({"seed": seed_identity_owner}))
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+
+    if MyVars.debug:
+        input(Colors.WARNING + "\n\nDID's created..." + Colors.ENDC)
+
+    # 3. Trustee create a steward
+    print(Colors.HEADER + "\n\t3. Trustee create a steward\n" + Colors.ENDC)
+    try:
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did, steward_node_5_did,
+                                         steward_node_5_verkey, None, Roles.STEWARD)
+        MyVars.test_results['Step 2'] = True
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+        return None
 #     # 2. verify wallet was created in .indy/wallet
 #     try:
 #         print(Colors.HEADER + "\n\t2. Verifying the new wallet was created\n" + Colors.ENDC)
@@ -111,12 +155,6 @@ async def test_scenario_04_keyrings_wallets():
 #         print(Colors.FAIL + str(E) + Colors.ENDC)
 # 
 #     await asyncio.sleep(0)
-
-    # Revert pool transactions sandbox file ------------------------------------------------------------------------------
-    try:
-        copy_file(MyVars.file_target, Constant.pool_genesis_txn_file)
-    except Exception as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
 
     logger.info("Test Scenario 07 -> completed")
 
