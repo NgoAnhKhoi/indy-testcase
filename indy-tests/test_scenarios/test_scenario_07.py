@@ -54,8 +54,8 @@ def command(command_str):
 
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
-    print(Colors.HEADER + "\nMake a copy of pool_transactions_sandbox file\n" + Colors.ENDC)
-    copy_file(MyVars.pool_genesis_txn_file, MyVars.pool_genesis_bak)
+#     print(Colors.HEADER + "\nMake a copy of pool_transactions_sandbox file\n" + Colors.ENDC)
+#     copy_file(MyVars.pool_genesis_txn_file, MyVars.pool_genesis_bak)
 #     open(MyVars.pool_genesis_txn_file, 'w').close()
 
 
@@ -105,7 +105,7 @@ async def test_scenario_04_keyrings_wallets():
     if MyVars.debug:
         input(Colors.WARNING + "\n\nDID's created..." + Colors.ENDC)
 
-    # Trustee create a steward
+    # 3. Trustee create a steward
     print(Colors.HEADER + "\n\t3. Trustee create a steward\n" + Colors.ENDC)
     try:
         await Common.build_and_send_nym(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did, steward_node_5_did,
@@ -154,12 +154,6 @@ async def test_scenario_04_keyrings_wallets():
 #         print(Colors.FAIL + str(E) + Colors.ENDC)
 # 
 #     await asyncio.sleep(0)
-
-    # Revert pool transactions sandbox file ------------------------------------------------------------------------------
-    try:
-        copy_file(MyVars.pool_genesis_bak, MyVars.pool_genesis_txn_file)
-    except Exception as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
 
     logger.info("Test Scenario 07 -> completed")
 
