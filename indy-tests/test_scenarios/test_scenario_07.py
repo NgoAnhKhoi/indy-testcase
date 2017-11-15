@@ -106,20 +106,52 @@ async def test_scenario_07_add_node():
     if MyVars.debug:
         input(Colors.WARNING + "\n\nDID's created..." + Colors.ENDC)
 
-    # 3. Trustee create a steward5, steward6, trustanchor, identityowner
+    # 3. Trustee create a steward5
     print(Colors.HEADER + "\n\t3. Trustee create a steward5, steward6, trust anchor, identity owner\n" + Colors.ENDC)
+    parts3={'3': False, '3a': False, '3b': False, '3c': False}
     try:
         await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
                                                 steward_node_5_did, steward_node_5_verkey, None, Roles.STEWARD)
-        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
-                                                steward_node_6_did, steward_node_6_verkey, None, Roles.STEWARD)
-        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
-                                                trust_anchor_did, trust_anchor_verkey, None, Roles.TRUST_ANCHOR)
-        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
-                                                identity_owner_did, identity_owner_verkey, None, Roles.NONE)
+        parts3['3'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
         return None
+
+    # 3a. Trustee create a steward6
+    try:
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                steward_node_6_did, steward_node_6_verkey, None, Roles.STEWARD)
+        parts3['3a'] = True
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+        return None
+
+    # 3b. Trustee create a trustanchor
+    try:
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                trust_anchor_did, trust_anchor_verkey, None, Roles.TRUST_ANCHOR)
+        parts3['3b'] = True
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+        return None
+
+    # 3c. Trustee create a identityowner
+    try:
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                identity_owner_did, identity_owner_verkey, None, Roles.NONE)
+        parts3['3c'] = True
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+        return None
+
+    # If any of the results are are not true, then fail the test
+    if not all(value is True for value in parts3.values()):
+        print(Colors.FAIL + "\n\tOne of the commands in step 3 failed" + Colors.ENDC)
+    else:
+        # Pass the test
+        MyVars.test_results['Step3'] = True
+
+    await asyncio.sleep(0)
 
     # 4. Verify that a Trustee cannot add a validator node
     print(Colors.HEADER + "\n\t4. Verify that a Trustee cannot add a validator node\n" + Colors.ENDC)
