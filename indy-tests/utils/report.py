@@ -7,6 +7,7 @@ Created on Nov 9, 2017
 import json
 import time
 import os
+import sys
 
 
 class KeyWord:
@@ -33,9 +34,14 @@ class TestReport:
         self.__error_id = 1
         self.__test_result = {}
         self.__run = []
+        self.__result_dir = self.__create_result_folder()
         self.__test_result[KeyWord.TEST_CASE] = test_case_name
         self.__test_result[KeyWord.RESULT] = Status.PASSED
         self.__test_result[KeyWord.START_TIME] = str(time.strftime("%Y%m%d_%H-%M-%S"))
+        self.__file_path = "{0}/{1}_{2}".format(self.__result_dir, self.__test_result[KeyWord.TEST_CASE],
+                                                   self.__test_result[KeyWord.START_TIME])
+        self.__log = open(self.__file_path + ".log", "w")
+        sys.stdout = self.__log
 
     def set_result(self, result):
         self.__test_result[KeyWord.RESULT] = result
@@ -48,9 +54,12 @@ class TestReport:
         self.__run.append(temp)
 
     def write_result_to_file(self):
-        temp_dir = self.__create_result_folder()
-        filename = "{0}/{1}_{2}.json".format(temp_dir, self.__test_result[KeyWord.TEST_CASE],
-                                             self.__test_result[KeyWord.START_TIME])
+        filename = self.__file_path + ".json"
+        self.__log.close()
+        if self.__test_result[KeyWord.RESULT] == Status.PASSED:
+            if os.path.isfile(self.__file_path + ".log"):
+                os.remove(self.__file_path + ".log")
+
         self.__test_result[KeyWord.RUN] = self.__run
         with open(filename, "w+") as outfile:
             json.dump(self.__test_result, outfile, ensure_ascii=False, indent=2)
