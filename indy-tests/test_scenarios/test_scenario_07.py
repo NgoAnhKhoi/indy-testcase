@@ -172,7 +172,9 @@ def final_results():
     else:
         for test_num, value in MyVars.test_results.items():
             if not value:
-                print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
+                print('%s: ' % str(test_num) + Colors.FAIL + 'Failed' + Colors.ENDC)
+            else:
+                print('%s: ' % str(test_num) + Colors.OKGREEN + 'Passed' + Colors.ENDC)
 
     MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
     MyVars.test_report.write_result_to_file()
