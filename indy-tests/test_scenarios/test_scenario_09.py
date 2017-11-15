@@ -80,6 +80,7 @@ async def get_nym(submitter_did, target_did):
 def check_role_in_retrieved_nym(retrieved_nym, role):
     if retrieved_nym is None:
         return False
+    print(Colors.HEADER + "\n" + retrieved_nym + "\n" + Colors.ENDC)
     nym_dict = json.loads(retrieved_nym)
     if "data" in nym_dict:
         if isinstance(nym_dict["data"], dict):
