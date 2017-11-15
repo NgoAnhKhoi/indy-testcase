@@ -407,3 +407,7 @@ class HTMLReport:
             HTMLReport.__table_test_log_content + HTMLReport.__end_file)
 
         f.close()
+
+    def make_single_html_report(self, path_to_json):
+        if path_to_json == TestReport.__default_result_dir:
+            self.make_html_report(path_to_json)

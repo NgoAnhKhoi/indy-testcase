@@ -9,7 +9,7 @@ from indy import pool, signus, wallet
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Colors, Constant
-from utils.report import TestReport, Status
+from utils.report import TestReport, Status, HTMLReport
 
 
 class MyVars:
@@ -180,6 +180,7 @@ def final_result():
     MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
     MyVars.test_report.write_result_to_file()
 
+    HTMLReport.make_single_html_report(MyVars.test_report.get_result_folder())
 
 def test():
     MyVars.begin_time = time.time()
@@ -190,6 +191,5 @@ def test():
     loop.close()
 
     final_result()
-
 
 test()
