@@ -109,22 +109,22 @@ async def test_scenario_07_add_node():
     # 3. Trustee create a steward5
     print(Colors.HEADER + "\n\t3. Trustee create a steward5, steward6, trust anchor, identity owner\n" + Colors.ENDC)
     parts3={'3': False, '3a': False, '3b': False, '3c': False}
-#     try:
-#         await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
-#                                                 steward_node_5_did, steward_node_5_verkey, None, Roles.STEWARD)
-#         parts3['3'] = True
-#     except IndyError as E:
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-#         return None
-# 
-#     # 3a. Trustee create a steward6
-#     try:
-#         await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
-#                                                 steward_node_6_did, steward_node_6_verkey, None, Roles.STEWARD)
-#         parts3['3a'] = True
-#     except IndyError as E:
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-#         return None
+    try:
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                steward_node_5_did, steward_node_5_verkey, None, Roles.STEWARD)
+        parts3['3'] = True
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+        return None
+
+    # 3a. Trustee create a steward6
+    try:
+        await Common.build_and_send_nym_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+                                                steward_node_6_did, steward_node_6_verkey, None, Roles.STEWARD)
+        parts3['3a'] = True
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+        return None
 
     # 3b. Trustee create a trustanchor
     try:
@@ -200,41 +200,48 @@ async def test_scenario_07_add_node():
     except IndyError as E:
         print(str(E))
 
-#     # 8. Verify that a steward can only add one node by trying to add another one.
-#     print(Colors.HEADER + "\n\t8. Verify that a Steward_node_5 can only add one node by trying to add another one\n" + Colors.ENDC)
-#     node_req8 = await ledger.build_node_request(steward_node_5_did, base_58_node_6, json.dumps(data_node6))
-#     try:
-#         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, steward_node_5_did, node_req8)
-#     except IndyError as E:
-#         if E.error_code == 304:
-#             MyVars.test_results['Step8'] = True
-#             print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_5 can only add one node by trying to add another one\n" + Colors.ENDC))
-#         else:
-#             print(str(E))
-# 
-#     # 9. Verify that a steward can only add one node by trying to add another one.
-#     print(Colors.HEADER + "\n\t9. Verify that a Steward_node_6 can add a validator node\n" + Colors.ENDC)
-#     node_req9 = await ledger.build_node_request(steward_node_6_did, base_58_node_6, json.dumps(data_node6))
-#     try:
-#         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, steward_node_6_did, node_req9)
-#     except IndyError as E:
-#         if E.error_code == 304:
-#             MyVars.test_results['Step9'] = True
-#             print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_6 can add a validator node\n" + Colors.ENDC))
-#         else:
-#             print(str(E))
+    # 8. Verify that a steward can only add one node by trying to add another one.
+    print(Colors.HEADER + "\n\t8. Verify that a Steward_node_5 can only add one node by trying to add another one\n" + Colors.ENDC)
+    node_req8 = await ledger.build_node_request(steward_node_5_did, base_58_node_6, json.dumps(data_node6))
+    try:
+        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, steward_node_5_did, node_req8)
+    except IndyError as E:
+        if E.error_code == 304:
+            MyVars.test_results['Step8'] = True
+            print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_5 can only add one node by trying to add another one\n" + Colors.ENDC))
+        else:
+            print(str(E))
 
-#     # ==================================================================================================================
-#     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#     # ==================================================================================================================
-#     # 4. Close wallet and pool ------------------------------------------------------------------------------
-#     print(Colors.HEADER + "\n\t==Clean up==\n\t4. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
-#     try:
-#         await Common.clean_up_pool_and_wallet(MyVars.pool_name, MyVars.pool_handle, MyVars.wallet_name, MyVars.wallet_handle)
-#     except IndyError as E:
-#         print(Colors.FAIL + str(E) + Colors.ENDC)
-# 
-#     await asyncio.sleep(0)
+    # 9. Verify that a steward can only add one node by trying to add another one.
+    print(Colors.HEADER + "\n\t9. Verify that a Steward_node_6 can add a validator node\n" + Colors.ENDC)
+    node_req9 = await ledger.build_node_request(steward_node_6_did, base_58_node_6, json.dumps(data_node6))
+    try:
+        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, steward_node_6_did, node_req9)
+    except IndyError as E:
+        if E.error_code == 304:
+            MyVars.test_results['Step9'] = True
+            print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_6 can add a validator node\n" + Colors.ENDC))
+        else:
+            print(str(E))
+
+    # ==================================================================================================================
+    #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # ==================================================================================================================
+    # 10. Close wallet and pool ------------------------------------------------------------------------------
+    print(Colors.HEADER + "\n\t==Clean up==\n\t10. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
+    try:
+        await Common.clean_up_pool_and_wallet(MyVars.pool_name, MyVars.pool_handle, MyVars.wallet_name, MyVars.wallet_handle)
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+    await asyncio.sleep(0)
+
+    # 11. Remove node 5,6 ------------------------------------------------------------------------------
+    print(Colors.HEADER + "\nt11. Remove node 5 and 6\n" + Colors.ENDC)
+    try:
+        print(Colors.OKBLUE + "TODO" + Colors.ENDC)
+    except IndyError as E:
+        print(Colors.FAIL + str(E) + Colors.ENDC)
+    await asyncio.sleep(0)
 
     logger.info("Test Scenario 07 -> completed")
 
