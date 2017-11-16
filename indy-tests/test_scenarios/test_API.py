@@ -13,8 +13,9 @@ import random
 from indy import pool, ledger
 from indy.error import IndyError
 from distutils.command.config import config
+from asyncio.tasks import sleep
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from utils.paramiko import Paramiko
+from utils.paramiko import Paramiko, TerminalEnv
 
 
 
@@ -50,11 +51,15 @@ logging.basicConfig(level=logging.INFO)
 
 
 def test_paramiko():
-    cmd = "ssh validator01"
+    ip_node5 = "192.168.171.158"
+    user_name = "vagrant"
     password = "vagrant"
+    paramk = Paramiko()
+    terminal = paramk.connect(ip_node5, user_name, password)
+    cmd = "echo 'hello'"
+    paramk.run(terminal, cmd)
 
-    Paramiko.run(cmd)
-    Paramiko.run(password)
+#     paramk.close_connection(terminal)
 
 
 test_paramiko()
@@ -76,13 +81,13 @@ test_paramiko()
 #         print("stderr: " + str(p.stderr))
 #         os.system(password)
 
-def test_start_stop_node():
-        p = subprocess.Popen(["systemctl start sovrin-node"], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
-        out, err = p.communicate(timeout=10)
-        print("[out:%s][err:%s]" % (str(out), str(err)))
-
-
-test_start_stop_node()
+# def test_start_stop_node():
+#         p = subprocess.Popen(["systemctl start sovrin-node"], shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+#         out, err = p.communicate(timeout=10)
+#         print("[out:%s][err:%s]" % (str(out), str(err)))
+# 
+# 
+# test_start_stop_node()
 
 
 
