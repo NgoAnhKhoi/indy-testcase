@@ -31,32 +31,27 @@ class MyVars:
     begin_time = 0
     pool_handle = 0
     # Need the path to the pool transaction file location
-    pool_genesis_txn_file = Constant.pool_genesis_txn_file
-    pool_genesis_bak = Constant.original_pool_genesis_txn_file + str(random.randrange(10, 1000, 2))
+    pool_genesis_txn_file = os.path.expanduser('~') + os.sep + "Git/indy-testcase/khoi"
 
-    domain_transactions_sandbox_genesis = Constant.domain_transactions_sandbox_genesis
-    domain_transactions_sandbox_genesis_bak = Constant.domain_transactions_sandbox_genesis + str(random.randrange(10, 1000, 2))
+#     domain_transactions_sandbox_genesis = Constant.domain_transactions_sandbox_genesis
+#     domain_transactions_sandbox_genesis_bak = Constant.domain_transactions_sandbox_genesis + str(random.randrange(10, 1000, 2))
 
     wallet_handle = 0
     test_report = TestReport("Test_scenario_07_Add_Node")
-    pool_name = generate_random_string("test_pool")
-    wallet_name = generate_random_string("test_wallet")
+    pool_name = generate_random_string("test_pool", size=32)
+    wallet_name = generate_random_string("test_wallet", size=32)
     debug = False
-    test_results = {'Step4': False, 'Step5': False, 'Step6': False, 'Step7': False,'Step8': False, 'Step9': False}
+    test_results = {'Step3': False, 'Step4': False, 'Step5': False, 'Step6': False, 'Step7': False, 'Step8': False, 'Step9': False}
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.ERROR)
 
 
-def command(command_str):
-    os.system(command_str)
-
-
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
     print(Colors.HEADER + "\nPrecondition. Clean up pools and wallets\n" + Colors.ENDC)
-    Common.clean_up_pool_and_wallet_files(MyVars.pool_name, MyVars.wallet_name)
+    Common.clean_up_pool_and_wallet_files()
 
 
 async def test_scenario_07_add_node():
@@ -213,17 +208,15 @@ async def test_scenario_07_add_node():
         else:
             print(str(E))
 
-    # 9. Verify that a steward can only add one node by trying to add another one.
+    # 9. Verify that a Steward_node_6 can add a validator node.
     print(Colors.HEADER + "\n\t9. Verify that a Steward_node_6 can add a validator node\n" + Colors.ENDC)
     node_req9 = await ledger.build_node_request(steward_node_6_did, base_58_node_6, json.dumps(data_node6))
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, steward_node_6_did, node_req9)
+        MyVars.test_results['Step9'] = True
+        print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_6 can add a validator node\n" + Colors.ENDC))
     except IndyError as E:
-        if E.error_code == 304:
-            MyVars.test_results['Step9'] = True
-            print(Colors.OKGREEN + ("::PASS::Validated that a Steward_node_6 can add a validator node\n" + Colors.ENDC))
-        else:
-            print(str(E))
+        print(str(E))
 
     # ==================================================================================================================
     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -232,14 +225,6 @@ async def test_scenario_07_add_node():
     print(Colors.HEADER + "\n\t==Clean up==\n\t10. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
     try:
         await Common.clean_up_pool_and_wallet(MyVars.pool_name, MyVars.pool_handle, MyVars.wallet_name, MyVars.wallet_handle)
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-    await asyncio.sleep(0)
-
-    # 11. Remove node 5,6 ------------------------------------------------------------------------------
-    print(Colors.HEADER + "\nt11. Remove node 5 and 6\n" + Colors.ENDC)
-    try:
-        print(Colors.OKBLUE + "TODO" + Colors.ENDC)
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
     await asyncio.sleep(0)
