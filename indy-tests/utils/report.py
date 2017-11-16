@@ -114,7 +114,7 @@ class TestReport:
     def change_result_dir(new_dir: str):
         if not new_dir.endswith("/"):
             new_dir += "/"
-        TestReport.result_dir = new_dir
+        TestReport.__result_dir = new_dir
 
 
 
