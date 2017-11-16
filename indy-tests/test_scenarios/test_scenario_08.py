@@ -25,11 +25,8 @@ class MyVars:
     wallet_name = "test_wallet08"
     test_results = {"Step 1": False, "Step 2": False, "Step 3": False, "Step 4": False,
                     "Step 5": False, "Step 6": False, "Step 7": False, "Step 8": False, "Step 9": False,
-                    "Step 10": False, "Step 13": False, "Step 14": False,
-                    "Step 15": False, "Step 16": False, "Step 17": False, "Step 18": False, "Step 19": False,
-                    "Step 20": False, "Step 21": False, "Step 22": False, "Step 23": False, "Step 24": False,
-                    "Step 25": False, "Step 26": False, "Step 27": False, "Step 28": False, "Step 29": False,
-                    "Step 30": False, "Step 31": False, "Step 32": False, "Step 33": False}
+                    "Step 10": False, "Step 13": False,"Step 11": False, "Step 12": False, "Step 14": False,
+                    "Step 15": False, "Step 16": False, "Step 17": False, }
     base_58_node_5 = "4Tn3wZMNCvhSTXPcLinQDnHyj56DTLQtL61ki4jo2Loc"
     base_58_node_6 = "6G9QhQa3HWjRKeRmEvEkLbWWf2t7cw6KLtafzi494G4G"
 
@@ -133,8 +130,8 @@ async def test_08_promote_and_demote_node():
     try:
         node_request = await ledger.build_node_request(default_trustee_did, MyVars.base_58_node_5,
                                                        json.dumps(MyVars.data_demote_node5))
-        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle,
-                                             default_trustee_did, node_request)
+        await ledger.submit_request(MyVars.pool_handle, MyVars.wallet_handle,
+                                    default_trustee_did, node_request)
         temp = True
     except IndyError as E:
         message = "\n{0} - {1}".format("Cannot demote Node5 by default Trustee", str(E))
@@ -145,8 +142,8 @@ async def test_08_promote_and_demote_node():
     try:
         node_request = await ledger.build_node_request(default_trustee_did, MyVars.base_58_node_6,
                                                        json.dumps(MyVars.data_demote_node6))
-        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle,
-                                             default_trustee_did, node_request)
+        await ledger.submit_request(MyVars.pool_handle, MyVars.wallet_handle,
+                                    default_trustee_did, node_request)
         temp = temp and True
     except IndyError as E:
         message = "{0}\n{1} - {2}".format(message, "Cannot demote Node5 by default Trustee", str(E))
