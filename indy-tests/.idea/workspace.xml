@@ -26,9 +26,15 @@
       <file leaf-file-name="test_scenario_07.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_07.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1428">
-              <caret line="86" column="0" lean-forward="true" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="-1411">
+              <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+              <folding>
+                <marker date="1510816893456" expanded="true" signature="12198:12224" ph="..." />
+                <marker date="1510816893456" expanded="true" signature="12198:12274" ph="..." />
+                <marker date="1510816893456" expanded="true" signature="12297:12883" ph="..." />
+                <marker date="1510816893456" expanded="true" signature="12490:12767" ph="..." />
+                <marker date="1510816893456" expanded="true" signature="12550:12767" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -78,8 +84,8 @@
       <file leaf-file-name="test_scenario_08.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_08.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="449">
-              <caret line="461" column="61" lean-forward="true" selection-start-line="461" selection-start-column="61" selection-end-line="461" selection-end-column="61" />
+            <state relative-caret-position="-889">
+              <caret line="45" column="0" lean-forward="true" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -751,9 +757,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_07.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1428">
-          <caret line="86" column="0" lean-forward="true" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="-1411">
+          <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+          <folding>
+            <marker date="1510816893456" expanded="true" signature="12198:12224" ph="..." />
+            <marker date="1510816893456" expanded="true" signature="12198:12274" ph="..." />
+            <marker date="1510816893456" expanded="true" signature="12297:12883" ph="..." />
+            <marker date="1510816893456" expanded="true" signature="12490:12767" ph="..." />
+            <marker date="1510816893456" expanded="true" signature="12550:12767" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -775,8 +787,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_scenarios/test_scenario_08.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="461" column="61" lean-forward="true" selection-start-line="461" selection-start-column="61" selection-end-line="461" selection-end-column="61" />
+        <state relative-caret-position="-889">
+          <caret line="45" column="0" lean-forward="true" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>

@@ -39,9 +39,9 @@ class MyVars:
                       'node_port': 9701, 'services': ['VALIDATOR']}
 
     data_promote_node5 = {'alias': 'Node5', 'services': ['VALIDATOR']}
-    data_demote_node5 = {'alias': 'Node6', 'services': []}
+    data_demote_node5 = {'alias': 'Node5', 'services': []}
 
-    data_promote_node6 = {'alias': 'Node5', 'services': ['VALIDATOR']}
+    data_promote_node6 = {'alias': 'Node6', 'services': ['VALIDATOR']}
     data_demote_node6 = {'alias': 'Node6', 'services': []}
 
 
