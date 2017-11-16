@@ -130,8 +130,8 @@ async def test_08_promote_and_demote_node():
     try:
         node_request = await ledger.build_node_request(default_trustee_did, MyVars.base_58_node_5,
                                                        json.dumps(MyVars.data_demote_node5))
-        await ledger.submit_request(MyVars.pool_handle, MyVars.wallet_handle,
-                                    default_trustee_did, node_request)
+        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle,
+                                             default_trustee_did, node_request)
         temp = True
     except IndyError as E:
         message = "\n{0} - {1}".format("Cannot demote Node5 by default Trustee", str(E))
@@ -142,8 +142,8 @@ async def test_08_promote_and_demote_node():
     try:
         node_request = await ledger.build_node_request(default_trustee_did, MyVars.base_58_node_6,
                                                        json.dumps(MyVars.data_demote_node6))
-        await ledger.submit_request(MyVars.pool_handle, MyVars.wallet_handle,
-                                    default_trustee_did, node_request)
+        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle,
+                                             default_trustee_did, node_request)
         temp = temp and True
     except IndyError as E:
         message = "{0}\n{1} - {2}".format(message, "Cannot demote Node5 by default Trustee", str(E))
