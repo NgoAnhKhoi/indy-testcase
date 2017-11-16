@@ -51,13 +51,14 @@ logging.basicConfig(level=logging.INFO)
 
 
 def test_paramiko():
-    ip_node5 = "192.168.171.158"
+    ip_node5 = "10.20.30.205"
     user_name = "vagrant"
     password = "vagrant"
     paramk = Paramiko()
     terminal = paramk.connect(ip_node5, user_name, password)
-    cmd = "echo 'hello'"
-    paramk.run(terminal, cmd)
+    cmd = "echo 'hello'\n"
+    stdout, stderr = paramk.run(terminal, cmd, 5)
+    print("[stdout:%s], [stderr:%s]" % (str(stdout), str(stderr)))
 
 #     paramk.close_connection(terminal)
 
