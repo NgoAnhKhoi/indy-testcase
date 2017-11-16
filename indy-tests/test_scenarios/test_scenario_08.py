@@ -43,7 +43,8 @@ class MyVars:
                          'node_port': 9701, 'services': []}
 
     data_promote_node6 = {'alias': 'Node6', 'services': ['VALIDATOR']}
-    data_demote_node6 = {'alias': 'Node6', 'services': []}
+    data_demote_node6 = {'client_port': 9702, 'client_ip': '10.20.30.206', 'alias': 'Node6', 'node_ip': '10.20.30.206',
+                         'node_port': 9701, 'services': []}
 
 
 def test_prep():
@@ -142,8 +143,8 @@ async def test_08_promote_and_demote_node():
 
     # Demote Node6
     try:
-        node_request = await ledger.build_node_request(default_trustee_did, MyVars.base_58_node_5,
-                                                       json.dumps(MyVars.data_demote_node5))
+        node_request = await ledger.build_node_request(default_trustee_did, MyVars.base_58_node_6,
+                                                       json.dumps(MyVars.data_demote_node6))
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle,
                                              default_trustee_did, node_request)
         temp = temp and True
