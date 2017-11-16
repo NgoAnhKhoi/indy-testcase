@@ -38,8 +38,8 @@ class MyVars:
     data_add_node6 = {'client_port': 9702, 'client_ip': '10.20.30.206', 'alias': 'Node6', 'node_ip': '10.20.30.206',
                       'node_port': 9701, 'services': ['VALIDATOR']}
 
-    data_promote_node5 = {'node_port': 9701,'alias': 'Node5', 'services': ['VALIDATOR']}
-    data_demote_node5 = {'alias': 'Node5', 'node_ip': '10.20.30.205', 'services': []}
+    data_promote_node5 = {'alias': 'Node5', 'services': ['VALIDATOR']}
+    data_demote_node5 = {'node_port': 9701, 'alias': 'Node5', 'node_ip': '10.20.30.205', 'services': []}
 
     data_promote_node6 = {'alias': 'Node6', 'services': ['VALIDATOR']}
     data_demote_node6 = {'node_port': 9701, 'alias': 'Node6', 'node_ip': '10.20.30.206', 'services': []}
