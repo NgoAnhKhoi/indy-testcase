@@ -14,6 +14,7 @@ import time
 import random
 from indy import signus, wallet, pool, ledger
 from indy.error import IndyError
+import abc
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import *
 from utils.constant import Colors, Constant, Roles
