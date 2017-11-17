@@ -31,7 +31,7 @@ class MyVars:
     pool_name = generate_random_string("test_pool")
     wallet_name = generate_random_string("test_wallet")
     debug = False
-    test_name = "test_scenario_11_special_case_trust_anchor_role"
+    test_name = "Test_Scenario_11_Special_Case_Trust_Anchor_Role"
     test_report = TestReport(test_name)
     test_results = {"Step1": False, "Step2": False, "Step3": False, "Step4": False,
                     "Step5": False, "Step6": False, "Step7": False, "Step8": False,
