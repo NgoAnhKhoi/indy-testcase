@@ -151,7 +151,7 @@ async def test_09_remove_and_add_role():
         return
 
     # 3. Create wallet.
-    step = "Step03: Create and open wallet"
+    step = "Step03. Create and open wallet"
     print(Colors.HEADER + "\n\t{}\n".format(step) + Colors.ENDC)
     try:
         await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
