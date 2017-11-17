@@ -18,7 +18,7 @@ class KeyWord:
     TEST_CASE = "testcase"
     RESULT = "result"
     START_TIME = "starttime"
-#    DURATION = "duration"
+    DURATION = "duration"
     RUN = "run"
     STEP = "step"
     STATUS = "status"
