@@ -18,7 +18,7 @@ class KeyWord:
     TEST_CASE = "testcase"
     RESULT = "result"
     START_TIME = "starttime"
-    DURATION = "duration"
+#    DURATION = "duration"
     RUN = "run"
     STEP = "step"
     STATUS = "status"
@@ -70,13 +70,6 @@ class TestReport:
         self.__test_result[KeyWord.TEST_CASE] = test_case_name
         self.__test_result[KeyWord.RESULT] = Status.PASSED
         self.__test_result[KeyWord.START_TIME] = str(time.strftime("%Y%m%d_%H-%M-%S"))
-        self.__result_dir = self.__create_result_folder()
-        self.__file_path = "{0}/{1}_{2}".format(self.__result_dir, self.__test_result[KeyWord.TEST_CASE],
-                                                self.__test_result[KeyWord.START_TIME])
-        self.__log = open(self.__file_path + ".log", "w")
-        self.__original_stdout = sys.stdout
-        sys.stdout = Printer(sys.stdout, self.__log)
-        logging.basicConfig(stream=sys.stdout, level=TestReport.__log_level)
 
     def set_result(self, result):
         """
@@ -104,6 +97,18 @@ class TestReport:
         """
         temp = {KeyWord.STEP: step_summary, KeyWord.STATUS: status, KeyWord.MESSAGE: message}
         self.__run.append(temp)
+
+    def setup_json_report(self):
+        """
+        Create the result folder for json and log file
+        """
+        self.__result_dir = self.__create_result_folder()
+        self.__file_path = "{0}/{1}_{2}".format(self.__result_dir, self.__test_result[KeyWord.TEST_CASE],
+                                                self.__test_result[KeyWord.START_TIME])
+        self.__log = open(self.__file_path + ".log", "w")
+        self.__original_stdout = sys.stdout
+        sys.stdout = Printer(sys.stdout, self.__log)
+        logging.basicConfig(stream=sys.stdout, level=TestReport.__log_level)
 
     def write_result_to_file(self):
         """
@@ -168,9 +173,10 @@ class TestReport:
 
         :param new_dir:
         """
-        if not new_dir.endswith("/"):
-            new_dir += "/"
-        TestReport.__result_dir = new_dir
+        if new_dir != "":
+            if not new_dir.endswith("/"):
+                new_dir += "/"
+            TestReport.__result_dir = new_dir
 
 
 class HTMLReport:
@@ -366,12 +372,19 @@ class HTMLReport:
 
     def make_suite_name(self, suite_name):
         # os.path.basename(__file__)
+        """
+        Generating the statictics table
+        :param suite_name:
+        """
         time = datetime.datetime.now().time()
         date = datetime.datetime.today().strftime('%Y%m%d')
         HTMLReport.__suite_name = HTMLReport.__suite_name.replace("s_name", "Summary_" + date + "_" + str(time))
         HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", suite_name + "_" + date + "_" + str(time))
 
     def make_configurate_table(self):
+        """
+        Generating the configuration table
+        """
         HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("host_name", socket.gethostname())
         HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("os_name", os.name + platform.system() + platform.release())
         HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("v_plenum", "1.1.27")
@@ -384,8 +397,12 @@ class HTMLReport:
         # dpkg -l | grep 'sovrin'
 
     def make_report_content(self, path_to_json):
+        """
+        Generating the report content by reading all json file within the inputted path
+        :param path_to_json:
+        """
+
         # this finds our json files
-        # path_to_json = 'Acceptance_Test/'
         json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
         passed = 0
         failed = 0
@@ -451,6 +468,12 @@ class HTMLReport:
         HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("total_time", str(total))
 
     def make_html_report(self, json_folder, suite_name):
+        """
+        Generating completely the report.
+        :param json_folder:
+        :param suite_name:
+        """
+
         self.make_suite_name(suite_name)
         self.make_configurate_table()
         self.make_report_content(json_folder)
@@ -466,3 +489,19 @@ class HTMLReport:
 
     def __init__(self):
         print("Generating a html report...")
+
+    def create_result_folder(self, test_name):
+        """
+        Creating the folder for html summary report.
+        :param test_name:
+        :return: the actual folder path
+        """
+        temp_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
+        temp_dir = "{0}{1}_{2}".format(temp_dir, test_name, str(time.strftime("%Y%m%d_%H-%M-%S")))
+        if not os.path.exists(temp_dir):
+            try:
+                os.makedirs(temp_dir)
+            except IOError as E:
+                print(str(E))
+                raise E
+        return temp_dir
