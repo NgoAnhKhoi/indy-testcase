@@ -44,10 +44,11 @@ logging.basicConfig(level=logging.INFO)
 def run_command(cmds):
     host_ip = "192.168.171.101"
     user_name = "vagrant"
-    pass_word = "vagrant" 
+    pass_word = "vagrant"
     paramk = Paramiko.connect(host_ip, user_name, pass_word)
     paramk.run(*cmds)
     paramk.close_connection()
+
 
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
@@ -128,5 +129,5 @@ def test():
 
     final_result()
 
-test()
 
+test()

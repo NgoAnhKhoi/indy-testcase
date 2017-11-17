@@ -39,7 +39,7 @@ def test_prep():
 
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
           + Colors.ENDC)
-    Common.clean_up_pool_and_wallet_files(MyVars.pool_name, MyVars.wallet_name)
+    Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def add_nym(submitter_did, target_did, ver_key, alias, role, can_add):

@@ -45,7 +45,7 @@ class Common():
         await Common().delete_pool_and_wallet(pool_name, wallet_name)
 
     @staticmethod
-    def clean_up_pool_and_wallet_folder(pool_name="", wallet_name=""):
+    def clean_up_pool_and_wallet_folder(pool_name, wallet_name):
         """
         Delete pool and wallet folder without using lib-indy.
 
@@ -74,13 +74,14 @@ class Common():
         """
         Build a nym request and send it.
 
-        :param pool_handle The handle of the pool.
-        :param wallet_handle: The handle of the wallet.
+        :param pool_handle: pool handle returned by indy_open_pool_ledger.
+        :param wallet_handle: wallet handle returned by indy_open_wallet.
         :param submitter_did: Id of Identity stored in secured Wallet.
         :param target_did: Id of Identity stored in secured Wallet.
         :param ver_key: verification key
         :param alias: alias
         :param role: Role of a user NYM record
+        :raise Exception if the method has error.
         """
         nym_txn_req = await ledger.build_nym_request(submitter_did, target_did, target_verkey, alias, role)
         try:
@@ -144,6 +145,13 @@ class Common():
         return wallet_handle
 
     async def close_pool_and_wallet(self, pool_handle, wallet_handle):
+        """
+        Close the pool and wallet with the pool and wallet handle.
+
+        :param pool_handle: pool handle returned by indy_open_pool_ledger.
+        :param wallet_handle: wallet handle returned by indy_open_wallet.
+        :raise Exception if the method has error.
+        """
         print(Colors.HEADER + "\nClose pool\n" + Colors.ENDC)
         try:
             await pool.close_pool_ledger(pool_handle)
@@ -160,6 +168,13 @@ class Common():
         await asyncio.sleep(0)
 
     async def delete_pool_and_wallet(self, pool_name, wallet_name):
+        """
+        Delete the pool and wallet with the pool and wallet name.
+
+        :param pool_name: Name of the pool that corresponds to this wallet.
+        :param wallet_name: Name of the wallet to delete.
+        :raise Exception if the method has error.
+        """
         print(Colors.HEADER + "\nDelete pool\n" + Colors.ENDC)
         try:
             await pool.delete_pool_ledger_config(pool_name)

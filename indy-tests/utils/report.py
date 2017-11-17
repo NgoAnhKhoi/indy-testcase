@@ -368,14 +368,14 @@ class HTMLReport:
             </tr>
             """
 
-    def make_suite_name(seft, suite_name):
+    def make_suite_name(self, suite_name):
         # os.path.basename(__file__)
         time = datetime.datetime.now().time()
         date = datetime.datetime.today().strftime('%Y%m%d')
         HTMLReport.__suite_name = HTMLReport.__suite_name.replace("s_name", "Summary_" + date + "_" + str(time))
         HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", suite_name + "_" + date + "_" + str(time))
 
-    def make_configurate_table(seft):
+    def make_configurate_table(self):
         HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("host_name", socket.gethostname())
         HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("os_name", os.name + platform.system() + platform.release())
         HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("v_plenum", "1.1.27")
@@ -387,7 +387,7 @@ class HTMLReport:
         # dpkg -l | grep 'indy-node'
         # dpkg -l | grep 'sovrin'
 
-    def make_report_content(seft, path_to_json):
+    def make_report_content(self, path_to_json):
         # this finds our json files
         # path_to_json = 'Acceptance_Test/'
         json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
@@ -454,10 +454,10 @@ class HTMLReport:
         HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("failed_num", str(failed))
         HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("total_time", str(total))
 
-    def make_html_report(seft, json_folder, suite_name):
-        seft.make_suite_name(suite_name)
-        seft.make_configurate_table()
-        seft.make_report_content(json_folder)
+    def make_html_report(self, json_folder, suite_name):
+        self.make_suite_name(suite_name)
+        self.make_configurate_table()
+        self.make_report_content(json_folder)
 
         # Write to file.
         print("Refer to " + json_folder + '/summary.html')
