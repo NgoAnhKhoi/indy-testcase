@@ -98,11 +98,9 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     if MyVars.debug:
         input(Colors.WARNING + "\n\nWallet handle is %s" % str(MyVars.wallet_handle) + Colors.ENDC)
 
-    # 4. Create DIDs - cli command = new key with seed ----------------------------------------------------
+    # 4. Create DIDs ----------------------------------------------------
     print(Colors.HEADER + "\n\t4. Create DID's\n" + Colors.ENDC)
     try:
-        # Changed to not use seeds so the test can run more than once on the same pool except for the default
-        # trustee did
         (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": Constant.seed_default_trustee}))
 
@@ -188,10 +186,10 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     await asyncio.sleep(0)
 
     # 6. Using the TrustAnchor create a Trustee (Trust Anchor should not be able to create Trustee) --------------------
+    # Create a dict for the parts of this test, use this to determine if everything worked
     parts6 = {'trustee': False, 'trusteenym': False}
-
     print(Colors.HEADER + "\n\t6. Use TrustAnchor1 to create a Trustee\n" + Colors.ENDC)
-    print("\nbefore build_nym_request\n")
+
     nym_txn_req6 = await ledger.build_nym_request(trustanchor1_did, trustee2_did, trustee2_verkey, None, Roles.TRUSTEE)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req6)

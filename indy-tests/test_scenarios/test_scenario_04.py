@@ -8,7 +8,7 @@ import sys
 import asyncio
 import json
 import os.path
-import logging.handlers
+import logging
 import time
 from indy import signus
 from indy.error import IndyError

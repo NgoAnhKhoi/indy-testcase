@@ -20,7 +20,6 @@ from utils.report import HTMLReport
 
 class MyVars:
     """  Needed some global variables. """
-
     pool_handle = 0
     pool_genesis_txn_file = Constant.pool_genesis_txn_file
     original_pool_genesis_txn_file = Constant.original_pool_genesis_txn_file
@@ -42,6 +41,11 @@ logging.basicConfig(level=logging.INFO)
 
 
 def run_command(cmds):
+    """
+    Execute commands via paramiko lib.
+
+    :param cmds: a list command will be run.
+    """
     host_ip = "192.168.171.101"
     user_name = "vagrant"
     pass_word = "vagrant"
