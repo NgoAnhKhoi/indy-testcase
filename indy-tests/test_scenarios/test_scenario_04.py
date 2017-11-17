@@ -9,9 +9,8 @@ import asyncio
 import json
 import os.path
 import logging.handlers
-# import shutil
 import time
-from indy import signus, wallet, pool
+from indy import signus
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import generate_random_string
@@ -35,29 +34,14 @@ class MyVars:
     pool_name = generate_random_string("test_pool")
     wallet_name = generate_random_string("test_wallet")
     debug = False
-    test_results = {'Step 2': False, 'Step 3': False}
+    test_results = {'Step2': False, 'Step3': False}
 
-# logger = logging.getLogger(__name__)
-# logging.basicConfig(level=logging.INFO)
-
-
-log_tm = time.strftime("%d-%m-%Y_%H-%M-%S")
-name, ext = os.path.splitext(sys.argv[0])
-log_name = str(name + '--test_' + log_tm + '.log')
-
-# Setup logger with an output level
-logger = logging.getLogger('LogiGear_log_test')
-logger.setLevel(logging.INFO)
-
-
-# Add the log message handler to the logger, set the max size for the log and the count for splitting the log
-handler = logging.handlers.RotatingFileHandler(log_name, maxBytes=5000000, backupCount=10)
-logger.addHandler(handler)
-
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
-    Common.clean_up_pool_and_wallet_files()
+    Common.clean_up_pool_and_wallet_files(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def test_scenario_04_keyrings_wallets():
@@ -65,7 +49,7 @@ async def test_scenario_04_keyrings_wallets():
     seed_default_trustee = "000000000000000000000000Trustee1"
 
     # 1. Create and open pool Ledger  ---------------------------------------------------------
-    print(Colors.HEADER + "\n\t1.  Create and open pool Ledger\n" + Colors.ENDC)
+    print(Colors.HEADER + "\n\Step1.  Create and open pool Ledger\n" + Colors.ENDC)
     try:
         MyVars.pool_handle, MyVars.wallet_handle = await Common.prepare_pool_and_wallet(MyVars.pool_name, MyVars.wallet_name, MyVars.pool_genesis_txn_file)
     except IndyError as E:
@@ -76,12 +60,12 @@ async def test_scenario_04_keyrings_wallets():
 
     # 2. verify wallet was created in .indy/wallet
     try:
-        print(Colors.HEADER + "\n\t2. Verifying the new wallet was created\n" + Colors.ENDC)
+        print(Colors.HEADER + "\n\Step2. Verifying the new wallet was created\n" + Colors.ENDC)
         work_dir = os.path.expanduser('~') + os.sep + ".indy"
         wallet_path = work_dir + "/wallet/" + MyVars.wallet_name
         result = os.path.exists(wallet_path)
         if result:
-            MyVars.test_results['Step 2'] = True
+            MyVars.test_results['Step2'] = True
             print("===PASSED===")
     except IndyError as E:
         MyVars.test_report.set_test_failed()
@@ -91,13 +75,13 @@ async def test_scenario_04_keyrings_wallets():
     await asyncio.sleep(0)
 
     # 3. create DID to check the new wallet work well.
-    print(Colors.HEADER + "\n\t3. Create DID to check the new wallet work well\n" + Colors.ENDC)
+    print(Colors.HEADER + "\n\Step3. Create DID to check the new wallet work well\n" + Colors.ENDC)
     try:
         # create and store did to check the new wallet work well.
         (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
         if default_trustee_did:
-            MyVars.test_results['Step 3'] = True
+            MyVars.test_results['Step3'] = True
             print("===PASSED===")
     except IndyError as E:
         MyVars.test_report.set_test_failed()

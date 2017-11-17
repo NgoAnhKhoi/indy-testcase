@@ -24,8 +24,3 @@ def generate_random_string(prefix="", suffix="", size=20):
         print("Warning: Length of prefix and suffix more than %s chars" % str(size))
     result = str(prefix) + random_str + str(suffix)
     return result
-
-def copy_file(file_des, file_target):
-    from .constant import Constant
-    import os
-    os.system('cp ' + file_des + " " + file_target)

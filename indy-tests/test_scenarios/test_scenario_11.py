@@ -8,7 +8,6 @@ import sys
 import asyncio
 import json
 import logging
-import shutil
 import os
 from indy import ledger, signus, wallet, pool
 from indy.error import IndyError
@@ -16,6 +15,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import generate_random_string
 from utils.constant import Colors, Constant, Roles
 from utils.report import TestReport
+from utils.common import Common
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
 # -----------------------------------------------------------------------------------------
@@ -42,25 +42,7 @@ logging.basicConfig(level=logging.INFO)
 
 def test_prep():
     """  Delete all files out of the .sovrin/pool and .sovrin/wallet directories  """
-    import os
-    print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
-    x = os.path.expanduser('~')
-    work_dir = x + os.sep + ".indy"
-
-    if os.path.exists(work_dir + "/pool/" + MyVars.pool_name):
-        try:
-            shutil.rmtree(work_dir + "/pool/" + MyVars.pool_name)
-        except IOError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    if os.path.exists(work_dir + "/wallet/" + MyVars.wallet_name):
-        try:
-            shutil.rmtree(work_dir + "/wallet/" + MyVars.wallet_name)
-        except IOError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    if MyVars.debug:
-        input(Colors.WARNING + "Pause after test prep\n" + Colors.ENDC)
+    Common.clean_up_pool_and_wallet_files(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles():
@@ -353,7 +335,6 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
 
     # 11. Verify that a TrustAnchor1 cannot create another TrustAnchor3 -------------------------------------
     print(Colors.HEADER + "\n\t11. Verify TrustAnchor1 cannot create a TrustAnchor3\n" + Colors.ENDC)
-    parts11 = {'TrustAnchor3': False, 'NYM': False, 'RandomUser1': False}
     nym_txn_req11 = await ledger.build_nym_request(trustanchor1_did, trustanchor3_did, trustanchor3_verkey, None,
                                                    Roles.TRUST_ANCHOR)
     try:
