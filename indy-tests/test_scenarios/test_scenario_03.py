@@ -7,10 +7,10 @@ import shutil
 import time
 from indy import pool, signus, wallet
 from indy.error import IndyError
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Colors, Constant
 from utils.report import TestReport, Status, HTMLReport
+from utils.common import Common
 
 
 class MyVars:
@@ -29,25 +29,16 @@ class MyVars:
     debug = False
     seed_steward01 = "000000000000000000000000Steward1"
 
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
 def test_precondition():
     # Precondition steps:
-    print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
-
-    if os.path.exists(Constant.work_dir + "/wallet/" + MyVars.wallet_name):
-        try:
-            shutil.rmtree(Constant.work_dir + "/wallet/" + MyVars.wallet_name)
-        except IOError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    if os.path.exists(Constant.work_dir + "/pool/" + MyVars.pool_name):
-        try:
-            shutil.rmtree(Constant.work_dir + "/pool/" + MyVars.pool_name)
-        except IOError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
+    print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
+          + Colors.ENDC)
+    Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def test_scenario_03_check_connection():
@@ -201,11 +192,13 @@ def final_result():
     if folder.find(MyVars.test_name) != -1:
         HTMLReport().make_html_report(folder, MyVars.test_name)
 
+
 def test(folder_path=""):
-    #Set up the report
+    # Set up the report
+
     MyVars.begin_time = time.time()
     MyVars.test_report.change_result_dir(folder_path)
-    MyVars.test_report.setup_json_report();
+    MyVars.test_report.setup_json_report()
 
     test_precondition()
 
@@ -214,6 +207,7 @@ def test(folder_path=""):
     loop.close()
 
     final_result()
+
 
 if __name__ == '__main__':
     test()
