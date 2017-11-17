@@ -10,6 +10,7 @@ from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Constant, Colors, Roles
 from utils.report import TestReport, Status
+from utils.common import Common
 
 
 class MyVars:
@@ -22,33 +23,42 @@ class MyVars:
     wallet_handle = 0
     pool_name = "pool_genesis_test9"
     wallet_name = "test_wallet9"
-    test_results = {"Step 1": False, "Step 2": False, "Step 3": False, "Step 4": False,
-                    "Step 5": False, "Step 6": False, "Step 7": False, "Step 8": False, "Step 9": False,
-                    "Step 10": False, "Step 13": False, "Step 14": False,
-                    "Step 15": False, "Step 16": False, "Step 17": False, "Step 18": False, "Step 19": False,
-                    "Step 20": False, "Step 21": False, "Step 22": False, "Step 23": False, "Step 24": False,
-                    "Step 25": False, "Step 26": False, "Step 27": False, "Step 28": False, "Step 29": False,
-                    "Step 30": False, "Step 31": False, "Step 32": False, "Step 33": False}
+    test_results = {"Step 1": False, "Step 2": False, "Step 3": False, "Step 4": False, "Step 5": False,
+                    "Step 6": False, "Step 7": False, "Step 8": False, "Step 9": False, "Step 10": False,
+                    "Step 13": False, "Step 14": False, "Step 15": False, "Step 16": False, "Step 17": False,
+                    "Step 18": False, "Step 19": False, "Step 20": False, "Step 21": False, "Step 22": False,
+                    "Step 23": False, "Step 24": False, "Step 25": False, "Step 26": False, "Step 27": False,
+                    "Step 28": False, "Step 29": False, "Step 30": False, "Step 31": False, "Step 32": False,
+                    "Step 33": False}
 
 
 def test_prep():
+    """
+    Clean up pool and wallet if they are exist.
+    """
+
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
           + Colors.ENDC)
-
-    if os.path.exists(Constant.work_dir + "/wallet/" + MyVars.wallet_name):
-        try:
-            shutil.rmtree(Constant.work_dir + "/wallet/" + MyVars.wallet_name)
-        except IOError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    if os.path.exists(Constant.work_dir + "/pool/" + MyVars.pool_name):
-        try:
-            shutil.rmtree(Constant.work_dir + "/pool/" + MyVars.pool_name)
-        except IOError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
+    Common.clean_up_pool_and_wallet_files(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def add_nym(submitter_did, target_did, ver_key, alias, role, can_add):
+    """
+    Build a NYM request and submit it to ledger
+
+    :param submitter_did:
+    :param target_did:
+    :param ver_key:
+    :param alias:
+    :param role:
+    :param can_add: if the expected result is the NYM can be added, can_add True.
+                    if the expected result is the NYM cannot be added, can_add = False.
+
+    :return: (True, message) if can_add = True and NYM can be added.
+                             if can_add = False and NYM cannot be added.
+             (False, message) if can_add = True and NYM cannot be added.
+                              if can_add = False and NYM can be added.
+    """
     result = False
     e = None
     try:
@@ -68,6 +78,14 @@ async def add_nym(submitter_did, target_did, ver_key, alias, role, can_add):
 
 
 async def get_nym(submitter_did, target_did):
+    """
+    Build and submit a GET NYM request.
+
+    :param submitter_did:
+    :param target_did:
+    :return: (True, message) if can execute GET NYM request.
+             (False, message) if cannot execute GET NYM request.
+    """
     try:
         get_nym_request = await ledger.build_get_nym_request(submitter_did, target_did)
         message = await ledger.submit_request(MyVars.pool_handle, get_nym_request)
@@ -78,6 +96,14 @@ async def get_nym(submitter_did, target_did):
 
 
 def check_role_in_retrieved_nym(retrieved_nym, role):
+    """
+    Check if the role in the GET NYM response is what we want.
+
+    :param retrieved_nym:
+    :param role: the role we want to check.
+    :return: True if the role is what we want.
+             False if the role is not what we want.
+    """
     if retrieved_nym is None:
         return False
     nym_dict = json.loads(retrieved_nym)
@@ -92,6 +118,10 @@ def check_role_in_retrieved_nym(retrieved_nym, role):
 
 
 async def test_09_remove_and_add_role():
+    """
+    This function is the main part of test script.
+    There is a bug in this scenario (in step 22, 23 24) so we log a bug here.
+    """
     # Declare all values use in the test
     seed_default_trustee = "000000000000000000000000Trustee1"
 
@@ -487,8 +517,8 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 22"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.set_step_status("Step22. Using default Trustee to remove roles",
-                                           Status.FAILED, message_22[1:])
+        MyVars.test_report.set_step_status("Step22. Using default Trustee to remove roles", Status.FAILED,
+                                           message_22[1:] + "\nBug: https://jira.hyperledger.org/browse/IS-430")
     else:
         MyVars.test_report.set_step_status("Step22. Using default Trustee to remove roles", Status.PASSED)
 
@@ -519,7 +549,8 @@ async def test_09_remove_and_add_role():
     if MyVars.test_results["Step 23"] is False:
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step23. Verify that removed Trustee1 cannot create Trustee or Steward",
-                                           Status.FAILED, message_23[1:])
+                                           Status.FAILED,
+                                           message_23[1:] + "\nBug: https://jira.hyperledger.org/browse/IS-430")
     else:
         MyVars.test_report.set_step_status("Step23. Verify that removed Trustee1 cannot create Trustee or Steward",
                                            Status.PASSED)
@@ -538,7 +569,7 @@ async def test_09_remove_and_add_role():
         if message is None:
             message = "Steward1 can create a TrustAnchor (should fail)"
         MyVars.test_report.set_step_status("Step24. Verify that removed Steward1 cannot create TrustAnchor",
-                                           Status.FAILED, message)
+                                           Status.FAILED, message + "\nBug: https://jira.hyperledger.org/browse/IS-430")
 
     # 25. Using default Trustee to create Trustee1.
     print(Colors.HEADER + "\n\t25.  Using default Trustee to create Trustee1\n" + Colors.ENDC)
