@@ -9,8 +9,8 @@ from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Constant, Colors
 from utils.utils import generate_random_string
-from utils.paramiko import Paramiko
 from utils.report import HTMLReport
+from utils.report import TestReport
 
 
 # -----------------------------------------------------------------------------------------
@@ -32,6 +32,8 @@ class MyVars:
     restore_pool_genesis_file = 'cp ' + original_pool_genesis_txn_file + " " + pool_genesis_txn_file
 
     debug = False
+    test_name = "test_scenario_02_verify_messages_on_connection"
+    test_report = TestReport(test_name)
     the_error_message = "the information needed to connect was not found"
     test_results = {'Step3': False}
 
@@ -40,24 +42,14 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-def run_command(cmds):
-    """
-    Execute commands via paramiko lib.
-
-    :param cmds: a list command will be run.
-    """
-    host_ip = "192.168.171.101"
-    user_name = "vagrant"
-    pass_word = "vagrant"
-    paramk = Paramiko.connect(host_ip, user_name, pass_word)
-    paramk.run(*cmds)
-    paramk.close_connection()
+def run(cmd):
+    os.system(cmd)
 
 
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
-    print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
-    run_command(MyVars.back_up_transacstion_file)
+    print(Colors.HEADER + "\nPrecondition \n" + Colors.ENDC)
+    run(MyVars.back_up_pool_genesis_file)
     open(MyVars.pool_genesis_txn_file, 'w').close()
 
 
@@ -65,26 +57,29 @@ async def test_scenario_02_verify_messages_on_connection():
     logger.info("Test Scenario 02 -> started")
     try:
         # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
-        print(Colors.HEADER + "\n\Step1.  Create Ledger\n" + Colors.ENDC)
+        print(Colors.HEADER + "\nStep1.  Create Ledger\n" + Colors.ENDC)
         pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file)})
         try:
             await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
+            MyVars.test_report.set_test_failed()
+            MyVars.test_report.set_step_status(1, "Create and open pool Ledger", str(E))
             sys.exit[1]
         await asyncio.sleep(0)
 
         # 2. Open pool ledger -----------------------------------------------------------------------------------
-        print(Colors.HEADER + "\n\Step2.  Open pool ledger\n" + Colors.ENDC)
+        print(Colors.HEADER + "\nStep2.  Open pool ledger\n" + Colors.ENDC)
         try:
-            print('%s: ' % str("Failed due to the Bug IS-332: https://jira.hyperledger.org/browse/IS-332") + Colors.FAIL + 'failed' + Colors.ENDC)
+            print(Colors.FAIL + "Failed due to the Bug IS-332" + Colors.ENDC)
+            print(Colors.UNDERLINE + "https://jira.hyperledger.org/browse/IS-332" + Colors.ENDC)
             return False
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
             sys.exit(1)
 
         # 3. verifying the message ------------------------------------------------------------------------
-        print(Colors.HEADER + "\n\Step3. verifying the message\n" + Colors.ENDC)
+        print(Colors.HEADER + "\nStep3. verifying the message\n" + Colors.ENDC)
         try:
             print("TODO after fix IS-332")
         except IndyError as E:
@@ -95,9 +90,10 @@ async def test_scenario_02_verify_messages_on_connection():
     # ==================================================================================================================
     finally:
         # 4. Restore the pool_transactions_sandbox_genesis file ------------------------------------------------------------------------------
-        print(Colors.HEADER + "\n\t==Clean up==\n\t4. Restore the pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
+        print(Colors.HEADER + "\nStep4. Restore the pool_transactions_sandbox_genesis file\n" + Colors.ENDC)
         try:
-            run_command(MyVars.remove_pool_genesis_file, MyVars.restore_pool_genesis_file)
+            run(MyVars.remove_pool_genesis_file)
+            run(MyVars.restore_pool_genesis_file)
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
 

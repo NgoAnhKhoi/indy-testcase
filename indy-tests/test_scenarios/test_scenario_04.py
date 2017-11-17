@@ -43,6 +43,7 @@ logging.basicConfig(level=logging.INFO)
 
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
+    print(Colors.HEADER + "\nPrecondition \n" + Colors.ENDC)
     Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
@@ -51,7 +52,7 @@ async def test_scenario_04_keyrings_wallets():
     seed_default_trustee = "000000000000000000000000Trustee1"
 
     # 1. Create and open pool Ledger  ---------------------------------------------------------
-    print(Colors.HEADER + "\n\Step1.  Create and open pool Ledger\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep1.  Create and open pool Ledger\n" + Colors.ENDC)
     try:
         MyVars.pool_handle, MyVars.wallet_handle = await Common.prepare_pool_and_wallet(MyVars.pool_name, MyVars.wallet_name, MyVars.pool_genesis_txn_file)
     except IndyError as E:
@@ -62,7 +63,7 @@ async def test_scenario_04_keyrings_wallets():
 
     # 2. verify wallet was created in .indy/wallet
     try:
-        print(Colors.HEADER + "\n\Step2. Verifying the new wallet was created\n" + Colors.ENDC)
+        print(Colors.HEADER + "\nStep2. Verifying the new wallet was created\n" + Colors.ENDC)
         work_dir = os.path.expanduser('~') + os.sep + ".indy"
         wallet_path = work_dir + "/wallet/" + MyVars.wallet_name
         result = os.path.exists(wallet_path)
@@ -77,10 +78,10 @@ async def test_scenario_04_keyrings_wallets():
     await asyncio.sleep(0)
 
     # 3. create DID to check the new wallet work well.
-    print(Colors.HEADER + "\n\Step3. Create DID to check the new wallet work well\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep3. Create DID to check the new wallet work well\n" + Colors.ENDC)
     try:
         # create and store did to check the new wallet work well.
-        (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
+        (default_trustee_did, default_trustee_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
         if default_trustee_did:
             MyVars.test_results['Step3'] = True
@@ -94,7 +95,7 @@ async def test_scenario_04_keyrings_wallets():
     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # ==================================================================================================================
     # 4. Close wallet and pool ------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t==Clean up==\n\t4. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep4. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
     try:
         await Common.clean_up_pool_and_wallet(MyVars.pool_name, MyVars.pool_handle, MyVars.wallet_name, MyVars.wallet_handle)
     except IndyError as E:

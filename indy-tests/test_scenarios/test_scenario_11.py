@@ -42,6 +42,7 @@ logging.basicConfig(level=logging.INFO)
 
 def test_prep():
     """  Delete all files out of the .sovrin/pool and .sovrin/wallet directories  """
+    print(Colors.HEADER + "\nPrecondition \n" + Colors.ENDC)
     Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
@@ -58,7 +59,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     seed_trustanchor3 = generate_random_string(prefix="TrustAnchor3", size=32)
 
     # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
-    print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep1.  Create Ledger\n" + Colors.ENDC)
     pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file)})
     try:
         await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
@@ -69,7 +70,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     await asyncio.sleep(0)
 
     # 2. Open pool ledger -----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t2.  Open pool ledger\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep2.  Open pool ledger\n" + Colors.ENDC)
     try:
         pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
         MyVars.pool_handle = pool_handle
@@ -81,7 +82,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         input(Colors.WARNING + "\n\nPoolHandle is %s" % str(MyVars.pool_handle) + Colors.ENDC)
 
     # 3. Create Wallet -----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t3. Create wallet\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep3. Create wallet\n" + Colors.ENDC)
     try:
         await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
     except IndyError as E:
@@ -99,24 +100,24 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         input(Colors.WARNING + "\n\nWallet handle is %s" % str(MyVars.wallet_handle) + Colors.ENDC)
 
     # 4. Create DIDs ----------------------------------------------------
-    print(Colors.HEADER + "\n\t4. Create DID's\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep4. Create DID's\n" + Colors.ENDC)
     try:
-        (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
+        (default_trustee_did, default_trustee_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": Constant.seed_default_trustee}))
 
-        (trustee1_did, trustee1_verkey, trustee1_pk) = await signus.create_and_store_my_did(
+        (trustee1_did, trustee1_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_trustee1}))
-        (trustee2_did, trustee2_verkey, trustee2_pk) = await signus.create_and_store_my_did(
+        (trustee2_did, trustee2_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_trustee2}))
-        (steward1_did, steward1_verkey, steward1_pk) = await signus.create_and_store_my_did(
+        (steward1_did, steward1_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_steward1}))
-        (steward2_did, steward2_verkey, steward2_pk) = await signus.create_and_store_my_did(
+        (steward2_did, steward2_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_steward2}))
-        (trustanchor1_did, trustanchor1_verkey, trustanchor1_pk) = await signus.create_and_store_my_did(
+        (trustanchor1_did, trustanchor1_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_trustanchor1}))
-        (trustanchor2_did, trustanchor2_verkey, trustanchor2_pk) = await signus.create_and_store_my_did(
+        (trustanchor2_did, trustanchor2_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_trustanchor2}))
-        (trustanchor3_did, trustanchor3_verkey, trustanchor3_pk) = await signus.create_and_store_my_did(
+        (trustanchor3_did, trustanchor3_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_trustanchor3}))
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
@@ -132,7 +133,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     # Create a dict for the parts of this test, use this to determine if everything worked
     parts5 = {'trustee1': False, 'trusteenym': False, 'trustanchor1': False, 'trustanchor1nym': False}
 
-    print(Colors.HEADER + "\n\t5. Use default Trustee to create a Trustee\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep5. Use default Trustee to create a Trustee\n" + Colors.ENDC)
     nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, trustee1_did, trustee1_verkey, None, Roles.TRUSTEE)
 
     try:
@@ -143,7 +144,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 5a. Verify GET_NYM for trustee1-----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t5a. Verify get nym for Trustee\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep5a. Verify get nym for Trustee\n" + Colors.ENDC)
     get_nym_txn_req5a = await ledger.build_get_nym_request(default_trustee_did, trustee1_did)
     try:
         await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req5a)
@@ -152,7 +153,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 5b. TrustAnchor1
-    print(Colors.HEADER + "\n\t5b. Use Trustee to create a TrustAnchor\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep5b. Use Trustee to create a TrustAnchor\n" + Colors.ENDC)
     nym_txn_req5b = await ledger.build_nym_request(default_trustee_did, trustanchor1_did, trustanchor1_verkey, None,
                                                    Roles.TRUST_ANCHOR)
     try:
@@ -163,7 +164,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # 5c. Verify GET_NYM for TrustAnchor1-------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t5c. Verify get NYM for TrustAnchor\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep5c. Verify get NYM for TrustAnchor\n" + Colors.ENDC)
     get_nym_txn_req5c = await ledger.build_get_nym_request(default_trustee_did, trustanchor1_did)
     try:
         await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req5c)
@@ -188,7 +189,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     # 6. Using the TrustAnchor create a Trustee (Trust Anchor should not be able to create Trustee) --------------------
     # Create a dict for the parts of this test, use this to determine if everything worked
     parts6 = {'trustee': False, 'trusteenym': False}
-    print(Colors.HEADER + "\n\t6. Use TrustAnchor1 to create a Trustee\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep6. Use TrustAnchor1 to create a Trustee\n" + Colors.ENDC)
 
     nym_txn_req6 = await ledger.build_nym_request(trustanchor1_did, trustee2_did, trustee2_verkey, None, Roles.TRUSTEE)
     try:
@@ -202,7 +203,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
             raise
 
     # 6a. Verify GET_NYM for new Trustee--------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t6a. Verify get NYM for new trustee\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep6a. Verify get NYM for new trustee\n" + Colors.ENDC)
     get_nym_txn_req6a = await ledger.build_get_nym_request(trustanchor1_did, trustee2_did)
     try:
         get_nym_txn_resp6a = await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req6a)
@@ -230,7 +231,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     await asyncio.sleep(0)
 
     # 7. Verify that the TestTrustAnchorTrustee cannot create a new Steward
-    print(Colors.HEADER + "\n\t7. Verify a trustee cannot create a new Steward\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep7. Verify a trustee cannot create a new Steward\n" + Colors.ENDC)
     nym_txn_req7 = await ledger.build_nym_request(trustee2_did, steward1_did, steward1_verkey, None, Roles.STEWARD)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustee2_did, nym_txn_req7)
@@ -251,7 +252,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     # Create a dict for the parts of this test, use this to determine if everything worked
     parts8 = {'trustee1': False, 'trustee2': False}
 
-    print(Colors.HEADER + "\n\t8. Use TrustAnchor to blacklist a Trustee\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep8. Use TrustAnchor to blacklist a Trustee\n" + Colors.ENDC)
     nym_txn_req8 = await ledger.build_nym_request(trustanchor1_did, trustee1_did, trustee1_verkey, None, Roles.NONE)
 
     try:
@@ -268,7 +269,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     await asyncio.sleep(0)
 
     # 8a. Verify Trustee was not blacklisted by creating another Trustee------------------------------------------------
-    print(Colors.HEADER + "\n\t8a. Verify Trustee was not blacklisted by creating another Trustee\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep8a. Verify Trustee was not blacklisted by creating another Trustee\n" + Colors.ENDC)
     get_nym_txn_req8a = await ledger.build_nym_request(trustee1_did, trustee2_did, trustee2_verkey, None, Roles.TRUSTEE)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustee1_did, get_nym_txn_req8a)
@@ -286,7 +287,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         MyVars.test_results['Test 8'] = True
 
     # 9. Using the TrustAnchor1 to create a Steward2 -----------------------------------------------------------------
-    print(Colors.HEADER + "\n\t9. Use TrustAnchor1 to create a Steward2\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep9. Use TrustAnchor1 to create a Steward2\n" + Colors.ENDC)
     nym_txn_req9 = await ledger.build_nym_request(trustanchor1_did, steward2_did, steward2_verkey, None, Roles.STEWARD)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req9)
@@ -300,7 +301,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     await asyncio.sleep(0)
 
     # 10. Using the TrustAnchor1 blacklist Steward1 -----------------------------------------------------------------
-    print(Colors.HEADER + "\n\t10. Use TrustAnchor1 to blacklist Steward1...\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep10. Use TrustAnchor1 to blacklist Steward1...\n" + Colors.ENDC)
     parts10 = {'setup': False, 'blacklist': False}
 
     # Setup:  Add Steward1 for the test
@@ -332,7 +333,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     await asyncio.sleep(0)
 
     # 11. Verify that a TrustAnchor1 cannot create another TrustAnchor3 -------------------------------------
-    print(Colors.HEADER + "\n\t11. Verify TrustAnchor1 cannot create a TrustAnchor3\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep11. Verify TrustAnchor1 cannot create a TrustAnchor3\n" + Colors.ENDC)
     nym_txn_req11 = await ledger.build_nym_request(trustanchor1_did, trustanchor3_did, trustanchor3_verkey, None,
                                                    Roles.TRUST_ANCHOR)
     try:
@@ -346,7 +347,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
             raise
 
     # 12. Verify that a TrustAnchor1 cannot blacklist another TrustAnchor2 -------------------------------------
-    print(Colors.HEADER + "\n\t12. Verify TrustAnchor1 cannot blacklist TrustAnchor2\n" + Colors.ENDC)
+    print(Colors.HEADER + "\nStep12. Verify TrustAnchor1 cannot blacklist TrustAnchor2\n" + Colors.ENDC)
     nym_txn_req11 = await ledger.build_nym_request(trustanchor1_did, trustanchor2_did, trustanchor2_verkey, None,
                                                    Roles.NONE)
     try:
