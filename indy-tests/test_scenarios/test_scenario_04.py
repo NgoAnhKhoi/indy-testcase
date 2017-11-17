@@ -8,7 +8,7 @@ import sys
 import asyncio
 import json
 import os.path
-import logging.handlers
+import logging
 import time
 from indy import signus
 from indy.error import IndyError
@@ -43,7 +43,7 @@ logging.basicConfig(level=logging.INFO)
 
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
-    Common.clean_up_pool_and_wallet_files(MyVars.pool_name, MyVars.wallet_name)
+    Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def test_scenario_04_keyrings_wallets():

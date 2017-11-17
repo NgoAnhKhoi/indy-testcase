@@ -42,7 +42,7 @@ logging.basicConfig(level=logging.INFO)
 
 def test_prep():
     """  Delete all files out of the .sovrin/pool and .sovrin/wallet directories  """
-    Common.clean_up_pool_and_wallet_files(MyVars.pool_name, MyVars.wallet_name)
+    Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles():
@@ -98,11 +98,9 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     if MyVars.debug:
         input(Colors.WARNING + "\n\nWallet handle is %s" % str(MyVars.wallet_handle) + Colors.ENDC)
 
-    # 4. Create DIDs - cli command = new key with seed ----------------------------------------------------
+    # 4. Create DIDs ----------------------------------------------------
     print(Colors.HEADER + "\n\t4. Create DID's\n" + Colors.ENDC)
     try:
-        # Changed to not use seeds so the test can run more than once on the same pool except for the default
-        # trustee did
         (default_trustee_did, default_trustee_verkey, default_trustee_pk) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": Constant.seed_default_trustee}))
 
@@ -138,7 +136,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, trustee1_did, trustee1_verkey, None, Roles.TRUSTEE)
 
     try:
-        res = await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
+        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
                                              nym_txn_req5)
         parts5['trustee1'] = True
     except IndyError as E:
@@ -148,7 +146,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     print(Colors.HEADER + "\n\t5a. Verify get nym for Trustee\n" + Colors.ENDC)
     get_nym_txn_req5a = await ledger.build_get_nym_request(default_trustee_did, trustee1_did)
     try:
-        get_nym_txn_resp5a = await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req5a)
+        await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req5a)
         parts5['trusteenym'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
@@ -156,7 +154,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     # 5b. TrustAnchor1
     print(Colors.HEADER + "\n\t5b. Use Trustee to create a TrustAnchor\n" + Colors.ENDC)
     nym_txn_req5b = await ledger.build_nym_request(default_trustee_did, trustanchor1_did, trustanchor1_verkey, None,
-                                                  Roles.TRUST_ANCHOR)
+                                                   Roles.TRUST_ANCHOR)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
                                              nym_txn_req5b)
@@ -168,13 +166,13 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     print(Colors.HEADER + "\n\t5c. Verify get NYM for TrustAnchor\n" + Colors.ENDC)
     get_nym_txn_req5c = await ledger.build_get_nym_request(default_trustee_did, trustanchor1_did)
     try:
-        get_nym_txn_resp5c = await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req5c)
+        await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req5c)
         parts5['trustanchor1nym'] = True
     except IndyError as E:
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # If any of the results are not true, then fail the test
-    if not all(value == True for value in parts5.values()):
+    if not all(value is True for value in parts5.values()):
         print(Colors.FAIL + "\n\tOne of the commands in test 5 failed" + Colors.ENDC)
     else:
         # Pass the test
@@ -188,10 +186,10 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     await asyncio.sleep(0)
 
     # 6. Using the TrustAnchor create a Trustee (Trust Anchor should not be able to create Trustee) --------------------
+    # Create a dict for the parts of this test, use this to determine if everything worked
     parts6 = {'trustee': False, 'trusteenym': False}
-
     print(Colors.HEADER + "\n\t6. Use TrustAnchor1 to create a Trustee\n" + Colors.ENDC)
-    print("\nbefore build_nym_request\n")
+
     nym_txn_req6 = await ledger.build_nym_request(trustanchor1_did, trustee2_did, trustee2_verkey, None, Roles.TRUSTEE)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req6)
@@ -254,7 +252,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     parts8 = {'trustee1': False, 'trustee2': False}
 
     print(Colors.HEADER + "\n\t8. Use TrustAnchor to blacklist a Trustee\n" + Colors.ENDC)
-    nym_txn_req8 = await ledger.build_nym_request(trustanchor1_did, trustee1_did, trustee1_verkey, None, Roles.NONE)#Roles.TRUST_ANCHOR)
+    nym_txn_req8 = await ledger.build_nym_request(trustanchor1_did, trustee1_did, trustee1_verkey, None, Roles.NONE)
 
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did,
@@ -314,7 +312,7 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     # Now run the test to blacklist Steward1
-    nym_txn_req10 = await ledger.build_nym_request(trustanchor1_did, steward1_did, steward1_verkey, None, Roles.NONE)#Roles.TRUST_ANCHOR)
+    nym_txn_req10 = await ledger.build_nym_request(trustanchor1_did, steward1_did, steward1_verkey, None, Roles.NONE)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req10)
     except IndyError as E:
@@ -405,25 +403,11 @@ async def check_the_nym(requestor, value):
     if str(check_response_to["result"]["data"]) == "None":
         return True
 
-    #     # 6a. Verify GET_NYM for new Trustee--------------------------------------------------------------------------------
-    # print(Colors.HEADER + "\n\t6a. Verify get NYM for new trustee\n" + Colors.ENDC)
-    # get_nym_txn_req6a = await ledger.build_get_nym_request(trustanchor1_did, trustee2_did)
-    # try:
-    #     get_nym_txn_resp6a = await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req6a)
-    # except IndyError as E:
-    #     print(Colors.FAIL + str(E) + Colors.ENDC)
-    #
-    # # The value for the NYM should be none.  This will check to make sure the result for the request is correct
-    # check_response_to = json.loads(get_nym_txn_resp6a)
-    # print(repr(check_response_to))
-    # if str(check_response_to["result"]["data"]) == "None":
-    #     parts6['trusteenym'] = True
-
 
 def final_results():
     """  Show the test results  """
 
-    if all(value == True for value in MyVars.test_results.values()):
+    if all(value is True for value in MyVars.test_results.values()):
         print(Colors.OKGREEN + "\n\tAll the tests passed...\n" + Colors.ENDC)
     else:
         for test_num, value in MyVars.test_results.items():
@@ -432,16 +416,17 @@ def final_results():
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
 
 
-def log(str):
-    print("\n\n" + str + "\n\n")
+def test():
+    # Run the cleanup first...
+    test_prep()
 
-# Run the cleanup first...
-test_prep()
+    # Create the loop instance using asyncio
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles())
+    loop.close()
 
-# Create the loop instance using asyncio
-loop = asyncio.get_event_loop()
-loop.run_until_complete(verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles())
-loop.close()
+    print("\n\nResults\n+" + 40 * "=" + "+")
+    final_results()
 
-print("\n\nResults\n+" + 40*"=" + "+")
-final_results()
+
+test()

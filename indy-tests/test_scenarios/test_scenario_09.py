@@ -35,8 +35,12 @@ def test_prep():
     Clean up pool and wallet if they are exist.
     """
 
+<<<<<<< HEAD
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
           + Colors.ENDC)
+=======
+    print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
+>>>>>>> 17a28ebd78dd4a68512ca70776535d973e1f2f40
     Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
@@ -417,8 +421,7 @@ async def test_09_remove_and_add_role():
                                     None, Roles.TRUST_ANCHOR, can_add=False)
     if temp:
         MyVars.test_results["Step 21"] = True
-        print(Colors.OKGREEN + "::PASS::Validated that a TrustAnchor cannot create another TrustAnchor!\n"
-              + Colors.ENDC)
+        print(Colors.OKGREEN + "::PASS::Validated that a TrustAnchor cannot create another TrustAnchor!\n" + Colors.ENDC)
         MyVars.test_report.set_step_status("Step21. Verify that TrustAnchor cannot create another TrustAnchor",
                                            Status.PASSED)
     else:
@@ -506,8 +509,7 @@ async def test_09_remove_and_add_role():
     message_23 = ""
     (temp, message) = await add_nym(trustee1_did, trustee2_did, trustee2_verkey, None, Roles.TRUSTEE, can_add=False)
     if temp:
-        print(Colors.OKGREEN + "::PASS::Validated that removed Trustee1 cannot create another Trustee!\n"
-              + Colors.ENDC)
+        print(Colors.OKGREEN + "::PASS::Validated that removed Trustee1 cannot create another Trustee!\n" + Colors.ENDC)
     else:
         if message is None:
             message = ""
@@ -576,18 +578,16 @@ async def test_09_remove_and_add_role():
 
     if MyVars.test_results["Step 26"] is False:
         MyVars.test_report.set_test_failed()
-        MyVars.test_report.set_step_status("Step26. Using Trustee1 to add Steward1",Status.FAILED, message_26[1:])
+        MyVars.test_report.set_step_status("Step26. Using Trustee1 to add Steward1", Status.FAILED, message_26[1:])
     else:
         MyVars.test_report.set_step_status("Step26. Using Trustee1 to add Steward1", Status.PASSED)
 
     # 27. Verify that Steward1 cannot add back a TrustAnchor removed by TrustTee.
-    print(Colors.HEADER + "\n\t27. Verify that Steward1 cannot add back a TrustAnchor removed by TrustTee\n"
-          + Colors.ENDC)
+    print(Colors.HEADER + "\n\t27. Verify that Steward1 cannot add back a TrustAnchor removed by TrustTee\n" + Colors.ENDC)
     (temp, message) = await add_nym(steward1_did, trustanchor1_did, trustanchor1_verkey,
                                     None, Roles.TRUST_ANCHOR, can_add=False)
     if temp:
-        print(Colors.OKGREEN + "::PASS::Validated that Steward1 cannot add back a TrustAnchor removed by TrustTee!\n"
-              + Colors.ENDC)
+        print(Colors.OKGREEN + "::PASS::Validated that Steward1 cannot add back a TrustAnchor removed by TrustTee!\n" + Colors.ENDC)
         MyVars.test_results["Step 27"] = True
         MyVars.test_report.set_step_status("Step27. Verify that Steward1 cannot "
                                            "add back a TrustAnchor removed by TrustTee",
