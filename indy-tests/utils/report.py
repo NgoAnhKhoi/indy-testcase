@@ -1,8 +1,8 @@
-'''
+"""
 Created on Nov 9, 2017
 
 @author: nhan.nguyen
-'''
+"""
 
 import json
 import time
@@ -12,7 +12,6 @@ import logging
 import datetime
 import socket
 import platform
-
 
 
 class KeyWord:
@@ -89,11 +88,9 @@ class TestReport:
 
     def set_duration(self, duration):
         """
-        Set duration for test (the duration is second
-        but we expect that it is in milisecond so we multiply
-        duration for 1000).
+        Set duration for test.
 
-        :param duration:
+        :param duration: (second)
         """
         self.__test_result[KeyWord.DURATION] = round(duration * 1000)
 
@@ -174,7 +171,6 @@ class TestReport:
         if not new_dir.endswith("/"):
             new_dir += "/"
         TestReport.__result_dir = new_dir
-
 
 
 class HTMLReport:

@@ -68,7 +68,7 @@ async def test_scenario_03_check_connection():
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step01. Create pool ledger", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
+        return
 
     # 2. Create wallet
     print(Colors.HEADER + "\n\t2. Create wallet\n" + Colors.ENDC)
@@ -82,7 +82,7 @@ async def test_scenario_03_check_connection():
         MyVars.test_report.set_test_failed()
         MyVars.test_report.set_step_status("Step02. Create wallet", Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
+        return
 
     MyVars.test_results["Step 2"] = temp
 
@@ -199,10 +199,11 @@ def test():
     MyVars.begin_time = time.time()
     test_precondition()
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
     loop.run_until_complete(test_scenario_03_check_connection())
     loop.close()
 
     final_result()
+
 
 test()

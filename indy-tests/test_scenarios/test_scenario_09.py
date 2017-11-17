@@ -1,11 +1,9 @@
 import json
 import sys
-import logging
 import os
 import asyncio
-import shutil
 import time
-from indy import agent, ledger, pool, signus, wallet
+from indy import ledger, pool, signus, wallet
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Constant, Colors, Roles
@@ -39,7 +37,7 @@ def test_prep():
 
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
           + Colors.ENDC)
-    Common.clean_up_pool_and_wallet_files(MyVars.pool_name, MyVars.wallet_name)
+    Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def add_nym(submitter_did, target_did, ver_key, alias, role, can_add):
@@ -122,9 +120,6 @@ async def test_09_remove_and_add_role():
     This function is the main part of test script.
     There is a bug in this scenario (in step 22, 23 24) so we log a bug here.
     """
-    # Declare all values use in the test
-    seed_default_trustee = "000000000000000000000000Trustee1"
-
     # 1. Create ledger config from genesis txn file.
     print(Colors.HEADER + "\n\t1.  Create Ledger\n" + Colors.ENDC)
     pool_config = json.dumps({"genesis_txn": str(Constant.pool_genesis_txn_file)})
@@ -176,69 +171,53 @@ async def test_09_remove_and_add_role():
     print(Colors.HEADER + "\n\t4.  Create DIDs\n" + Colors.ENDC)
     try:
         (default_trustee_did,
-         default_trustee_verkey,
-         default_trustee_pk) = await signus.create_and_store_my_did(
-                MyVars.wallet_handle, json.dumps({"seed": seed_default_trustee}))
+         default_trustee_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle,
+                                                                    json.dumps({"seed": Constant.seed_default_trustee}))
 
         (trustee1_did,
-         trustee1_verkey,
-         trustee1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustee1_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (trustee2_did,
-         trustee2_verkey,
-         trustee2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustee2_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (steward1_did,
-         steward1_verkey,
-         steward1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         steward1_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (steward2_did,
-         steward2_verkey,
-         steward2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         steward2_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (steward3_did,
-         steward3_verkey,
-         steward3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         steward3_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (tgb1_did,
-         tgb1_verkey,
-         tgb1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         tgb1_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (trustanchor1_did,
-         trustanchor1_verkey,
-         trustanchor1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustanchor1_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (trustanchor2_did,
-         trustanchor2_verkey,
-         trustanchor2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustanchor2_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (trustanchor3_did,
-         trustanchor3_verkey,
-         trustanchor3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         trustanchor3_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user1_did,
-         user1_verkey,
-         user1_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user1_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user2_did,
-         user2_verkey,
-         user2_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user2_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user3_did,
-         user3_verkey,
-         user3_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user3_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user4_did,
-         user4_verkey,
-         user4_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user4_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user5_did,
-         user5_verkey,
-         user5_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user5_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
 
         (user6_did,
-         user6_verkey,
-         user6_pk) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
+         user6_verkey) = await signus.create_and_store_my_did(MyVars.wallet_handle, json.dumps({}))
         MyVars.test_results["Step 4"] = True
         MyVars.test_report.set_step_status("Step04. Create DID", Status.PASSED)
     except IndyError as E:

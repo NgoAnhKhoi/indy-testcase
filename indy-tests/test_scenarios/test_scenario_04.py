@@ -36,8 +36,10 @@ class MyVars:
     debug = False
     test_results = {'Step2': False, 'Step3': False}
 
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
 
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """

@@ -49,6 +49,7 @@ def run_command(cmds):
     paramk.run(*cmds)
     paramk.close_connection()
 
+
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
     print(Colors.HEADER + "\n\ Precondition \n" + Colors.ENDC)
@@ -127,6 +128,7 @@ def test():
     loop.close()
 
     final_result()
+
 
 test()
 
