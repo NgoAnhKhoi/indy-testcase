@@ -283,7 +283,7 @@ async def test_09_remove_and_add_role():
         MyVars.test_report.set_step_status(step, Status.PASSED)
 
     # 9. Add identity (no role) by Trustee1.
-    step = "Step09. Add identity (no role) bt Trustee1"
+    step = "Step09. Add identity (no role) by Trustee1"
     print(Colors.HEADER + "\n\t{}\n".format(step) + Colors.ENDC)
     (MyVars.test_results["Step 9"], message) = await add_nym(trustee1_did, user3_did, user3_verkey,
                                                              None, None, can_add=True)
@@ -374,7 +374,7 @@ async def test_09_remove_and_add_role():
         MyVars.test_report.set_step_status(step, Status.PASSED)
 
     # 17. Verify that a Steward cannot create another Steward.
-    step = "Step17. Verify Steward cannot create another Steward"
+    step = "Step17. Verify that Steward cannot create another Steward"
     print(Colors.HEADER + "\n\t{}\n".format(step) + Colors.ENDC)
     (temp, message) = await add_nym(steward1_did, steward2_did, steward2_verkey, None, Roles.STEWARD, can_add=False)
 
@@ -389,7 +389,7 @@ async def test_09_remove_and_add_role():
         MyVars.test_report.set_step_status(step, Status.FAILED, str(message))
 
     # 18. Verify that a Steward cannot create a Trustee.
-    step = "Step18. Verify Steward cannot create a Trustee"
+    step = "Step18. Verify that Steward cannot create a Trustee"
     print(Colors.HEADER + "\n\t{}\n".format(step) + Colors.ENDC)
     (temp, message) = await add_nym(steward1_did, trustee1_did, trustee1_verkey, None, Roles.TRUSTEE, can_add=False)
 
@@ -674,7 +674,7 @@ async def test_09_remove_and_add_role():
     # Clean up here
     # =========================================================================================
 
-    print(Colors.HEADER + "\n\t==Cleanup==\n" + Colors.ENDC)
+    print(Colors.HEADER + "\n\t==Cleanup==" + Colors.ENDC)
     # 32. Close pool ledger and wallet.
     step = "Step32. Close pool ledger and wallet"
     print(Colors.HEADER + "\n\t{}\n".format(step) + Colors.ENDC)
