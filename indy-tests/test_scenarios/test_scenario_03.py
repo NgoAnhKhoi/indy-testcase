@@ -50,8 +50,6 @@ async def test_scenario_03_check_connection():
     """
     This is main part of test scenario 03
     This scenario is PASSED
-
-    :return:
     """
     logger.info("Test scenario 3 -> started")
 
