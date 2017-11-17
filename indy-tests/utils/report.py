@@ -262,7 +262,7 @@ class HTMLReport:
 
     __suite_name = """<h3>s_name</h3>"""
 
-     __configuration_table = """<table id="configuration">
+    __configuration_table = """<table id="configuration">
             <tbody>
             <tr>
                 <th>Run machine</th>
