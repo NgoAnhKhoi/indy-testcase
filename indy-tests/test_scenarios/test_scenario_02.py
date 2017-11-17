@@ -20,7 +20,7 @@ from utils.report import TestReport, Status
 
 class MyVars:
     # Data for generating report
-    test_name = "test_scenario_02_verify_messages_on_connection"
+    test_name = "Test_Scenario_02_Verify_Messages_On_Connection"
     test_report = TestReport(test_name)
     the_error_message = "the information needed to connect was not found"
     test_results = {"Step 1": False, "Step 2": False, "Step 3": False, "Step 4": False}
