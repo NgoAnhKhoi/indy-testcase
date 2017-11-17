@@ -283,7 +283,7 @@ async def test_09_remove_and_add_role():
         MyVars.test_report.set_step_status(step, Status.PASSED)
 
     # 9. Add identity (no role) by Trustee1.
-    step = "Add identity (no role) bt Trustee1"
+    step = "Step09. Add identity (no role) bt Trustee1"
     print(Colors.HEADER + "\n\t{}\n".format(step) + Colors.ENDC)
     (MyVars.test_results["Step 9"], message) = await add_nym(trustee1_did, user3_did, user3_verkey,
                                                              None, None, can_add=True)
