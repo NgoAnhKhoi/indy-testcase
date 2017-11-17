@@ -34,13 +34,7 @@ def test_prep():
     """
     Clean up pool and wallet if they are exist.
     """
-
-<<<<<<< HEAD
-    print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
-          + Colors.ENDC)
-=======
     print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
->>>>>>> 17a28ebd78dd4a68512ca70776535d973e1f2f40
     Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
