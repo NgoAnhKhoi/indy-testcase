@@ -8,13 +8,14 @@ import sys
 import asyncio
 import json
 import logging
+import time
 import os
 from indy import ledger, signus, wallet, pool
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import generate_random_string
 from utils.constant import Colors, Constant, Roles
-from utils.report import TestReport
+from utils.report import TestReport, Status, HTMLReport
 from utils.common import Common
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
@@ -25,28 +26,31 @@ class MyVars:
     """  Needed some global variables. """
 
     pool_handle = 0
-    # Need the path to the pool transaction file location
     pool_genesis_txn_file = Constant.pool_genesis_txn_file
     wallet_handle = 0
-    pool_name = generate_random_string("test_pool", size=10)
-    wallet_name = generate_random_string("test_wallet", size=10)
-    print("[%s] - [%s]" % (pool_name, wallet_name))
+    pool_name = generate_random_string("test_pool")
+    wallet_name = generate_random_string("test_wallet")
     debug = False
-    test_results = {'Test 5': False, 'Test 6': False, 'Test 7': False, 'Test 8': False, 'Test 9': False,
-                    'Test 10': False, 'Test 11': False, 'Test 12': False}
+    test_name = "test_scenario_11_special_case_trust_anchor_role"
+    test_report = TestReport(test_name)
+    test_results = {"Step1": False, "Step2": False, "Step3": False, "Step4": False,
+                    "Step5": False, "Step6": False, "Step7": False, "Step8": False,
+                    "Step9": False, "Step10": False, "Step11": False, "Step12": False,
+                    "Step13": False, "Step14": False, "Step15": False, "Step16": False,
+                    "Step17": False, "Step18": False}
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-def test_prep():
+def test_precondition():
     """  Delete all files out of the .sovrin/pool and .sovrin/wallet directories  """
     print(Colors.HEADER + "\nPrecondition \n" + Colors.ENDC)
     Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
-async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles():
+async def test_scenario_11_special_case_trust_anchor_role():
     logger.info("Test Scenario 11 -> started")
 
     # Declare all values use in the test
@@ -59,48 +63,25 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     seed_trustanchor3 = generate_random_string(prefix="TrustAnchor3", size=32)
 
     # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
-    print(Colors.HEADER + "\nStep1.  Create Ledger\n" + Colors.ENDC)
-    pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file)})
+    step = "Step01. Create and open pool Ledger"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     try:
-        await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
+        MyVars.pool_handle, MyVars.wallet_handle = await Common.prepare_pool_and_wallet(MyVars.pool_name, MyVars.wallet_name, MyVars.pool_genesis_txn_file)
+        MyVars.test_results["Step1"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
-
+        return
     await asyncio.sleep(0)
 
-    # 2. Open pool ledger -----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\nStep2.  Open pool ledger\n" + Colors.ENDC)
-    try:
-        pool_handle = await pool.open_pool_ledger(MyVars.pool_name, None)
-        MyVars.pool_handle = pool_handle
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    await asyncio.sleep(0)
-    if MyVars.debug:
-        input(Colors.WARNING + "\n\nPoolHandle is %s" % str(MyVars.pool_handle) + Colors.ENDC)
-
-    # 3. Create Wallet -----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\nStep3. Create wallet\n" + Colors.ENDC)
-    try:
-        await wallet.create_wallet(MyVars.pool_name, MyVars.wallet_name, None, None, None)
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-        sys.exit[1]
-
-    # Get wallet handle
-    try:
-        MyVars.wallet_handle = await wallet.open_wallet(MyVars.wallet_name, None, None)
-    except IndyError as E:
-        print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    await asyncio.sleep(0)
     if MyVars.debug:
         input(Colors.WARNING + "\n\nWallet handle is %s" % str(MyVars.wallet_handle) + Colors.ENDC)
 
-    # 4. Create DIDs ----------------------------------------------------
-    print(Colors.HEADER + "\nStep4. Create DID's\n" + Colors.ENDC)
+    # 2. Create DIDs ----------------------------------------------------
+    step = "Step02. Create DIDs"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     try:
         (default_trustee_did, default_trustee_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": Constant.seed_default_trustee}))
@@ -119,8 +100,13 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
             MyVars.wallet_handle, json.dumps({"seed": seed_trustanchor2}))
         (trustanchor3_did, trustanchor3_verkey) = await signus.create_and_store_my_did(
             MyVars.wallet_handle, json.dumps({"seed": seed_trustanchor3}))
+        MyVars.test_results["Step2"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
+        return
 
     if MyVars.debug:
         input(Colors.WARNING + "\n\nDID's created..." + Colors.ENDC)
@@ -129,225 +115,213 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Test starts here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # ==================================================================================================================
 
-    # 5. Using the default Trustee create a TrustAnchor and a new Trustee----------------------------------------------
+    # 3. Using the default Trustee create a TrustAnchor and a new Trustee----------------------------------------------
     # Create a dict for the parts of this test, use this to determine if everything worked
-    parts5 = {'trustee1': False, 'trusteenym': False, 'trustanchor1': False, 'trustanchor1nym': False}
-
-    print(Colors.HEADER + "\nStep5. Use default Trustee to create a Trustee\n" + Colors.ENDC)
+    step = "Step03. Use default Trustee to create a Trustee"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, trustee1_did, trustee1_verkey, None, Roles.TRUSTEE)
-
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
                                              nym_txn_req5)
-        parts5['trustee1'] = True
+        MyVars.test_results["Step3"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # 5a. Verify GET_NYM for trustee1-----------------------------------------------------------------------------------
-    print(Colors.HEADER + "\nStep5a. Verify get nym for Trustee\n" + Colors.ENDC)
+    # 4. Verify GET_NYM for trustee1-----------------------------------------------------------------------------------
+    step = "Step04. Verify get nym for Trustee"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     get_nym_txn_req5a = await ledger.build_get_nym_request(default_trustee_did, trustee1_did)
     try:
         await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req5a)
-        parts5['trusteenym'] = True
+        MyVars.test_results["Step4"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # 5b. TrustAnchor1
-    print(Colors.HEADER + "\nStep5b. Use Trustee to create a TrustAnchor\n" + Colors.ENDC)
+    # 5. TrustAnchor1
+    step = "Step05. Verify get nym for Trustee"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     nym_txn_req5b = await ledger.build_nym_request(default_trustee_did, trustanchor1_did, trustanchor1_verkey, None,
                                                    Roles.TRUST_ANCHOR)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, default_trustee_did,
                                              nym_txn_req5b)
-        parts5['trustanchor1'] = True
+        MyVars.test_results["Step5"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # 5c. Verify GET_NYM for TrustAnchor1-------------------------------------------------------------------------------
-    print(Colors.HEADER + "\nStep5c. Verify get NYM for TrustAnchor\n" + Colors.ENDC)
+    # 6. Verify GET_NYM for TrustAnchor1-------------------------------------------------------------------------------
+    step = "Step06. Verify get nym for Trustee"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     get_nym_txn_req5c = await ledger.build_get_nym_request(default_trustee_did, trustanchor1_did)
     try:
         await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req5c)
-        parts5['trustanchor1nym'] = True
+        MyVars.test_results["Step6"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    # If any of the results are not true, then fail the test
-    if not all(value is True for value in parts5.values()):
-        print(Colors.FAIL + "\n\tOne of the commands in test 5 failed" + Colors.ENDC)
-    else:
-        # Pass the test
-        MyVars.test_results['Test 5'] = True
-
-    if MyVars.debug:
-        for k, v in parts5.items():
-            print("\t\tResults for #5: ", (k, v))
-        input(Colors.WARNING + "\n\nInitialized trustee1 and TrustAnchor1 and created NYMS..." + Colors.ENDC)
 
     await asyncio.sleep(0)
 
-    # 6. Using the TrustAnchor create a Trustee (Trust Anchor should not be able to create Trustee) --------------------
-    # Create a dict for the parts of this test, use this to determine if everything worked
-    parts6 = {'trustee': False, 'trusteenym': False}
-    print(Colors.HEADER + "\nStep6. Use TrustAnchor1 to create a Trustee\n" + Colors.ENDC)
+    # 7. Using the TrustAnchor create a Trustee (Trust Anchor should not be able to create Trustee) --------------------
+    step = "Step07. Use TrustAnchor1 to create a Trustee"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
 
     nym_txn_req6 = await ledger.build_nym_request(trustanchor1_did, trustee2_did, trustee2_verkey, None, Roles.TRUSTEE)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req6)
     except IndyError as E:
         if E.error_code == 304:
-            parts6['trustee'] = True
-            print(Colors.OKGREEN + ("::PASS::Validated that a TrustAnchor cannot add a Trustee\n" + Colors.ENDC))
+            MyVars.test_results["Step7"] = True
+            MyVars.test_report.set_step_status(step, Status.PASSED)
         else:
-            print(str(E))
-            raise
+            MyVars.test_report.set_test_failed()
+            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
+            print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # 6a. Verify GET_NYM for new Trustee--------------------------------------------------------------------------------
-    print(Colors.HEADER + "\nStep6a. Verify get NYM for new trustee\n" + Colors.ENDC)
+    # 8. Verify GET_NYM for new Trustee--------------------------------------------------------------------------------
+    step = "Step08. Verify get NYM for new trustee"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     get_nym_txn_req6a = await ledger.build_get_nym_request(trustanchor1_did, trustee2_did)
     try:
-        get_nym_txn_resp6a = await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req6a)
+        await ledger.submit_request(MyVars.pool_handle, get_nym_txn_req6a)
+        MyVars.test_results["Step8"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    # The value for the NYM should be none.  This will check to make sure the result for the request is correct
-    check_response_to = json.loads(get_nym_txn_resp6a)
-    print(repr(check_response_to))
-    if str(check_response_to["result"]["data"]) == "None":
-        parts6['trusteenym'] = True
-
-    # If any of the results are are not true, then fail the test
-    if not all(value is True for value in parts6.values()):
-        print(Colors.FAIL + "\n\tOne of the commands in test 6 failed" + Colors.ENDC)
-    else:
-        # Pass the test
-        MyVars.test_results['Test 6'] = True
-
-    if MyVars.debug:
-        for k, v in parts6.items():
-            print("\t\tResults for #6: ", (k, v))
-        input(Colors.WARNING + "\n\nTried to create Trustee using the Trust Anchor ..." + Colors.ENDC)
 
     await asyncio.sleep(0)
 
-    # 7. Verify that the TestTrustAnchorTrustee cannot create a new Steward
-    print(Colors.HEADER + "\nStep7. Verify a trustee cannot create a new Steward\n" + Colors.ENDC)
+    # 9. Verify that the TestTrustAnchorTrustee cannot create a new Steward
+    step = "Step09. Verify a trustee cannot create a new Steward"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     nym_txn_req7 = await ledger.build_nym_request(trustee2_did, steward1_did, steward1_verkey, None, Roles.STEWARD)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustee2_did, nym_txn_req7)
     except IndyError as E:
         if E.error_code == 304:
-            MyVars.test_results['Test 7'] = True
-            print(Colors.OKGREEN + ("::PASS::Validated that a Trustee cannot create a Steward...\n" + Colors.ENDC))
+            MyVars.test_results["Step9"] = True
+            MyVars.test_report.set_step_status(step, Status.PASSED)
         else:
+            MyVars.test_report.set_test_failed()
+            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
             print(Colors.FAIL + str(E) + Colors.ENDC)
-            raise
 
     if MyVars.debug:
         input(Colors.WARNING + "\n\nTestTrustAnchorTrustee cannot create a steward" + Colors.ENDC)
 
     await asyncio.sleep(0)
 
-    # 8. Using the TrustAnchor blacklist a Trustee (TrustAnchor should not be able to blacklist Trustee)
-    # Create a dict for the parts of this test, use this to determine if everything worked
-    parts8 = {'trustee1': False, 'trustee2': False}
-
-    print(Colors.HEADER + "\nStep8. Use TrustAnchor to blacklist a Trustee\n" + Colors.ENDC)
+    # 10. Using the TrustAnchor blacklist a Trustee (TrustAnchor should not be able to blacklist Trustee)
+    step = "Step10. Use TrustAnchor to blacklist a Trustee"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     nym_txn_req8 = await ledger.build_nym_request(trustanchor1_did, trustee1_did, trustee1_verkey, None, Roles.NONE)
-
     try:
-        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did,
-                                             nym_txn_req8)
+        await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req8)
     except IndyError as E:
         if E.error_code == 304:
-            parts8['trustee1'] = True
-            print(Colors.OKGREEN + ("::PASS::TrustAnchor could not blacklist a Trustee...\n" + Colors.ENDC))
+            MyVars.test_results["Step10"] = True
+            MyVars.test_report.set_step_status(step, Status.PASSED)
         else:
+            MyVars.test_report.set_test_failed()
+            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
             print(Colors.FAIL + str(E) + Colors.ENDC)
-            raise
 
     await asyncio.sleep(0)
 
-    # 8a. Verify Trustee was not blacklisted by creating another Trustee------------------------------------------------
-    print(Colors.HEADER + "\nStep8a. Verify Trustee was not blacklisted by creating another Trustee\n" + Colors.ENDC)
+    # 11. Verify Trustee was not blacklisted by creating another Trustee------------------------------------------------
+    step = "Step11. Verify Trustee was not blacklisted by creating another Trustee"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     get_nym_txn_req8a = await ledger.build_nym_request(trustee1_did, trustee2_did, trustee2_verkey, None, Roles.TRUSTEE)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustee1_did, get_nym_txn_req8a)
-        parts8['trustee2'] = True
+        MyVars.test_results["Step11"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
 
-    # If any of the results are are not true, then fail the test
-    if not all(value is True for value in parts8.values()):
-        print(Colors.FAIL + "\n\tOne of the commands in test 8 failed" + Colors.ENDC)
-    else:
-        # Pass the test
-        MyVars.test_results['Test 8'] = True
-
-    # 9. Using the TrustAnchor1 to create a Steward2 -----------------------------------------------------------------
-    print(Colors.HEADER + "\nStep9. Use TrustAnchor1 to create a Steward2\n" + Colors.ENDC)
+    # 12. Using the TrustAnchor1 to create a Steward2 -----------------------------------------------------------------
+    step = "Step12. Use TrustAnchor1 to create a Steward2"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     nym_txn_req9 = await ledger.build_nym_request(trustanchor1_did, steward2_did, steward2_verkey, None, Roles.STEWARD)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req9)
     except IndyError as E:
         if E.error_code == 304:
-            MyVars.test_results['Test 9'] = True
-            print(Colors.OKGREEN + ("::PASS::Validated that a TrustAnchor cannot create a Steward" + Colors.ENDC))
+            MyVars.test_results["Step12"] = True
+            MyVars.test_report.set_step_status(step, Status.PASSED)
         else:
+            MyVars.test_report.set_test_failed()
+            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
             print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
 
-    # 10. Using the TrustAnchor1 blacklist Steward1 -----------------------------------------------------------------
-    print(Colors.HEADER + "\nStep10. Use TrustAnchor1 to blacklist Steward1...\n" + Colors.ENDC)
-    parts10 = {'setup': False, 'blacklist': False}
-
-    # Setup:  Add Steward1 for the test
+    # 13. Using the TrustAnchor1 blacklist Steward1 -----------------------------------------------------------------
+    step = "Step13. Add Steward1 for the test"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     setup_10 = await ledger.build_nym_request(trustee1_did, steward1_did, steward1_verkey, None, Roles.STEWARD)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustee1_did, setup_10)
-        parts10['setup'] = True
+        MyVars.test_results["Step13"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # Now run the test to blacklist Steward1
+    # 14. Now run the test to blacklist Steward1
+    step = "Step14. Run the test to blacklist Steward1"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     nym_txn_req10 = await ledger.build_nym_request(trustanchor1_did, steward1_did, steward1_verkey, None, Roles.NONE)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req10)
     except IndyError as E:
         if E.error_code == 304:
-            parts10['blacklist'] = True
-            print(Colors.OKGREEN + ("::PASS::Validated that a TrustAnchor cannot blacklist a Steward" + Colors.ENDC))
+            MyVars.test_results["Step14"] = True
+            MyVars.test_report.set_step_status(step, Status.PASSED)
         else:
+            MyVars.test_report.set_test_failed()
+            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
             print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    # If any of the results are are not true, then fail the test
-    if not all(value is True for value in parts10.values()):
-        print(Colors.FAIL + "\n\tOne of the commands in test 10 failed" + Colors.ENDC)
-    else:
-        # Pass the test
-        MyVars.test_results['Test 10'] = True
 
     await asyncio.sleep(0)
 
-    # 11. Verify that a TrustAnchor1 cannot create another TrustAnchor3 -------------------------------------
-    print(Colors.HEADER + "\nStep11. Verify TrustAnchor1 cannot create a TrustAnchor3\n" + Colors.ENDC)
+    # 15. Verify that a TrustAnchor1 cannot create another TrustAnchor3 -------------------------------------
+    step = "Step15. Verify TrustAnchor1 cannot create a TrustAnchor3"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     nym_txn_req11 = await ledger.build_nym_request(trustanchor1_did, trustanchor3_did, trustanchor3_verkey, None,
                                                    Roles.TRUST_ANCHOR)
     try:
         await ledger.sign_and_submit_request(MyVars.pool_handle, MyVars.wallet_handle, trustanchor1_did, nym_txn_req11)
     except Exception as E:
         if E.error_code == 304:
-            MyVars.test_results['Test 11'] = True
-            print(Colors.OKGREEN + ("::PASS::Validated that a TrustAnchor cannot create a TrustAnchor" + Colors.ENDC))
+            MyVars.test_results["Step15"] = True
+            MyVars.test_report.set_step_status(step, Status.PASSED)
         else:
-            print(str(E))
-            raise
+            MyVars.test_report.set_test_failed()
+            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
+            print(Colors.FAIL + str(E) + Colors.ENDC)
 
-    # 12. Verify that a TrustAnchor1 cannot blacklist another TrustAnchor2 -------------------------------------
-    print(Colors.HEADER + "\nStep12. Verify TrustAnchor1 cannot blacklist TrustAnchor2\n" + Colors.ENDC)
+    # 16. Verify that a TrustAnchor1 cannot blacklist another TrustAnchor2 -------------------------------------
+    step = "Step16. Verify TrustAnchor1 cannot blacklist TrustAnchor2"
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     nym_txn_req11 = await ledger.build_nym_request(trustanchor1_did, trustanchor2_did, trustanchor2_verkey, None,
                                                    Roles.NONE)
     try:
@@ -355,12 +329,12 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
                                              nym_txn_req11)
     except Exception as E:
         if E.error_code == 304:
-            MyVars.test_results['Test 12'] = True
-            print(
-                Colors.OKGREEN + ("::PASS::Validated that a TrustAnchor cannot blacklist a TrustAnchor" + Colors.ENDC))
+            MyVars.test_results["Step16"] = True
+            MyVars.test_report.set_step_status(step, Status.PASSED)
         else:
-            print(str(E))
-            raise
+            MyVars.test_report.set_test_failed()
+            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
+            print(Colors.FAIL + str(E) + Colors.ENDC)
 
     if MyVars.debug:
         input(Colors.WARNING + "\n\nTrustAnchor cannot blacklist another TrustAnchor" + Colors.ENDC)
@@ -368,24 +342,34 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     # ==================================================================================================================
     #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # ==================================================================================================================
-    # 13. Close wallet and pool ------------------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t==Clean up==\n\t13. Close and delete the wallet and the pool ledger...\n" + Colors.ENDC)
+    # 17. Close wallet and pool ------------------------------------------------------------------------------
+    step = "Step17. Close and delete the wallet and the pool ledger..."
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     try:
         await wallet.close_wallet(MyVars.wallet_handle)
         await pool.close_pool_ledger(MyVars.pool_handle)
+        MyVars.test_results["Step17"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
     if MyVars.debug:
         input(Colors.WARNING + "\n\nClosed wallet and pool\n" + Colors.ENDC)
 
-    # 14. Delete wallet and pool ledger --------------------------------------------------------------------
-    print(Colors.HEADER + "\n\t14. Delete the wallet and pool ledger...\n" + Colors.ENDC)
+    # 18. Delete wallet and pool ledger --------------------------------------------------------------------
+    step = "Step18. Delete the wallet and pool ledger..."
+    print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
     try:
         await wallet.delete_wallet(MyVars.wallet_name, None)
         await pool.delete_pool_ledger_config(MyVars.pool_name)
+        MyVars.test_results["Step18"] = True
+        MyVars.test_report.set_step_status(step, Status.PASSED)
     except IndyError as E:
+        MyVars.test_report.set_test_failed()
+        MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
         print(Colors.FAIL + str(E) + Colors.ENDC)
 
     await asyncio.sleep(0)
@@ -395,39 +379,38 @@ async def verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_
     logger.info("Test Scenario 11 -> completed")
 
 
-async def check_the_nym(requestor, value):
-    """  Validate the nym after it is obtained  """
-
-    # The value for the NYM should be none.  This will check to make sure the result for the request is correct
-    check_response_to = json.loads(requestor)
-    print(repr(check_response_to))
-    if str(check_response_to["result"]["data"]) == "None":
-        return True
-
-
-def final_results():
-    """  Show the test results  """
-
+def final_result():
+    print("\nTest result================================================" + Colors.ENDC)
     if all(value is True for value in MyVars.test_results.values()):
-        print(Colors.OKGREEN + "\n\tAll the tests passed...\n" + Colors.ENDC)
+        print(Colors.OKGREEN + "\tAll the tests passed...\n" + Colors.ENDC)
     else:
         for test_num, value in MyVars.test_results.items():
             if not value:
-                # print('{}: {}'.format(test_num, value))
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
+    MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
+    MyVars.test_report.write_result_to_file()
+
+    # Generate html single report:
+    folder = MyVars.test_report.get_result_folder()
+
+    if folder.find(MyVars.test_name) != -1:
+        HTMLReport().make_html_report(folder, MyVars.test_name)
 
 
-def test():
-    # Run the cleanup first...
-    test_prep()
+def test(folder_path=""):
+    # Set up the report
+    MyVars.begin_time = time.time()
+    MyVars.test_report.change_result_dir(folder_path)
+    MyVars.test_report.setup_json_report()
 
-    # Create the loop instance using asyncio
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(verifying_that_the_Trust_Anchor_can_only_add_NYMs_for_identity_owners_and_not_blacklist_any_roles())
+    test_precondition()
+
+    loop = asyncio.new_event_loop()
+    loop.run_until_complete(test_scenario_11_special_case_trust_anchor_role())
     loop.close()
 
-    print("\n\nResults\n+" + 40 * "=" + "+")
-    final_results()
+    final_result()
 
 
-test()
+if __name__ == '__main__':
+    test()
