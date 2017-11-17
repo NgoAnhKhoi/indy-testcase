@@ -32,13 +32,23 @@ class Status:
 
 
 class Printer(object):
+    """
+    Class that write content to several file.
+    Use this class when you want to write log
+    not only on console but only on some other files.
+    """
     def __init__(self, *files):
         self.files = files
 
     def write(self, obj):
+        """
+        Write a content into several files.
+
+        :param obj: content you want to write.
+        """
         for f in self.files:
             f.write(obj)
-            f.flush()
+            f.flush()  # Want this content is displayed immediately on file
 
     def flush(self):
         for f in self.files:
@@ -51,9 +61,13 @@ class TestReport:
     __log_level = logging.DEBUG
 
     def __init__(self, test_case_name):
-        self.__error_id = 1
-        self.__test_result = {}
-        self.__run = []
+        """
+        Constructor of a TestReport instance.
+
+        :param test_case_name:
+        """
+        self.__test_result = {}  # Store information of a test case
+        self.__run = []  # Store information of steps in test case
         self.__test_result[KeyWord.TEST_CASE] = test_case_name
         self.__test_result[KeyWord.RESULT] = Status.PASSED
         self.__test_result[KeyWord.START_TIME] = str(time.strftime("%Y%m%d_%H-%M-%S"))
@@ -66,16 +80,39 @@ class TestReport:
         logging.basicConfig(stream=sys.stdout, level=TestReport.__log_level)
 
     def set_result(self, result):
+        """
+        Set a result (PASSED or FAILED) for test case.
+
+        :param result:
+        """
         self.__test_result[KeyWord.RESULT] = result
 
     def set_duration(self, duration):
+        """
+        Set duration for test (the duration is second
+        but we expect that it is in milisecond so we multiply
+        duration for 1000).
+
+        :param duration:
+        """
         self.__test_result[KeyWord.DURATION] = round(duration * 1000)
 
     def set_step_status(self, step_summary: str, status: str = Status.PASSED, message: str = None):
+        """
+        Set status and message for specify step.
+
+        :param step_summary: title of step.
+        :param status: PASSED or FAILED.
+        :param message: anything that involve to step like Exception, Log,...
+        """
         temp = {KeyWord.STEP: step_summary, KeyWord.STATUS: status, KeyWord.MESSAGE: message}
         self.__run.append(temp)
 
     def write_result_to_file(self):
+        """
+        Write the result as json and log file to folder.
+        If test status is PASSED, delete log file.
+        """
         filename = self.__file_path + ".json"
         self.__log.close()
         if self.__test_result[KeyWord.RESULT] == Status.PASSED:
@@ -88,15 +125,31 @@ class TestReport:
             json.dump(self.__test_result, outfile, ensure_ascii=False, indent=2)
 
     def set_test_failed(self):
+        """
+        Set status of test to FAILED.
+        """
         self.set_result(Status.FAILED)
 
-    def get_result_folder(self):
+    def get_result_folder(self) -> str:
+        """
+        Return the path that the result will be writen.
+        :return: the result dir
+        """
         return self.__result_dir
 
     def set_test_passed(self):
+        """
+        Set status of test to PASSED.
+        """
         self.set_test_passed(Status.PASSED)
 
-    def __create_result_folder(self):
+    def __create_result_folder(self) -> str:
+        """
+        Check if the result folder is exist.
+        Create folder if it is not exist.
+
+        :return: result folder path.
+        """
         temp_dir = TestReport.__result_dir
         if temp_dir == TestReport.__default_result_dir:
             temp_dir = "{0}{1}_{2}".format(temp_dir, self.__test_result[KeyWord.TEST_CASE],
@@ -112,6 +165,12 @@ class TestReport:
 
     @staticmethod
     def change_result_dir(new_dir: str):
+        """
+        It will be used when you want to run multiple test case.
+        Change the path where the tests save the result.
+
+        :param new_dir:
+        """
         if not new_dir.endswith("/"):
             new_dir += "/"
         TestReport.__result_dir = new_dir
