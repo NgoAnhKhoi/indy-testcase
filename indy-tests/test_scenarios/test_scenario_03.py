@@ -9,7 +9,7 @@ from indy import pool, signus, wallet
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Colors, Constant
-from utils.report import TestReport, Status, HTMLReport
+from utils.report import TestReport, Status
 from utils.common import Common
 
 
@@ -185,12 +185,6 @@ def final_result():
                 print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
     MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
     MyVars.test_report.write_result_to_file()
-
-    # Generate html single report:
-    folder = MyVars.test_report.get_result_folder()
-
-    if folder.find(MyVars.test_name) != -1:
-        HTMLReport().make_html_report(folder, MyVars.test_name)
 
 
 def test(folder_path=""):
