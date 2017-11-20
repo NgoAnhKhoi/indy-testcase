@@ -1,12 +1,12 @@
 import os
 import json
-import datetime
 import socket
 import platform
 import time
 import glob
 import sys
 import subprocess
+
 
 class Position:
     @staticmethod
@@ -86,6 +86,7 @@ class FileNameFilter:
                 if temp[0] == "name" or temp[0] == "date":
                     self.__filter[temp[0]] = temp[1]
 
+
 def get_version(program: str) -> str:
     """
     Return version of a program
@@ -100,7 +101,7 @@ def get_version(program: str) -> str:
 
     if len(version) >= 3:
         return version[2]
-    return None
+    return "Cannot find version for '{}'".format(program)
 
 
 class HTMLReport:
@@ -306,11 +307,8 @@ class HTMLReport:
         Generating the statictics table
         :param suite_name:
         """
-        time = datetime.datetime.now().time()
-        date = datetime.datetime.today().strftime('%Y-%m-%d')
-        HTMLReport.__suite_name = HTMLReport.__suite_name.replace("s_name", "Summary_" + date + "_" + str(time))
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("plan_name",
-                                                                              suite_name + "_" + date + "_" + str(time))
+        HTMLReport.__suite_name = HTMLReport.__suite_name.replace("s_name", suite_name)
+        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", suite_name)
 
     def make_configurate_table(self):
         """
@@ -558,7 +556,7 @@ class HTMLReport:
             name = "{}{}".format(name, json_filter["date"])
 
         if name is "":
-            name = "summary"
+            name = "Summary"
 
         return name
 
