@@ -557,9 +557,8 @@ class HTMLReport:
                 name += "_"
             name = "{}{}".format(name, json_filter["date"])
 
-        if name is not "":
-            name += "_"
-        name = "{}{}".format(name, "summary")
+        if name is "":
+            name = "summary"
 
         return name
 
