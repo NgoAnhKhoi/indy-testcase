@@ -5,12 +5,11 @@ Created on Nov 8, 2017
 '''
 # /usr/bin/env python3.6
 import sys
-import asyncio
 import json
 import logging
 import time
 import os
-from indy import ledger, signus, wallet, pool
+from indy import ledger, signus
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import *
@@ -25,7 +24,7 @@ from utils.step import Step
 
 class Variables:
     """  Needed some global variables. """
-    test_report = TestReport("Test_scenario_04_Keyrings_Wallets")
+    test_report = TestReport("Test_Scenario_11_Special_Case_Trust_Anchor_Role")
     pool_name = generate_random_string("test_pool")
     wallet_name = generate_random_string("test_wallet")
     debug = False
@@ -55,8 +54,6 @@ async def test_scenario_11_special_case_trust_anchor_role():
     seed_trustanchor1 = generate_random_string(prefix="TrustAnchor1", size=32)
     seed_trustanchor2 = generate_random_string(prefix="TrustAnchor2", size=32)
     seed_trustanchor3 = generate_random_string(prefix="TrustAnchor3", size=32)
-    seed_user1 = generate_random_string(prefix="RandomUser1", size=32)
-    seed_user2 = generate_random_string(prefix="RandomUser2", size=32)
 
     try:
         # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
@@ -85,97 +82,102 @@ async def test_scenario_11_special_case_trust_anchor_role():
                                                                 wallet_handle, json.dumps({"seed": seed_trustanchor2}))
         (trustanchor3_did, trustanchor3_verkey) = await perform(Variables.steps[2], signus.create_and_store_my_did,
                                                                 wallet_handle, json.dumps({"seed": seed_trustanchor3}))
-        (random_user1_did, random_user1_verkey) = await perform(Variables.steps[2], signus.create_and_store_my_did,
-                                                                wallet_handle, json.dumps({"seed": seed_user1}))
-        (random_user2_did, random_user2_verkey) = await perform(Variables.steps[2], signus.create_and_store_my_did,
-                                                                wallet_handle, json.dumps({"seed": seed_user2}))
 
         # 3. Using the default Trustee create a TrustAnchor and a new Trustee---------------
         Variables.steps[3].set_name("Use default Trustee to create a Trustee")
-        nym_txn_req3 = await ledger.build_nym_request(default_trustee_did, trustee1_did, trustee1_verkey, None, Roles.TRUSTEE)
+        nym_txn_req3 = await perform(Variables.steps[3], ledger.build_nym_request, default_trustee_did, trustee1_did,
+                                     trustee1_verkey, None, Roles.TRUSTEE)
         await perform(Variables.steps[3], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                       default_trustee_did, nym_txn_req3)
 
         # 4. Verify GET_NYM for trustee1-----------------------------------------------------------------------------------
         Variables.steps[4].set_name("Verify get nym for Trustee")
-        get_nym_txn_req4 = await ledger.build_get_nym_request(default_trustee_did, trustee1_did)
+        get_nym_txn_req4 = await perform(Variables.steps[4], ledger.build_get_nym_request, default_trustee_did, trustee1_did)
         await perform(Variables.steps[4], ledger.submit_request, pool_handle, get_nym_txn_req4)
 
         # 5. Create TrustAnchor1
         Variables.steps[5].set_name("Create TrustAnchor1")
-        nym_txn_req5 = await ledger.build_nym_request(default_trustee_did, trustanchor1_did, trustanchor1_verkey,
-                                                      None, Roles.TRUST_ANCHOR)
+        nym_txn_req5 = await perform(Variables.steps[5], ledger.build_nym_request, default_trustee_did, trustanchor1_did,
+                                     trustanchor1_verkey, None, Roles.TRUST_ANCHOR)
         await perform(Variables.steps[5], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                       default_trustee_did, nym_txn_req5)
 
         # 6. Verify GET_NYM for TrustAnchor1-------------------------------------------------------------------------------
         Variables.steps[6].set_name("Verify GET_NYM for TrustAnchor1")
-        get_nym_txn_req6 = await ledger.build_get_nym_request(default_trustee_did, trustanchor1_did)
+        get_nym_txn_req6 = await perform(Variables.steps[6], ledger.build_get_nym_request, default_trustee_did, trustanchor1_did)
         await perform(Variables.steps[6], ledger.submit_request, pool_handle, get_nym_txn_req6)
 
         # 7. Using the TrustAnchor create a Trustee (Trust Anchor should not be able to create Trustee) --------------------
         Variables.steps[7].set_name("Use TrustAnchor1 to create a Trustee")
-        nym_txn_req7 = await ledger.build_nym_request(trustanchor1_did, trustee2_did, trustee2_verkey, None, Roles.TRUSTEE)
+        nym_txn_req7 = await perform(Variables.steps[7], ledger.build_nym_request, trustanchor1_did,
+                                     trustee2_did, trustee2_verkey, None, Roles.TRUSTEE)
         await perform_with_expected_code(Variables.steps[7], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                                          trustanchor1_did, nym_txn_req7, expected_code=304)
 
         # 8. Verify GET_NYM for new Trustee--------------------------------------------------------------------------------
         Variables.steps[8].set_name("Verify get NYM for new trustee")
-        get_nym_txn_req8 = await ledger.build_get_nym_request(trustanchor1_did, trustee2_did)
+        get_nym_txn_req8 = await perform(Variables.steps[8], ledger.build_get_nym_request, trustanchor1_did, trustee2_did)
         await perform(Variables.steps[8], ledger.submit_request, pool_handle, get_nym_txn_req8)
 
         # 9. Verify that the TestTrustAnchorTrustee cannot create a new Steward
         Variables.steps[9].set_name("Verify a trustee cannot create a new Steward")
-        nym_txn_req9 = await ledger.build_nym_request(trustee2_did, steward1_did, steward1_verkey, None, Roles.STEWARD)
+        nym_txn_req9 = await perform(Variables.steps[9], ledger.build_nym_request, trustee2_did, steward1_did,
+                                     steward1_verkey, None, Roles.STEWARD)
         await perform_with_expected_code(Variables.steps[9], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                                          trustee2_did, nym_txn_req9, expected_code=304)
 
         # 10. Using the TrustAnchor blacklist a Trustee (TrustAnchor should not be able to blacklist Trustee)
         Variables.steps[10].set_name("Use TrustAnchor to blacklist a Trustee")
-        nym_txn_req10 = await ledger.build_nym_request(trustanchor1_did, trustee1_did, trustee1_verkey, None, Roles.NONE)
+        nym_txn_req10 = await perform(Variables.steps[10], ledger.build_nym_request, trustanchor1_did, trustee1_did,
+                                      trustee1_verkey, None, Roles.NONE)
         await perform_with_expected_code(Variables.steps[10], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                                          trustanchor1_did, nym_txn_req10, expected_code=304)
 
         # 11. Verify Trustee was not blacklisted by creating another Trustee------------------------------------------------
         Variables.steps[11].set_name("Verify Trustee was not blacklisted by creating another Trustee")
-        nym_txn_req11 = await ledger.build_nym_request(trustee1_did, trustee2_did, trustee2_verkey, None, Roles.TRUSTEE)
+        nym_txn_req11 = await perform(Variables.steps[11], ledger.build_nym_request, trustee1_did, trustee2_did,
+                                      trustee2_verkey, None, Roles.TRUSTEE)
         await perform(Variables.steps[11], ledger.sign_and_submit_request, pool_handle, wallet_handle, trustee1_did, nym_txn_req11)
 
         # 12. Using the TrustAnchor1 to create a Steward2 -----------------------------------------------------------------
         Variables.steps[12].set_name("TrustAnchor1 cannot create a Steward2")
-        nym_txn_req12 = await ledger.build_nym_request(trustanchor1_did, steward2_did, steward2_verkey, None, Roles.STEWARD)
+        nym_txn_req12 = await perform(Variables.steps[12], ledger.build_nym_request, trustanchor1_did, steward2_did,
+                                      steward2_verkey, None, Roles.STEWARD)
         await perform_with_expected_code(Variables.steps[12], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                                          trustanchor1_did, nym_txn_req12, expected_code=304)
 
         # 13. Using the Trustee1 create Steward1 -----------------------------------------------------------------
         Variables.steps[13].set_name("Using the Trustee1 create Steward1")
-        nym_txn_req13 = await ledger.build_nym_request(trustee1_did, steward1_did, steward1_verkey, None, Roles.STEWARD)
+        nym_txn_req13 = await perform(Variables.steps[13], ledger.build_nym_request, trustee1_did, steward1_did,
+                                      steward1_verkey, None, Roles.STEWARD)
         await perform(Variables.steps[13], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                       trustee1_did, nym_txn_req13)
 
         # 14. Now run the test to blacklist Steward1
         Variables.steps[14].set_name("Run the test to blacklist Steward1")
-        nym_txn_req14 = await ledger.build_nym_request(trustanchor1_did, steward1_did, steward1_verkey, None, Roles.NONE)
+        nym_txn_req14 = await perform(Variables.steps[14], ledger.build_nym_request, trustanchor1_did, steward1_did,
+                                      steward1_verkey, None, Roles.NONE)
         await perform_with_expected_code(Variables.steps[14], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                                          trustanchor1_did, nym_txn_req14, expected_code=304)
 
         # 15. Verify that a TrustAnchor1 cannot create another TrustAnchor3 -------------------------------------
         Variables.steps[15].set_name("Verify TrustAnchor1 cannot create a TrustAnchor3")
-        nym_txn_req15 = await ledger.build_nym_request(trustanchor1_did, trustanchor3_did, trustanchor3_verkey, None,
-                                                       Roles.TRUST_ANCHOR)
+        nym_txn_req15 = await perform(Variables.steps[15], ledger.build_nym_request, trustanchor1_did, trustanchor3_did,
+                                      trustanchor3_verkey, None, Roles.TRUST_ANCHOR)
         await perform_with_expected_code(Variables.steps[15], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                                          trustanchor1_did, nym_txn_req15, expected_code=304)
 
         # 16. Using the Trustee1 create TrustAnchor2 -----------------------------------------------------------------
         Variables.steps[16].set_name("Using the Trustee1 create Steward1")
-        nym_txn_req16 = await ledger.build_nym_request(trustee1_did, trustanchor2_did, trustanchor2_verkey, None, Roles.TRUST_ANCHOR)
+        nym_txn_req16 = await perform(Variables.steps[16], ledger.build_nym_request, trustee1_did, trustanchor2_did,
+                                      trustanchor2_verkey, None, Roles.TRUST_ANCHOR)
         await perform(Variables.steps[16], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                       trustee1_did, nym_txn_req16)
 
         # 17. Verify that a TrustAnchor1 cannot blacklist another TrustAnchor2 -------------------------------------
         Variables.steps[17].set_name("Verify TrustAnchor1 cannot blacklist TrustAnchor2")
-        nym_txn_req17 = await ledger.build_nym_request(trustanchor1_did, trustanchor2_did, trustanchor2_verkey, None,
-                                                       Roles.NONE)
+        nym_txn_req17 = await perform(Variables.steps[17], ledger.build_nym_request, trustanchor1_did, trustanchor2_did,
+                                      trustanchor2_verkey, None, Roles.NONE)
         await perform_with_expected_code(Variables.steps[17], ledger.sign_and_submit_request, pool_handle, wallet_handle,
                                          trustanchor1_did, nym_txn_req17, expected_code=304)
 
