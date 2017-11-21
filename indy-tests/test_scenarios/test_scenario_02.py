@@ -8,8 +8,11 @@ from indy import pool
 from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Constant, Colors
-from utils.utils import generate_random_string
+from utils.utils import *
 from utils.report import TestReport, Status
+from utils.step import Step
+from utils.common import Common
+
 
 
 # -----------------------------------------------------------------------------------------
@@ -17,12 +20,13 @@ from utils.report import TestReport, Status
 # -----------------------------------------------------------------------------------------
 
 
-class MyVars:
-    # Data for generating report
-    test_name = "Test_Scenario_02_Verify_Messages_On_Connection"
-    test_report = TestReport(test_name)
+class Variables:
     the_error_message = "the information needed to connect was not found"
-    test_results = {"Step 1": False, "Step 2": False, "Step 3": False, "Step 4": False}
+    test_report = TestReport("Test_Scenario_02_Verify_Messages_On_Connection")
+    pool_name = generate_random_string("test_pool")
+    wallet_name = generate_random_string("test_wallet")
+    debug = False
+    steps = create_step(5)
 
     """  Needed some global variables. """
     pool_handle = 0
@@ -37,6 +41,7 @@ class MyVars:
     remove_pool_genesis_file = 'rm ' + pool_genesis_txn_file
     restore_pool_genesis_file = 'cp ' + original_pool_genesis_txn_file + " " + pool_genesis_txn_file
 
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -47,9 +52,10 @@ def run(cmd):
 
 def test_precondition():
     """  Make a copy of pool_transactions_sandbox_genesis  """
-    print(Colors.HEADER + "\nPrecondition \n" + Colors.ENDC)
-    run(MyVars.back_up_pool_genesis_file)
-    open(MyVars.pool_genesis_txn_file, 'w').close()
+    Variables.steps[0].set_name("Precondition")
+    run(Variables.back_up_pool_genesis_file)
+    open(Variables.pool_genesis_txn_file, 'w').close()
+    Variables.steps[0].set_status(Status.PASSED)
 
 
 async def test_scenario_02_verify_messages_on_connection():
@@ -57,95 +63,46 @@ async def test_scenario_02_verify_messages_on_connection():
 
     try:
         # 1. Create ledger config from genesis txn file  ---------------------------------------------------------
-        step = "Step1.  Create Ledger"
-        print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
-        pool_config = json.dumps({"genesis_txn": str(MyVars.pool_genesis_txn_file)})
-
-        try:
-            await pool.create_pool_ledger_config(MyVars.pool_name, pool_config)
-
-            MyVars.test_results["Step 1"] = True
-            MyVars.test_report.set_step_status(step, Status.PASSED)
-        except IndyError as E:
-            MyVars.test_report.set_test_failed()
-            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-            return
-        await asyncio.sleep(0)
+        Variables.steps[1].set_name("Create Ledger")
+        pool_config = json.dumps({"genesis_txn": str(Variables.pool_genesis_txn_file)})
+        Variables.pool_handle = await perform(Variables.steps[1], pool.create_pool_ledger_config, Variables.pool_name, pool_config)
 
         # 2. Open pool ledger -----------------------------------------------------------------------------------
-        step = "Step2.  Open pool ledger"
-        print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
-        try:
-            print(Colors.FAIL + "Failed due to the Bug IS-332" + Colors.ENDC)
-            print(Colors.UNDERLINE + "https://jira.hyperledger.org/browse/IS-332" + Colors.ENDC)
-
-            MyVars.test_report.set_test_failed()
-            MyVars.test_report.set_step_status(step, Status.FAILED, "Failed due to the Bug IS-332 https://jira.hyperledger.org/browse/IS-332")
-            return
-        except IndyError as E:
-            MyVars.test_report.set_test_failed()
-            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-            return
+        Variables.steps[2].set_name("Open pool ledger")
+        Variables.steps[2].set_message("Failed due to the Bug IS-332")
+        Variables.steps[2].set_status(Status.FAILED)
 
         # 3. verifying the message ------------------------------------------------------------------------
-        step = "Step3. verifying the message"
-        print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
+        Variables.steps[3].set_name("verifying the message")
+        Variables.steps[3].set_message("TODO after fix IS-332")
+        Variables.steps[3].set_status(Status.FAILED)
 
-        try:
-            print("TODO after fix IS-332")
-        except IndyError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
-            sys.exit[1]
-    # ==================================================================================================================
-    #      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! End of test, run cleanup !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # ==================================================================================================================
     finally:
         # 4. Restore the pool_transactions_sandbox_genesis file-------------------------------------------------
-        step = "Step4. Restore the pool_transactions_sandbox_genesis file"
-        print(Colors.HEADER + "\n\t {0}\n".format(step) + Colors.ENDC)
+        Variables.steps[4].set_name("Restore the pool_transactions_sandbox_genesis file")
         try:
-            run(MyVars.remove_pool_genesis_file)
-            run(MyVars.restore_pool_genesis_file)
-
-            MyVars.test_results["Step 4"] = True
-            MyVars.test_report.set_step_status(step, Status.PASSED)
-        except IndyError as E:
-            MyVars.test_report.set_test_failed()
-            MyVars.test_report.set_step_status(step, Status.FAILED, str(E))
+            run(Variables.remove_pool_genesis_file)
+            run(Variables.restore_pool_genesis_file)
+            Variables.steps[4].set_status(Status.PASSED)
+        except Exception as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
-
-    logger.info("Test Scenario 02 -> completed")
-
-
-def final_result():
-    print("\nTest result================================================" + Colors.ENDC)
-    if all(value is True for value in MyVars.test_results.values()):
-        print(Colors.OKGREEN + "\tAll the tests passed...\n" + Colors.ENDC)
-    else:
-        for test_num, value in MyVars.test_results.items():
-            if not value:
-                print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
-    MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
-    MyVars.test_report.write_result_to_file()
+            Variables.steps[4].set_status(Status.FAILED)
+            Variables.steps[4].set_message(str(E))
+        logger.info("Test Scenario 02 -> completed")
 
 
 def test(folder_path=""):
     # Set up the report
-    MyVars.begin_time = time.time()
-    MyVars.test_report.change_result_dir(folder_path)
-    MyVars.test_report.setup_json_report()
+    begin_time = time.time()
+    Variables.test_report.setup_json_report()
 
+    # Precondition
     test_precondition()
 
-    loop = asyncio.new_event_loop()
-    loop.run_until_complete(test_scenario_02_verify_messages_on_connection())
-    loop.close()
-
-    final_result()
+    # Run test case and collect result
+    Common.run(test_scenario_02_verify_messages_on_connection)
+    Common.final_result(Variables.test_report, Variables.steps, begin_time)
 
 
 if __name__ == '__main__':
     test()
-
