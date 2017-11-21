@@ -26,7 +26,6 @@ from utils.report import TestReport, Status
 
 class Variables:
     """  Needed some global variables. """
-    pool_genesis_txn_file = Constant.pool_genesis_txn_file
     test_report = TestReport("Test_scenario_04_Keyrings_Wallets")
     pool_name = generate_random_string("test_pool")
     wallet_name = generate_random_string("test_wallet")
