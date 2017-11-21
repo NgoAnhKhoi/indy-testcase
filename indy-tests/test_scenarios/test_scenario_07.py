@@ -51,7 +51,7 @@ logging.basicConfig(level=logging.ERROR)
 def test_prep():
     """  Delete all files out of the .indy/pool and .indy/wallet directories  """
     print(Colors.HEADER + "\nPrecondition. Clean up pools and wallets\n" + Colors.ENDC)
-    Common.clean_up_pool_and_wallet_files()
+    Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
 async def test_scenario_07_add_node():

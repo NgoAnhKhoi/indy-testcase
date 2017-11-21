@@ -35,19 +35,27 @@ def create_step(size):
     return lst_step
 
 
+def handle_exception(code, *agrs):
+    if not isinstance(code, IndexError or Exception):
+        *agrs = code
+    else:
+        raise code
+
 async def perform(step, func, *agrs):
     from indy.error import IndyError
     from utils.report import Status
     result = None
     try:
         result = await func(*agrs)
+        step.set_status(Status.PASSED)
     except IndyError as E:
-        print("[perform] Indy error" + str(E))
-        raise E
+        print("Indy error" + str(E))
+        step.set_message(str(E))
+        return E
     except Exception as Ex:
-        print("[perform] Exception" + str(Ex))
-        raise Ex
-    step.set_status(Status.PASSED)
+        print("Exception" + str(Ex))
+        step.set_message(str(E))
+        return Ex
     return result
 
 

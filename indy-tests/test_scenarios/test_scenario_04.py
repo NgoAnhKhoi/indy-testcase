@@ -55,14 +55,17 @@ async def test_scenario_04_keyrings_wallets():
     try:
         # 1. Create and open pool Ledger  ---------------------------------------------------------
         Variables.steps[1].set_name("Create and open pool Ledger")
-        pool_handle, wallet_handle = await perform(Variables.steps[1], Common.prepare_pool_and_wallet, pool_name,
-                                                   wallet_name, pool_genesis_txn_file)
+        result = await perform(Variables.steps[1], Common.prepare_pool_and_wallet, pool_name,
+                               wallet_name, pool_genesis_txn_file)
+
+        handle_exception(result, pool_handle, wallet_handle)
 
         # 2. verify wallet was created in .indy/wallet
         Variables.steps[2].set_name("Verify wallet was created in .indy/wallet")
         wallet_path = Constant.work_dir + "/wallet/" + wallet_name
         result = os.path.exists(wallet_path)
         if result:
+            raise "ERROR KHOI"
             Variables.steps[2].set_status(Status.PASSED)
 
         # 3. create DID to check the new wallet work well.
