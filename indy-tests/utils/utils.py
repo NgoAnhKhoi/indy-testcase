@@ -35,34 +35,43 @@ def create_step(size):
     return lst_step
 
 
+def handle_exception(code):
+    if isinstance(code, IndexError or Exception):
+        raise code
+    else:
+        return code
+
+
 async def perform(step, func, *agrs):
     from indy.error import IndyError
     from utils.report import Status
     result = None
     try:
         result = await func(*agrs)
+        step.set_status(Status.PASSED)
     except IndyError as E:
-        print("[perform] Indy error" + str(E))
-        raise E
+        print("Indy error" + str(E))
+        step.set_message(str(E))
+        return E
     except Exception as Ex:
-        print("[perform] Exception" + str(Ex))
-        raise Ex
-    step.set_status(Status.PASSED)
-    return result
-
-
-async def perform_with_expected_code(func, *agrs, expected_code=0):
-    from indy.error import IndyError
-    result = None
-    try:
-        result = await func(*agrs)
-    except IndyError as E:
-        if E == expected_code:
-            print("PASSED")
-        else:
-            print("[NAK-perform] Indy error" + str(E))
-            raise E
-    except Exception as Ex:
-        print("[NAK-perform] Exception" + str(Ex))
+        print("Exception" + str(Ex))
+        step.set_message(str(E))
         return Ex
     return result
+
+
+async def perform_with_expected_code(step, func, *agrs, expected_code=0):
+    from indy.error import IndyError
+    from utils.report import Status
+    try:
+        await func(*agrs)
+    except IndyError as E:
+        if E == expected_code:
+            step.set_status(Status.PASSED)
+        else:
+            print("Indy error" + str(E))
+            step.set_message(str(E))
+            return E
+    except Exception as Ex:
+        print("Exception" + str(Ex))
+        return Ex

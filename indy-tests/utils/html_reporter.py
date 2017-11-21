@@ -2,57 +2,62 @@ import os
 import json
 import socket
 import platform
-import time
 import glob
 import sys
 import subprocess
 
 
-class Position:
-    @staticmethod
-    def get_date_position(str_len: int) -> (int, int):
-        """
-        Return date position in file name
-        :param str_len: file name len (include file extension)
-        :return: begin and end position of date
-        """
-        return str_len - 24, str_len - 14
+class FileNameGetter:
+    __FILE_NAME_GETTER = {"name": "get_name", "date": "get_date"}
+    __BEGIN_DATE_PART = 24
+    __END_DATE_PART = 14
 
     @staticmethod
-    def get_name_position(str_len: int) -> (int, int):
+    def get(part: str, file_name: str) -> str:
         """
-        Return test name position in file name
-        :param str_len: file name len (include file extension)
-        :return: begin and end position of test name
+        Get a specify part in file name
+        :param part: what part you want to get in file name
+        :param file_name:
+        :return: the part in file name that you want
         """
-        return 0, str_len - 25
+        if part in FileNameGetter.__FILE_NAME_GETTER:
+            getter = getattr(FileNameGetter, FileNameGetter.__FILE_NAME_GETTER[part])
+            return getter(file_name)
+
+        return ""
+
+    @staticmethod
+    def get_name(file_name: str) -> str:
+        """
+        Get name of test from file name
+        :param file_name:
+        :return: name of test
+        """
+        if file_name is None or len(file_name) < (FileNameGetter.__BEGIN_DATE_PART + 1):
+            return ""
+        return file_name[0:(len(file_name) - (FileNameGetter.__BEGIN_DATE_PART + 1))]
+
+    @staticmethod
+    def get_date(file_name: str) -> str:
+        """
+        Get date of test from file name
+        :param file_name:
+        :return: date of test
+        """
+        if file_name is None or len(file_name) < FileNameGetter.__BEGIN_DATE_PART:
+            return ""
+        return file_name[(len(file_name) - FileNameGetter.__BEGIN_DATE_PART):
+                         (len(file_name) - FileNameGetter.__END_DATE_PART)]
 
 
 class FileNameFilter:
+    __FILTER_SUPPORTED = ["name", "date"]
+    __FILTER_REGEX = "&"
+    __VALUE_REGEX = "="
 
     def __init__(self, arg: str):
         self.__filter = {}
         self.__parse_filter(arg)
-
-    def check(self, filename: str) -> bool:
-        """
-        Check if the file name satisfy the condition
-        :param filename:
-        :return:
-        """
-        temp = {"name": True, "date": True}
-
-        if "name" in self.__filter:
-            (x, y) = Position.get_name_position(len(filename))
-            if not filename[x:y].startswith(self.__filter["name"]):
-                temp["name"] = False
-
-        if "date" in self.__filter:
-            (x, y) = Position.get_date_position(len(filename))
-            if not filename[x:y].startswith(self.__filter["date"]):
-                temp["date"] = False
-
-        return all(value is True for value in temp.values())
 
     def do_filter(self, list_file_name) -> list:
         """
@@ -60,9 +65,9 @@ class FileNameFilter:
         :return: list of file name that satisfy condition
         """
         result = []
-        for filename in list_file_name:
-            if self.check(os.path.basename(filename)):
-                result.append(filename)
+        for file_name in list_file_name:
+            if self.__check(os.path.basename(file_name)):
+                result.append(file_name)
 
         return result
 
@@ -79,12 +84,30 @@ class FileNameFilter:
         if not arg:
             return
 
-        list_filter = arg.split("&")
+        list_filter = arg.split(FileNameFilter.__FILTER_REGEX)
         for f in list_filter:
-            temp = f.split("=")
+            temp = f.split(FileNameFilter.__VALUE_REGEX)
             if len(temp) == 2:
-                if temp[0] == "name" or temp[0] == "date":
+                if temp[0] in FileNameFilter.__FILTER_SUPPORTED:
                     self.__filter[temp[0]] = temp[1]
+
+    def __check(self, file_name: str) -> bool:
+        """
+        Check if the file name satisfy the condition
+        :param file_name:
+        :return:
+        """
+        temp = {}
+        for f in FileNameFilter.__FILTER_SUPPORTED:
+            temp[f] = True
+
+        for f in self.__filter.keys():
+            if f in temp:
+                part = FileNameGetter.get(part=f, file_name=file_name)
+                if not part or not self.__filter[f] or not part.startswith(self.__filter[f]):
+                    temp[f] = False
+
+        return all(value is True for value in temp.values())
 
 
 def get_version(program: str) -> str:
@@ -307,22 +330,20 @@ class HTMLReport:
         Generating the statictics table
         :param suite_name:
         """
-        HTMLReport.__suite_name = HTMLReport.__suite_name.replace("s_name", suite_name)
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", suite_name)
+        self.__suite_name = HTMLReport.__suite_name.replace("s_name", suite_name)
+        self.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", suite_name)
 
     def make_configurate_table(self):
         """
         Generating the configuration table
         """
-        HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("host_name", socket.gethostname())
-        HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("os_name", os.name + platform.system() + platform.release())
-        HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("v_plenum",
-                                                                                    get_version("indy-plenum"))
-        HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("v_anoncreds",
-                                                                                    get_version("indy-anoncreds"))
-        HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("v_indynode",
-                                                                                    get_version("indy-node"))
-        HTMLReport.__configuration_table = HTMLReport.__configuration_table.replace("v_sovrin", get_version("sovrin"))
+        self.__configuration_table = self.__configuration_table.replace("host_name", socket.gethostname())
+        self.__configuration_table = self.__configuration_table.replace("os_name", os.name + platform.system() +
+                                                                        platform.release())
+        self.__configuration_table = self.__configuration_table.replace("v_plenum", get_version("indy-plenum"))
+        self.__configuration_table = self.__configuration_table.replace("v_anoncreds", get_version("indy-anoncreds"))
+        self.__configuration_table = self.__configuration_table.replace("v_indynode", get_version("indy-node"))
+        self.__configuration_table = self.__configuration_table.replace("v_sovrin", get_version("sovrin"))
         # dpkg -l | grep 'indy-plenum'
         # dpkg -l | grep 'indy-anoncreds'
         # dpkg -l | grep 'indy-node'
@@ -355,49 +376,49 @@ class HTMLReport:
                 if result == "Passed":
                     passed = passed + 1
 
-                    temp_testcase = HTMLReport.__passed_testcase_template
+                    temp_testcase = self.__passed_testcase_template
                     temp_testcase = temp_testcase.replace("tc_name", testcase)
                     temp_testcase = temp_testcase.replace("tc_starttime", starttime)
                     temp_testcase = temp_testcase.replace("tc_duration", str(duration))
                     # Add passed test case into  table
-                    HTMLReport.__passed_testcase_table = HTMLReport.__passed_testcase_table + temp_testcase
+                    self.__passed_testcase_table = self.__passed_testcase_table + temp_testcase
 
                 elif result == "Failed":
                     failed = failed + 1
 
-                    temp_testcase = HTMLReport.__failed_testcase_template
+                    temp_testcase = self.__failed_testcase_template
                     temp_testcase = temp_testcase.replace("tc_name", testcase)
                     temp_testcase = temp_testcase.replace("tc_starttime", starttime)
                     temp_testcase = temp_testcase.replace("tc_duration", str(duration))
                     temp_testcase = temp_testcase.replace("tc_link", testcase.replace(" ", ""))
                     # Add failed test case into  table
-                    HTMLReport.__failed_testcase_table = HTMLReport.__failed_testcase_table + temp_testcase
+                    self.__failed_testcase_table = self.__failed_testcase_table + temp_testcase
 
-                    test_log = HTMLReport.__table_test_log
+                    test_log = self.__table_test_log
                     test_log = test_log.replace("test_name", testcase)
                     test_log = test_log.replace("tc_link", testcase.replace(" ", ""))
 
-                    HTMLReport.__table_test_log_content = HTMLReport.__table_test_log_content + test_log
+                    self.__table_test_log_content = self.__table_test_log_content + test_log
 
                     # loop for each step
                     for i in range(0, len(json_text['run'])):
-                        if (json_text['run'][i]['status'] == "Passed"):
-                            temp = HTMLReport.__passed_test_log
+                        if json_text['run'][i]['status'] == "Passed":
+                            temp = self.__passed_test_log
                         else:
-                            temp = HTMLReport.__failed_test_log
+                            temp = self.__failed_test_log
                             temp = temp.replace("error_message", json_text['run'][i]['message'])
 
                         temp = temp.replace("step_num", str(i + 1))
                         temp = temp.replace("step_name", json_text['run'][i]['step'])
                         temp = temp.replace("step_status", json_text['run'][i]['status'])
-                        HTMLReport.__table_test_log_content = HTMLReport.__table_test_log_content + temp
+                        self.__table_test_log_content = self.__table_test_log_content + temp
 
-                    HTMLReport.__table_test_log_content = HTMLReport.__table_test_log_content + HTMLReport.__end_table + HTMLReport.__go_to_summary
+                    self.__table_test_log_content = self.__table_test_log_content + self.__end_table + self.__go_to_summary
 
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", str(passed))
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("passed_num", str(passed))
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("failed_num", str(failed))
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("total_time", str(total))
+        self.__statictics_table = self.__statictics_table.replace("plan_name", str(passed))
+        self.__statictics_table = self.__statictics_table.replace("passed_num", str(passed))
+        self.__statictics_table = self.__statictics_table.replace("failed_num", str(failed))
+        self.__statictics_table = self.__statictics_table.replace("total_time", str(total))
 
     def make_report_content_by_list(self, list_json: list):
         """
@@ -426,49 +447,49 @@ class HTMLReport:
                 if result == "Passed":
                     passed = passed + 1
 
-                    temp_testcase = HTMLReport.__passed_testcase_template
+                    temp_testcase = self.__passed_testcase_template
                     temp_testcase = temp_testcase.replace("tc_name", testcase)
                     temp_testcase = temp_testcase.replace("tc_starttime", starttime)
                     temp_testcase = temp_testcase.replace("tc_duration", str(duration))
                     # Add passed test case into  table
-                    HTMLReport.__passed_testcase_table = HTMLReport.__passed_testcase_table + temp_testcase
+                    self.__passed_testcase_table = self.__passed_testcase_table + temp_testcase
 
                 elif result == "Failed":
                     failed = failed + 1
 
-                    temp_testcase = HTMLReport.__failed_testcase_template
+                    temp_testcase = self.__failed_testcase_template
                     temp_testcase = temp_testcase.replace("tc_name", testcase)
                     temp_testcase = temp_testcase.replace("tc_starttime", starttime)
                     temp_testcase = temp_testcase.replace("tc_duration", str(duration))
                     temp_testcase = temp_testcase.replace("tc_link", testcase.replace(" ", ""))
                     # Add failed test case into  table
-                    HTMLReport.__failed_testcase_table = HTMLReport.__failed_testcase_table + temp_testcase
+                    self.__failed_testcase_table = self.__failed_testcase_table + temp_testcase
 
-                    test_log = HTMLReport.__table_test_log
+                    test_log = self.__table_test_log
                     test_log = test_log.replace("test_name", testcase)
                     test_log = test_log.replace("tc_link", testcase.replace(" ", ""))
 
-                    HTMLReport.__table_test_log_content = HTMLReport.__table_test_log_content + test_log
+                    self.__table_test_log_content = self.__table_test_log_content + test_log
 
                     # loop for each step
                     for i in range(0, len(json_text['run'])):
-                        if (json_text['run'][i]['status'] == "Passed"):
-                            temp = HTMLReport.__passed_test_log
+                        if json_text['run'][i]['status'] == "Passed":
+                            temp = self.__passed_test_log
                         else:
-                            temp = HTMLReport.__failed_test_log
+                            temp = self.__failed_test_log
                             temp = temp.replace("error_message", json_text['run'][i]['message'])
 
                         temp = temp.replace("step_num", str(i + 1))
                         temp = temp.replace("step_name", json_text['run'][i]['step'])
                         temp = temp.replace("step_status", json_text['run'][i]['status'])
-                        HTMLReport.__table_test_log_content = HTMLReport.__table_test_log_content + temp
+                        self.__table_test_log_content = self.__table_test_log_content + temp
 
-                    HTMLReport.__table_test_log_content = HTMLReport.__table_test_log_content + HTMLReport.__end_table + HTMLReport.__go_to_summary
+                    self.__table_test_log_content = self.__table_test_log_content + self.__end_table + self.__go_to_summary
 
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", str(passed))
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("passed_num", str(passed))
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("failed_num", str(failed))
-        HTMLReport.__statictics_table = HTMLReport.__statictics_table.replace("total_time", str(total))
+        self.__statictics_table = self.__statictics_table.replace("plan_name", str(passed))
+        self.__statictics_table = self.__statictics_table.replace("passed_num", str(passed))
+        self.__statictics_table = self.__statictics_table.replace("failed_num", str(failed))
+        self.__statictics_table = self.__statictics_table.replace("total_time", str(total))
 
     def make_html_report(self, json_folder, suite_name):
         """
@@ -485,36 +506,31 @@ class HTMLReport:
         print("Refer to " + json_folder + '/summary.html')
         f = open(json_folder + '/summary.html', 'w')
         f.write(
-            HTMLReport.__head + HTMLReport.__suite_name + HTMLReport.__configuration_table + HTMLReport.__statictics_table + HTMLReport.__summary_head + HTMLReport.__begin_summary_content + HTMLReport.__passed_testcase_table + HTMLReport.__end_summary_content + HTMLReport.__begin_summary_content + HTMLReport.__failed_testcase_table + HTMLReport.__end_summary_content + HTMLReport.__end_table + HTMLReport.__test_log_head +
-            HTMLReport.__table_test_log_content + HTMLReport.__end_file)
+            self.__head + self.__suite_name +
+            self.__configuration_table +
+            self.__statictics_table +
+            self.__summary_head +
+            self.__begin_summary_content +
+            self.__passed_testcase_table +
+            self.__end_summary_content +
+            self.__begin_summary_content +
+            self.__failed_testcase_table +
+            self.__end_summary_content +
+            self.__end_table +
+            self.__test_log_head +
+            self.__table_test_log_content + HTMLReport.__end_file)
 
         f.close()
 
     def __init__(self):
         self.__filter = None
 
-    def create_result_folder(self, test_name):
-        """
-        Creating the folder for html summary report.
-        :param test_name:
-        :return: the actual folder path
-        """
-        temp_dir = os.path.join(os.path.dirname(__file__), "..") + "/test_results/"
-        temp_dir = "{0}{1}_{2}".format(temp_dir, test_name, str(time.strftime("%Y-%m-%d_%H-%M-%S")))
-        if not os.path.exists(temp_dir):
-            try:
-                os.makedirs(temp_dir)
-            except IOError as E:
-                print(str(E))
-                raise E
-        return temp_dir
-
     def generate_report(self, json_filter: str):
         print("Generating a html report...")
         self.__filter = FileNameFilter(json_filter)
         list_file_name = glob.glob(HTMLReport.__json_dir + "*.json")
         list_file_name = self.__filter.do_filter(list_file_name)
-        report_file_name = self.__make_report_name(self.__filter.get_filter())
+        report_file_name = HTMLReport.__make_report_name(self.__filter.get_filter())
         self.make_suite_name(report_file_name)
         self.make_configurate_table()
         self.make_report_content_by_list(list_file_name)
@@ -523,24 +539,25 @@ class HTMLReport:
         print(("Refer to " + self.__report_dir + "/{}.html").format(report_file_name))
         f = open((self.__report_dir + "/{}.html").format(report_file_name), 'w')
         f.write(
-            HTMLReport.__head + HTMLReport.__suite_name +
-            HTMLReport.__configuration_table +
-            HTMLReport.__statictics_table +
-            HTMLReport.__summary_head +
-            HTMLReport.__begin_summary_content +
-            HTMLReport.__passed_testcase_table +
-            HTMLReport.__end_summary_content +
-            HTMLReport.__begin_summary_content +
-            HTMLReport.__failed_testcase_table +
-            HTMLReport.__end_summary_content +
-            HTMLReport.__end_table +
-            HTMLReport.__test_log_head +
-            HTMLReport.__table_test_log_content +
-            HTMLReport.__end_file)
+            self.__head + HTMLReport.__suite_name +
+            self.__configuration_table +
+            self.__statictics_table +
+            self.__summary_head +
+            self.__begin_summary_content +
+            self.__passed_testcase_table +
+            self.__end_summary_content +
+            self.__begin_summary_content +
+            self.__failed_testcase_table +
+            self.__end_summary_content +
+            self.__end_table +
+            self.__test_log_head +
+            self.__table_test_log_content +
+            self.__end_file)
 
         f.close()
 
-    def __make_report_name(self, json_filter: dict) -> str:
+    @staticmethod
+    def __make_report_name(json_filter: dict) -> str:
         """
         Generate report name from filter
         :param json_filter:

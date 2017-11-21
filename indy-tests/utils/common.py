@@ -34,7 +34,7 @@ class Common():
     @staticmethod
     async def clean_up_pool_and_wallet(pool_name, pool_handle, wallet_name, wallet_handle):
         """
-        Clean up pool and wallet. Using as a postcondition of a test case.
+        Clean up pool and wallet. Using as a post condition of a test case.
 
         :param pool_name: The name of the pool.
         :param pool_handle: The handle of the pool.
@@ -54,7 +54,8 @@ class Common():
         """
         import os
         import shutil
-        print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n" + Colors.ENDC)
+        print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
+              + Colors.ENDC)
         work_dir = Constant.work_dir
 
         if os.path.exists(work_dir + "/pool/" + pool_name):
@@ -79,17 +80,18 @@ class Common():
     def final_result(test_report, steps, begin_time):
         import time
         from utils.report import Status
-        step_fail = None
         for step in steps:
+            test_report.add_step(step)
             if step.get_status() == Status.FAILED:
-                step_fail = step
-        if step_fail:
-            print('%s: ' % str(step_fail.get_id()) + Colors.FAIL + 'failed' + Colors.ENDC)
+                print('%s: ' % str(step.get_id()) + Colors.FAIL + 'failed\n' + Colors.ENDC)
+                test_report.set_test_failed()
+
         test_report.set_duration(time.time() - begin_time)
         test_report.write_result_to_file()
 
     @staticmethod
-    async def build_and_send_nym_request(pool_handle, wallet_handle, submitter_did, target_did, target_verkey, alias, role):
+    async def build_and_send_nym_request(pool_handle, wallet_handle, submitter_did,
+                                         target_did, target_verkey, alias, role):
         """
         Build a nym request and send it.
 
@@ -97,13 +99,13 @@ class Common():
         :param wallet_handle: wallet handle returned by indy_open_wallet.
         :param submitter_did: Id of Identity stored in secured Wallet.
         :param target_did: Id of Identity stored in secured Wallet.
-        :param ver_key: verification key
+        :param target_verkey: verification key
         :param alias: alias
         :param role: Role of a user NYM record
         :raise Exception if the method has error.
         """
-        nym_txn_req = await ledger.build_nym_request(submitter_did, target_did, target_verkey, alias, role)
         try:
+            nym_txn_req = await ledger.build_nym_request(submitter_did, target_did, target_verkey, alias, role)
             await ledger.sign_and_submit_request(pool_handle, wallet_handle, submitter_did, nym_txn_req)
         except IndyError as E:
             print(Colors.FAIL + str(E) + Colors.ENDC)
@@ -139,7 +141,8 @@ class Common():
     async def create_and_open_wallet(self, pool_name, wallet_name):
         """
         Creates a new secure wallet with the given unique name.
-        Then open that wallet and get the wallet handle that can be used later to use in methods that require wallet access.
+        Then open that wallet and get the wallet handle that can
+        be used later to use in methods that require wallet access.
 
         :param pool_name: Name of the pool that corresponds to this wallet.
         :param wallet_name: Name of the wallet.
