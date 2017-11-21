@@ -35,11 +35,12 @@ def create_step(size):
     return lst_step
 
 
-def handle_exception(code, *agrs):
-    if not isinstance(code, IndexError or Exception):
-        *agrs = code
-    else:
+def handle_exception(code):
+    if isinstance(code, IndexError or Exception):
         raise code
+    else:
+        return code
+
 
 async def perform(step, func, *agrs):
     from indy.error import IndyError
@@ -68,9 +69,9 @@ async def perform_with_expected_code(func, *agrs, expected_code=0):
         if E == expected_code:
             print("PASSED")
         else:
-            print("[NAK-perform] Indy error" + str(E))
+            print("Indy error" + str(E))
             raise E
     except Exception as Ex:
-        print("[NAK-perform] Exception" + str(Ex))
+        print("Exception" + str(Ex))
         return Ex
     return result
