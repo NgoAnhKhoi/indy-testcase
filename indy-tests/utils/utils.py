@@ -42,10 +42,10 @@ async def perform(step, func, *agrs):
     try:
         result = await func(*agrs)
     except IndyError as E:
-        print("[NAK-perform] Indy error" + str(E))
+        print("[perform] Indy error" + str(E))
         raise E
     except Exception as Ex:
-        print("[NAK-perform] Exception" + str(Ex))
+        print("[perform] Exception" + str(Ex))
         raise Ex
     step.set_status(Status.PASSED)
     return result
