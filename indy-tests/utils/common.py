@@ -34,7 +34,7 @@ class Common():
     @staticmethod
     async def clean_up_pool_and_wallet(pool_name, pool_handle, wallet_name, wallet_handle):
         """
-        Clean up pool and wallet. Using as a precondition of a test case.
+        Clean up pool and wallet. Using as a postcondition of a test case.
 
         :param pool_name: The name of the pool.
         :param pool_handle: The handle of the pool.
@@ -70,14 +70,24 @@ class Common():
                 print(Colors.FAIL + str(E) + Colors.ENDC)
 
     @staticmethod
-    def final_result(test_report, test_results, test_name, begin_time):
+    def run(test_case):
+        loop = asyncio.new_event_loop()
+        loop.run_until_complete(test_case())
+        loop.close()
+
+    @staticmethod
+    def final_result(test_report, steps, begin_time):
         import time
-        if all(value is True for value in test_results.values()):
-            print(Colors.OKGREEN + "\tAll the tests passed...\n" + Colors.ENDC)
-        else:
-            for test_num, value in test_results.items():
-                if not value:
-                    print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
+        from utils.report import Status
+        step_fail = None
+        for step in steps:
+            if step.get_status() == Status.FAILED:
+                step_fail = step
+            else:
+                test_report.set_step_status(step)
+        if step_fail:
+            print('%s: ' % str(step_fail.get_id()) + Colors.FAIL + 'failed' + Colors.ENDC)
+            test_report.set_test_failed()
         test_report.set_duration(time.time() - begin_time)
         test_report.write_result_to_file()
 

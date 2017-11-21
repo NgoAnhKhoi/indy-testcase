@@ -6,7 +6,10 @@ Created on Nov 9, 2017
 
 
 class Colors:
-    """ Class to set the colors for text.  Syntax:  print(Colors.OKGREEN +"TEXT HERE" +Colors.ENDC) """
+    """
+    Class to set the colors for text.
+    Syntax:  print(Colors.OKGREEN +"TEXT HERE" +Colors.ENDC)
+    """
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
@@ -18,14 +21,20 @@ class Colors:
 
 
 class Roles:
+    """
+    Class to define roles.
+    """
     TRUSTEE = "TRUSTEE"
     STEWARD = "STEWARD"
     TRUST_ANCHOR = "TRUST_ANCHOR"
-    TGB = "TGB"
+    TGB = "TGB"  # obsolete
     NONE = ""
 
 
 class Constant:
+    """
+    Class Constant store some necessary paths.
+    """
     import os
     work_dir = os.path.expanduser('~') + os.sep + ".indy"
     seed_default_trustee = "000000000000000000000000Trustee1"
