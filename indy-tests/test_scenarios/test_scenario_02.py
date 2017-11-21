@@ -14,6 +14,7 @@ from utils.step import Step
 from utils.common import Common
 
 
+
 # -----------------------------------------------------------------------------------------
 # This will run acceptance tests that will validate the add/remove roles functionality.
 # -----------------------------------------------------------------------------------------
