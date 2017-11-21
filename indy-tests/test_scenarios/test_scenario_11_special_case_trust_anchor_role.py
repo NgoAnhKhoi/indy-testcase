@@ -194,7 +194,7 @@ async def test_scenario_11_special_case_trust_anchor_role():
         logger.info("Test Scenario 11 -> completed")
 
 
-def test(folder_path=""):
+def test():
     # Set up the report
     begin_time = time.time()
     Variables.test_report.setup_json_report()
