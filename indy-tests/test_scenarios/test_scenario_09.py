@@ -545,7 +545,7 @@ async def test_09_remove_and_add_role():
             item.to_string()
 
 
-def test(folder_path=""):
+def test():
     # Set up the report
     begin_time = time.time()
 
