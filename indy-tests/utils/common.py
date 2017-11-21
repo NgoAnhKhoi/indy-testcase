@@ -70,6 +70,18 @@ class Common():
                 print(Colors.FAIL + str(E) + Colors.ENDC)
 
     @staticmethod
+    def final_result(test_report, test_results, test_name, begin_time):
+        import time
+        if all(value is True for value in test_results.values()):
+            print(Colors.OKGREEN + "\tAll the tests passed...\n" + Colors.ENDC)
+        else:
+            for test_num, value in test_results.items():
+                if not value:
+                    print('%s: ' % str(test_num) + Colors.FAIL + 'failed' + Colors.ENDC)
+        test_report.set_duration(time.time() - begin_time)
+        test_report.write_result_to_file()
+
+    @staticmethod
     async def build_and_send_nym_request(pool_handle, wallet_handle, submitter_did, target_did, target_verkey, alias, role):
         """
         Build a nym request and send it.
@@ -106,7 +118,6 @@ class Common():
         try:
             await pool.create_pool_ledger_config(pool_name, pool_config)
         except IndyError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
             raise E
 
         print(Colors.HEADER + "\nOpen pool ledger\n" + Colors.ENDC)
@@ -114,7 +125,6 @@ class Common():
         try:
             pool_handle = await pool.open_pool_ledger(pool_name, None)
         except IndyError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
             raise E
         await asyncio.sleep(0)
         return pool_handle
@@ -132,14 +142,12 @@ class Common():
         try:
             await wallet.create_wallet(pool_name, wallet_name, None, None, None)
         except IndyError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
             raise E
 
         print(Colors.HEADER + "\nGet wallet handle\n" + Colors.ENDC)
         try:
             wallet_handle = await wallet.open_wallet(wallet_name, None, None)
         except IndyError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
             raise E
         await asyncio.sleep(0)
         return wallet_handle
@@ -156,14 +164,12 @@ class Common():
         try:
             await pool.close_pool_ledger(pool_handle)
         except IndyError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
             raise E
 
-        print(Colors.HEADER + "\nClose waleet\n" + Colors.ENDC)
+        print(Colors.HEADER + "\nClose wallet\n" + Colors.ENDC)
         try:
             await wallet.close_wallet(wallet_handle)
         except IndyError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
             raise E
         await asyncio.sleep(0)
 
@@ -179,13 +185,11 @@ class Common():
         try:
             await pool.delete_pool_ledger_config(pool_name)
         except IndyError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
             raise E
 
         print(Colors.HEADER + "\nDelete wallet\n" + Colors.ENDC)
         try:
             await wallet.delete_wallet(wallet_name, None)
         except IndyError as E:
-            print(Colors.FAIL + str(E) + Colors.ENDC)
             raise E
         await asyncio.sleep(0)

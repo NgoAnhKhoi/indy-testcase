@@ -6,7 +6,7 @@ Created on Nov 9, 2017
 
 
 class Colors:
-    """ 
+    """
     Class to set the colors for text.
     Syntax:  print(Colors.OKGREEN +"TEXT HERE" +Colors.ENDC)
     """
@@ -21,7 +21,7 @@ class Colors:
 
 
 class Roles:
-    """ 
+    """
     Class to define roles.
     """
     TRUSTEE = "TRUSTEE"
@@ -32,7 +32,7 @@ class Roles:
 
 
 class Constant:
-    """ 
+    """
     Class Constant store some necessary paths.
     """
     import os
@@ -41,4 +41,3 @@ class Constant:
     pool_genesis_txn_file = os.path.expanduser('~') + os.sep + ".sovrin/pool_transactions_sandbox_genesis"
     domain_transactions_sandbox_genesis = os.path.expanduser('~') + os.sep + ".sovrin/domain_transactions_sandbox_genesis "
     original_pool_genesis_txn_file = os.path.expanduser('~') + os.sep + ".sovrin/original_pool_transactions_sandbox_genesis"
-
