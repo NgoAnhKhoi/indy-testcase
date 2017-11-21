@@ -9,7 +9,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.constant import Constant, Colors, Roles
 from utils.report import TestReport, Status
 from utils.common import Common
-from utils.report import HTMLReport
 
 
 class MyVars:
@@ -38,8 +37,6 @@ def test_precondition():
     """
     Clean up pool and wallet if they are exist.
     """
-    print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
-          + Colors.ENDC)
     Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
@@ -713,16 +710,9 @@ def final_result():
     MyVars.test_report.set_duration(time.time() - MyVars.begin_time)
     MyVars.test_report.write_result_to_file()
 
-    # Generate html single report:
-    folder = MyVars.test_report.get_result_folder()
-
-    if folder.find(MyVars.test_name) != -1:
-        HTMLReport().make_html_report(folder, MyVars.test_name)
-
 
 def test(folder_path=""):
     # Set up the report
-
     MyVars.begin_time = time.time()
     MyVars.test_report.change_result_dir(folder_path)
     MyVars.test_report.setup_json_report()
