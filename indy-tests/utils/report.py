@@ -9,6 +9,7 @@ import time
 import os
 import sys
 import logging
+from utils.step import Step
 
 
 class KeyWord:
@@ -100,6 +101,17 @@ class TestReport:
         temp = {KeyWord.STEP: step_summary, KeyWord.STATUS: status, KeyWord.MESSAGE: message}
         self.__run.append(temp)
 
+    def add_step(self, step: Step):
+        """
+        Add a step to report
+        :param step:
+        :return:
+        """
+        if not step:
+            return
+        temp = {KeyWord.STEP: step.get_name(), KeyWord.STATUS: step.get_status(), KeyWord.MESSAGE: step.get_message()}
+        self.__run.append(temp)
+
     def setup_json_report(self):
         """
         Create the result folder for json and log file
@@ -138,11 +150,7 @@ class TestReport:
         """
         Set status of test to PASSED.
         """
-        self.set_test_passed(Status.PASSED)
-
-    def prepare_report(self, folder_path):
-        self.change_result_dir(folder_path)
-        self.setup_json_report()
+        self.set_result(Status.PASSED)
 
     @staticmethod
     def change_result_dir(new_dir: str):
