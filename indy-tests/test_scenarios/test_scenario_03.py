@@ -14,7 +14,7 @@ from utils.common import Common
 
 class MyVars:
     # Data for generating report
-    test_name = "Test_scenario_03_Check_Connection"
+    test_name = "Test_Scenario_03_Check_Connection"
     test_report = TestReport(test_name)
     test_results = {"Step 1": False, "Step 2": False, "Step 3": False, "Step 4": False,
                     "Step 5": False, "Step 6": False, "Step 7": False, "Step 8": False}
@@ -202,4 +202,3 @@ def test(folder_path=""):
 
 if __name__ == '__main__':
     test()
-

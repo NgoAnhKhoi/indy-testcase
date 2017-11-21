@@ -72,6 +72,8 @@ class TestReport:
         self.__log = None
         self.__original_stdout = None
         self.__json_file_path = ""
+        self.setup_json_report()
+        TestReport.__init_output_folder()
 
     def set_result(self, result):
         """
@@ -163,3 +165,15 @@ class TestReport:
             if not new_dir.endswith("/"):
                 new_dir += "/"
             TestReport.__result_dir = new_dir
+
+    @staticmethod
+    def __init_output_folder():
+        """
+        Create test_output directory if it not exist
+        :return:
+        """
+        if not os.path.exists(TestReport.__json_dir):
+            os.makedirs(TestReport.__json_dir)
+
+        if not os.path.exists(TestReport.__log_dir):
+            os.makedirs(TestReport.__log_dir)

@@ -49,15 +49,13 @@ class FileNameGetter:
         return file_name[(len(file_name) - FileNameGetter.__BEGIN_DATE_PART):
                          (len(file_name) - FileNameGetter.__END_DATE_PART)]
 
-
 class FileNameFilter:
     __FILTER_SUPPORTED = ["name", "date"]
     __FILTER_REGEX = "&"
     __VALUE_REGEX = "="
 
-    def __init__(self, arg: str):
-        self.__filter = {}
-        self.__parse_filter(arg)
+    def __init__(self, list_filter: dict):
+        self.__filter = list_filter
 
     def do_filter(self, list_file_name) -> list:
         """
@@ -330,8 +328,8 @@ class HTMLReport:
         Generating the statictics table
         :param suite_name:
         """
-        self.__suite_name = HTMLReport.__suite_name.replace("s_name", suite_name)
-        self.__statictics_table = HTMLReport.__statictics_table.replace("plan_name", suite_name)
+        self.__suite_name = self.__suite_name.replace("s_name", suite_name)
+        self.__statictics_table = self.__statictics_table.replace("plan_name", suite_name)
 
     def make_configurate_table(self):
         """
@@ -524,10 +522,12 @@ class HTMLReport:
 
     def __init__(self):
         self.__filter = None
+        HTMLReport.__init_report_folder()
 
-    def generate_report(self, json_filter: str):
+
+    def generate_report(self, file_filter: dict):
         print("Generating a html report...")
-        self.__filter = FileNameFilter(json_filter)
+        self.__filter = FileNameFilter(file_filter)
         list_file_name = glob.glob(HTMLReport.__json_dir + "*.json")
         list_file_name = self.__filter.do_filter(list_file_name)
         report_file_name = HTMLReport.__make_report_name(self.__filter.get_filter())
@@ -577,31 +577,38 @@ class HTMLReport:
 
         return name
 
+    @staticmethod
+    def __init_report_folder():
+        """
+        Create reporter_summary_report directory if it not exist
+        :return:
+        """
+        if not os.path.exists(HTMLReport.__report_dir):
+            os.makedirs(HTMLReport.__report_dir)
+
 
 def print_help():
     content = "\nGenerate html report from serveral json files\n\n" \
               "-help: print help\n\n" \
-              "-filter: the condition that allow you to filtering the json file that is used to make " \
-              "html report\n" \
-              "Syntax: -filter \"[filter_name=value]|[filter_name=value]\"\n" \
-              "Example: -filter \"name=Test_senario_09&date=2017-11-16\"\n" \
-              "With this filter, the HTMLReporter will select the json files that relate with scenario_09 run " \
-              "on 2017-11-16 to make html report.\n" \
-              "Note: format of date is yyyy-MM-dd\n\n"
+              "-name: test name of json files that will be selected to make report\n" \
+              "-date: date of test of json files that will be selected to make report\n" \
+              "Example: python3.6 html_reporter.py -name Test09 -date 2017-11-20\n"
     print(content)
 
 
 if __name__ == "__main__":
+    __FILTER_SUPPORTED = {"-date": "date", "-name": "name"}
     args = sys.argv
     if "-help" in args:
         print_help()
         exit(0)
 
     reporter = HTMLReport()
-    json_filter = None
-    if "-filter" in args:
-        index = args.index("-filter")
-        if index + 1 < len(args):
-            json_filter = args[index + 1]
+    json_filter = {}
+    for key in __FILTER_SUPPORTED:
+        if key in args:
+            index = args.index(key)
+            if index + 1 < len(args):
+                json_filter[__FILTER_SUPPORTED[key]] = args[index + 1]
 
     reporter.generate_report(json_filter)

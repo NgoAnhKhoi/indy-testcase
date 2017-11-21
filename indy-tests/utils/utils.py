@@ -11,7 +11,7 @@ def generate_random_string(prefix="", suffix="", size=20):
 
     :param prefix: (optional) Prefix of a string.
     :param suffix: (optional) Suffix of a string.
-    :param length: (optional) Max length of a string (include prefix and suffix)
+    :param size: (optional) Max length of a string (include prefix and suffix)
     :return: The random string.
     """
     import random
