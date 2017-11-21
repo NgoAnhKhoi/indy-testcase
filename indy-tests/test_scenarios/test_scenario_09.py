@@ -37,8 +37,6 @@ def test_precondition():
     """
     Clean up pool and wallet if they are exist.
     """
-    print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
-          + Colors.ENDC)
     Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 

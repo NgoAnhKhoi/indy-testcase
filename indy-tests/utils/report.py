@@ -9,9 +9,6 @@ import time
 import os
 import sys
 import logging
-import datetime
-import socket
-import platform
 
 
 class KeyWord:

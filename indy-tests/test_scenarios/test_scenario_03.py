@@ -3,7 +3,6 @@ import sys
 import logging
 import os
 import asyncio
-import shutil
 import time
 from indy import pool, signus, wallet
 from indy.error import IndyError
@@ -36,8 +35,6 @@ logging.basicConfig(level=logging.INFO)
 
 def test_precondition():
     # Precondition steps:
-    print(Colors.HEADER + "\n\tCheck if the wallet and pool for this test already exist and delete them...\n"
-          + Colors.ENDC)
     Common.clean_up_pool_and_wallet_folder(MyVars.pool_name, MyVars.wallet_name)
 
 
