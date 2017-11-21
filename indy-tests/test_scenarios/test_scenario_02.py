@@ -91,7 +91,7 @@ async def test_scenario_02_verify_messages_on_connection():
         logger.info("Test Scenario 02 -> completed")
 
 
-def test(folder_path=""):
+def test():
     # Set up the report
     begin_time = time.time()
     Variables.test_report.setup_json_report()
