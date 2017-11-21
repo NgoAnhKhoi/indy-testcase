@@ -5,7 +5,6 @@ Created on Nov 8, 2017
 '''
 # /usr/bin/env python3.6
 import sys
-import asyncio
 import json
 import os.path
 import logging
@@ -16,7 +15,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import *
 from utils.constant import Colors, Constant
 from utils.common import Common
-from utils.step import Step
 from utils.report import TestReport, Status
 
 # -----------------------------------------------------------------------------------------
@@ -89,7 +87,6 @@ async def test_scenario_04_keyrings_wallets():
 def test(folder_path=""):
     # Set up the report
     begin_time = time.time()
-    Variables.test_report.setup_json_report()
 
     # Precondition
     test_precondition()

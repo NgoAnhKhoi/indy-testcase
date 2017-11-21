@@ -45,7 +45,6 @@ def raise_if_exception(code):
 async def perform(step, func, *agrs):
     from indy.error import IndyError
     from utils.report import Status
-    result = None
     try:
         result = await func(*agrs)
         step.set_status(Status.PASSED)
@@ -55,7 +54,7 @@ async def perform(step, func, *agrs):
         return E
     except Exception as Ex:
         print("Exception" + str(Ex))
-        step.set_message(str(E))
+        step.set_message(str(Ex))
         return Ex
     return result
 
@@ -65,6 +64,7 @@ async def perform_with_expected_code(step, func, *agrs, expected_code=0):
     from utils.report import Status
     try:
         await func(*agrs)
+        step.set_status(Status.FAILED)
     except IndyError as E:
         if E == expected_code:
             step.set_status(Status.PASSED)
