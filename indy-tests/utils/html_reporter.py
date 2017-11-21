@@ -49,7 +49,6 @@ class FileNameGetter:
         return file_name[(len(file_name) - FileNameGetter.__BEGIN_DATE_PART):
                          (len(file_name) - FileNameGetter.__END_DATE_PART)]
 
-
 class FileNameFilter:
     __FILTER_SUPPORTED = ["name", "date"]
     __FILTER_REGEX = "&"
@@ -524,6 +523,7 @@ class HTMLReport:
     def __init__(self):
         self.__filter = None
         HTMLReport.__init_report_folder()
+
 
     def generate_report(self, file_filter: dict):
         print("Generating a html report...")
