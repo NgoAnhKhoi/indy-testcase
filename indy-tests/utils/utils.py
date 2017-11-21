@@ -60,18 +60,18 @@ async def perform(step, func, *agrs):
     return result
 
 
-async def perform_with_expected_code(func, *agrs, expected_code=0):
+async def perform_with_expected_code(step, func, *agrs, expected_code=0):
     from indy.error import IndyError
-    result = None
+    from utils.report import Status
     try:
-        result = await func(*agrs)
+        await func(*agrs)
     except IndyError as E:
         if E == expected_code:
-            print("PASSED")
+            step.set_status(Status.PASSED)
         else:
             print("Indy error" + str(E))
-            raise E
+            step.set_message(str(E))
+            return E
     except Exception as Ex:
         print("Exception" + str(Ex))
         return Ex
-    return result

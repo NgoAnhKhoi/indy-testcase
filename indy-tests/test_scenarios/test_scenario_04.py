@@ -11,6 +11,7 @@ import os.path
 import logging
 import time
 from indy import signus
+from indy.error import IndyError
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.utils import *
 from utils.constant import Colors, Constant
@@ -65,18 +66,19 @@ async def test_scenario_04_keyrings_wallets():
         wallet_path = Constant.work_dir + "/wallet/" + wallet_name
         result = os.path.exists(wallet_path)
         if result:
-            raise "ERROR KHOI"
             Variables.steps[2].set_status(Status.PASSED)
 
         # 3. create DID to check the new wallet work well.
         Variables.steps[3].set_name("Create DID to check the new wallet work well")
         await perform(Variables.steps[3], signus.create_and_store_my_did,
                       wallet_handle, json.dumps({"seed": seed_default_trustee}))
+    except IndyError as e:
+        print(Colors.FAIL + "Indy error: " + str(e) + Colors.ENDC)
     except Exception as ex:
         print(Colors.FAIL + "Exception: " + str(ex) + Colors.ENDC)
     finally:
         # 4. Close and delete the wallet and pool ------------------------------------------------------------------------------
-        Variables.steps[4].set_name("Close and delete the wallet and the pool ledger...")
+        Variables.steps[4].set_name("Postcondition - Close and delete the wallet and the pool ledger...")
         await perform(Variables.steps[4], Common.clean_up_pool_and_wallet, pool_name,
                       pool_handle, wallet_name, wallet_handle)
 
@@ -88,7 +90,7 @@ async def test_scenario_04_keyrings_wallets():
 def test(folder_path=""):
     # Set up the report
     begin_time = time.time()
-    Variables.test_report.prepare_report(folder_path)
+    Variables.test_report.setup_json_report()
 
     # Precondition
     test_precondition()

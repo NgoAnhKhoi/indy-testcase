@@ -9,7 +9,6 @@ import time
 import os
 import sys
 import logging
-from utils.step import Step
 
 
 class KeyWord:
@@ -101,7 +100,7 @@ class TestReport:
         temp = {KeyWord.STEP: step_summary, KeyWord.STATUS: status, KeyWord.MESSAGE: message}
         self.__run.append(temp)
 
-    def add_step(self, step: Step):
+    def add_step(self, step):
         """
         Add a step to report
         :param step:
