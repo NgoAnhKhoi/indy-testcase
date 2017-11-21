@@ -140,6 +140,10 @@ class TestReport:
         """
         self.set_test_passed(Status.PASSED)
 
+    def prepare_report(self, folder_path):
+        self.change_result_dir(folder_path)
+        self.setup_json_report()
+
     @staticmethod
     def change_result_dir(new_dir: str):
         """

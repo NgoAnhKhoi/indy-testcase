@@ -15,6 +15,18 @@ class Step():
         self.__status = status
         self.__message = message
 
+    def get_id(self):
+        return self.__id
+
+    def get_name(self):
+        return self.__name
+
+    def get_status(self):
+        return self.__status
+
+    def get_message(self):
+        return self.__message
+
     def set_status(self, status):
         self.__status = status
 

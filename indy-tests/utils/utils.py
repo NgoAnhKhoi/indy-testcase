@@ -29,7 +29,7 @@ def generate_random_string(prefix="", suffix="", size=20):
 def create_step(size):
     from utils.step import Step
     lst_step = []
-    for i in range(1, size + 1):
+    for i in range(0, size):
         step = Step(i, "")
         lst_step.append(step)
     return lst_step
