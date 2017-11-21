@@ -83,7 +83,7 @@ class Common():
         for step in steps:
             test_report.add_step(step)
             if step.get_status() == Status.FAILED:
-                print('%s: ' % str(step.get_id()) + Colors.FAIL + 'failed\n' + Colors.ENDC)
+                print('%s: ' % str(step.get_id()) + Colors.FAIL + 'failed\nMessage: ' + step.get_message() + Colors.ENDC)
                 test_report.set_test_failed()
 
         test_report.set_duration(time.time() - begin_time)

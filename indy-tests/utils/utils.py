@@ -65,8 +65,9 @@ async def perform_with_expected_code(step, func, *agrs, expected_code=0):
     from utils.report import Status
     try:
         await func(*agrs)
+        step.set_message("Can execute without exception.")
     except IndyError as E:
-        if E == expected_code:
+        if E.error_code == expected_code:
             step.set_status(Status.PASSED)
         else:
             print("Indy error" + str(E))
