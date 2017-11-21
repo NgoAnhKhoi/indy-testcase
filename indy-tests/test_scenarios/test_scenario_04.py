@@ -84,7 +84,7 @@ async def test_scenario_04_keyrings_wallets():
         logger.info("Test Scenario 04 -> completed")
 
 
-def test(folder_path=""):
+def test():
     # Set up the report
     begin_time = time.time()
 
