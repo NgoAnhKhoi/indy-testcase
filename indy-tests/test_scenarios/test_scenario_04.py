@@ -59,7 +59,7 @@ async def test_scenario_04_keyrings_wallets():
         result = await perform(Variables.steps[1], Common.prepare_pool_and_wallet, pool_name,
                                wallet_name, pool_genesis_txn_file)
 
-        pool_handle, wallet_handle = handle_exception(result)
+        pool_handle, wallet_handle = raise_if_exception(result)
 
         # 2. verify wallet was created in .indy/wallet
         Variables.steps[2].set_name("Verify wallet was created in .indy/wallet")

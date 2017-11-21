@@ -35,7 +35,7 @@ def create_step(size):
     return lst_step
 
 
-def handle_exception(code):
+def raise_if_exception(code):
     if isinstance(code, IndexError or Exception):
         raise code
     else:
